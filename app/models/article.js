@@ -1,16 +1,19 @@
-var mongoose = require('./db')
+
+var mongoose = require('./database')
 
 var ArticleSchema = new mongoose.Schema({
-    title: String
-},{
+    title: String,
+    timestamp:String,
+    user:String},
+{
     versionKey: false
-});
+})
 
-ArticleSchema.statics.find = function(title, callback) {
-    return this.find({'title': title})
+ArticleSchema.statics.findAll = function(callback) {
+    return this.find({})
     .exec(callback)
 }
 
-var Article = mongoose.model('Article', ArticleSchema, 'articles')
+var Article = mongoose.model('Article', ArticleSchema, 'revisions')
 
 module.exports = Article
