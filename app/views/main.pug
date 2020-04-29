@@ -1,9 +1,30 @@
 doctype html
-
 html(lang="en")
+  head
+    title WikiLatic - COMP5347 Group 22 Title Goes Here
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
 
-body
-    h1 Article Analytics
-
-    h2 Overall Analytics
-
+  body
+    div.container-fluid
+      div.jumbotron
+        h1 Title here
+        p Description goes here
+      div.row(id="img_section")
+        div
+          h2 Image Title goes here
+          img(src="ADD IMG HERE")
+      hr
+      div.row
+        div
+          h2 Log In Stuff
+          form(action='/login' method='POST' id='loginForm')
+            div.form-group
+              label Username
+              input(class="form-control" type="text")
+            div.form-group
+              label Password
+              input(class="form-control" type="password")
+            input(class="btn btn-default btn-lg" type = "submit" value = "Login")
+            div
+        div
