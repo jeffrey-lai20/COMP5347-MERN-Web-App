@@ -25,3 +25,11 @@ In terminal:
 To import all the json files into mongodb:
 
 ```for %i in (C:\full-path-to-database-file\*.json)do "C:\Program Files\MongoDB\Server\4.2\bin\mongoimport.exe" --db wikidb --collection wikicollection --type json --file %i --jsonArray```
+
+3. Server installation and running
+
+In terminal:
+```npm install -g serve```
+
+To run the server:
+```serve -s build```
