@@ -2,11 +2,11 @@
 
 ## Instructions to run code:
 
-1. Install all dependencies in package.json
+** Install all dependencies in package.json **
 
 ```npm install ---save package.json```
 
-2. Set up MongoDB database and import sample data (Lab 7)
+** Set up MongoDB database and import sample data (Lab 7) **
 
 * Create a directory comp5347/mongodb on your U drive.
 * Open a command window or power shell window and change to directory C:/Program Files/MongoDB/Server/3.4/bin
@@ -20,3 +20,8 @@ In terminal:
 ```cd C:/Program Files/MongoDB/Server/3.4/bin.```
 
 ```mongoimport --jsonArray --db wikipedia --collection revisions --file <full-path-to-downloaded-revision-json-file>```
+
+** Running Node.js **
+``` cd <application.js directory path> '''
+
+** Open in browser **
