@@ -20,3 +20,8 @@ In terminal:
 ```cd C:/Program Files/MongoDB/Server/3.4/bin.```
 
 ```mongoimport --jsonArray --db wikipedia --collection revisions --file <full-path-to-downloaded-revision-json-file>```
+
+
+To import all the json files into mongodb:
+
+```for %i in (C:\full-path-to-database-file\*.json)do "C:\Program Files\MongoDB\Server\4.2\bin\mongoimport.exe" --db wikidb --collection wikicollection --type json --file %i --jsonArray```
