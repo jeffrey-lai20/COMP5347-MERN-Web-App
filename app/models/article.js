@@ -1,19 +1,34 @@
 
-var mongoose = require('./database')
+var mongoose = require('./db')
 
-var ArticleSchema = new mongoose.Schema({
-    title: String,
-    timestamp:String,
-    user:String},
-{
-    versionKey: false
-})
+var RevisionSchema = new mongoose.Schema(
+		{title: String, 
+		 timestamp:String, 
+		 user:String, 
+		 anon:String},
+		 {
+		 	versionKey: false
+		})
 
-ArticleSchema.statics.findAll = function(callback) {
-    return this.find({})
-    .exec(callback)
+// Query to find the top n articles with highest revisions
+RevisionSchema.statics.findHighestRevisions = function(noOfArticles, callback){
+    return this.find()
+    .select('title')
+	.sort({'timestamp':-1})
+	.limit(noOfArticles)
+	.exec(callback)
 }
 
-var Article = mongoose.model('Article', ArticleSchema, 'revisions')
+RevisionSchema.statics.findLowestRevisions = function(noOfArticles, callback){
+	
+	return this.find()
+	.sort({'timestamp':-1})
+	.limit(noOfArticles)
+	.exec(callback)
+}
 
-module.exports = Article
+
+
+var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
+
+module.exports = Revision
