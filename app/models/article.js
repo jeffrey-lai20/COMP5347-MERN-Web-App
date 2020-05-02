@@ -1,25 +1,33 @@
 
-// var mongoose = require('./database')
-var mongoose = require('mongoose');
+var mongoose = require('./db')
 
-mongoose.connect('mongod://localhost/WikipediaArticles', { useNewUrlParser: true}, function () {
-    console.log('mongod connected')
-})
+var RevisionSchema = new mongoose.Schema(
+		{title: String, 
+		 timestamp:String, 
+		 user:String, 
+		 anon:String},
+		 {
+		 	versionKey: false
+		})
 
-var ArticleSchema = new mongoose.Schema({
-    title: String,
-    timestamp:String,
-    user:String},
-{
-    versionKey: false
-})
-
-ArticleSchema.statics.findAll = function(callback) {
-    return this.find({})
-    .limit(1)
-    .exec(callback)
+RevisionSchema.statics.findTopTwoHighestRevisions = function(noOfArticles, callback){
+    return this.find()
+    .select('title')
+	.sort({'timestamp':-1})
+	.limit(noOfArticles)
+	.exec(callback)
 }
 
-var Article = mongoose.model('Article', ArticleSchema, 'articles')
+RevisionSchema.statics.findTopTwoLowestRevisions = function(callback){
+	
+	return this.find()
+	.sort({'timestamp':-1})
+	.limit(1)
+	.exec(callback)
+}
 
-module.exports = Article
+
+
+var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
+
+module.exports = Revision

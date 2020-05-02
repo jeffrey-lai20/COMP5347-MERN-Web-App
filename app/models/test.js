@@ -21,12 +21,14 @@ var articleSchema = new mongoose.Schema(
 			    versionKey: false 
 		});
 
-var Article = mongoose.model('Article', articleSchema, 'articles');
+var ArticleTest = mongoose.model('Article', articleSchema, 'articles');
 
-Article.find({}).limit(1).exec(function(err, result) {
+ArticleTest.find({}).limit(1).exec(function(err, result) {
     if (err) {
         console.log("Query error")
     } else {
         console.log(result[0]);
     }
 });
+
+module.exports = ArticleTest
