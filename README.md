@@ -33,7 +33,7 @@ To import all the json files into mongodb:
 * In C:/Program Files/MongoDB/server/3.4/bin 
 * Run the following command:
 
-``` mongod.exe --dbpath <path to mongoDB directory> 
+``` mongod.exe --dbpath <path to mongoDB directory> ```
 
 ** Starting the server - backend runs on port 5000 ** 
 
