@@ -1,6 +1,27 @@
 # comp5347
 
-## Instructions to run code:
+# RUNNING APP - 3 STEPS #
+
+** Running database - starting MongoDB database engine daemon **
+
+* In C:/Program Files/MongoDB/server/3.4/bin 
+* Run the following command:
+
+``` mongod.exe --dbpath <path to mongoDB directory> ```
+
+** Starting the server - backend runs on port 5000 ** 
+
+``` node server.js ```
+
+** Starting the frontend - react app runs on port 3000 **
+
+* React app is in views
+* To run react:
+``` cd frontend ```
+``` npm start ```
+* app should be running on localhost:3000
+
+## Database set up and installing dependencies 
 
 ** Install all dependencies in package.json **
 
@@ -26,23 +47,3 @@ To import all the json files into mongodb:
 
 ```for %i in (C:\full-path-to-database-file\*.json)do "C:\Program Files\MongoDB\Server\4.2\bin\mongoimport.exe" --db wikidb --collection wikicollection --type json --file %i --jsonArray```
 
-# RUNNING APP - 3 STEPS #
-
-** Running database - starting MongoDB database engine daemon **
-
-* In C:/Program Files/MongoDB/server/3.4/bin 
-* Run the following command:
-
-``` mongod.exe --dbpath <path to mongoDB directory> ```
-
-** Starting the server - backend runs on port 5000 ** 
-
-``` node server.js ```
-
-** Starting the frontend - react app runs on port 3000 **
-
-* React app is in views
-* To run react:
-``` cd frontend ```
-``` npm start ```
-* app should be running on localhost:3000
