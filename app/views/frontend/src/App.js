@@ -17,6 +17,8 @@ export default () => {
      
       <Router>
         <Route path="/login" component = {Login}/>
+        { loggedIn ? ( <Redirect to="/main"/>) : (<Login loginFunction={login}/>)}
+
         <Route path="/main" component = {MainPage}/>
 
       </Router>
