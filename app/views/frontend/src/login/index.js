@@ -1,11 +1,13 @@
 import React from "react";
 
+import Button, { ButtonAppearances } from '@atlaskit/button';
+
 export const Login = ({loginFunction}) => {
 
     return (
         <div>
         <h2> Login Page goes here </h2>
-        <button onClick={loginFunction}>LOG IN</button>
+        <Button  appearance="primary" href="/main">LOG IN</Button>
         </div>
     )
 }

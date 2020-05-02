@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlaskit/button": "^13.3.11",
+    "@atlaskit/dynamic-table": "^13.7.4",
     "@atlaskit/select": "^11.0.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",

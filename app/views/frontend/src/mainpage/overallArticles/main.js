@@ -2,6 +2,7 @@ import React, { useState, Component, useEffect } from "react";
 import { ArticleHeading, SubHeading, Result } from "./styled"
 import Select from '@atlaskit/select';
 
+
 export const OverallArticles = props => {
 
     const [topRevisions, setTopRevisions] = useState([]);
@@ -12,6 +13,7 @@ export const OverallArticles = props => {
       fetch('/api/topArticleRevisions').then(res => res.json()).then(list => setTopRevisions(list));
       fetch('/api/lowestArticleRevisions').then(res => res.json()).then(list => setLowestRevisions(list));
     }, [])
+
 
     const topRevisionsDisplay = topRevisions.map(article => {
       return (<Result><b>Article:</b> {article.title} <br></br><b>Number of Revisions:</b>
@@ -49,6 +51,7 @@ export const OverallArticles = props => {
           <SubHeading>Top articles with the highest number of revisions</SubHeading>
          
           {topRevisionsDisplay}
+
 
           <SubHeading>Top articles with the lowest number of revisions</SubHeading>
 
