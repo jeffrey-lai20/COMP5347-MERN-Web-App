@@ -2,8 +2,10 @@ var express = require('express');
 
 var Article = require("../models/article")
 
-module.exports.showLoginPage = function(req, res) {
-    res.render('login.pug');
+// An api endpoint that returns a short list of items
+module.exports.getList = function(req, res) {
+    var list = ["item1", "item2", "item3"];
+    res.json(list);
 }
 
 module.exports.showMainPage = function(req, res) {
