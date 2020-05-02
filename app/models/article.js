@@ -10,7 +10,8 @@ var RevisionSchema = new mongoose.Schema(
 		 	versionKey: false
 		})
 
-RevisionSchema.statics.findTopTwoHighestRevisions = function(noOfArticles, callback){
+// Query to find the top n articles with highest revisions
+RevisionSchema.statics.findHighestRevisions = function(noOfArticles, callback){
     return this.find()
     .select('title')
 	.sort({'timestamp':-1})
@@ -18,11 +19,11 @@ RevisionSchema.statics.findTopTwoHighestRevisions = function(noOfArticles, callb
 	.exec(callback)
 }
 
-RevisionSchema.statics.findTopTwoLowestRevisions = function(callback){
+RevisionSchema.statics.findLowestRevisions = function(noOfArticles, callback){
 	
 	return this.find()
 	.sort({'timestamp':-1})
-	.limit(1)
+	.limit(noOfArticles)
 	.exec(callback)
 }
 
