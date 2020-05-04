@@ -86,6 +86,15 @@ RevisionSchema.statics.findAllArticles = function(callback){
 	]).exec(callback)
 }
 
+RevisionSchema.statics.findTopFiveUsers = function(Ititle, callback) {
+	this.aggregate([
+		{$match: {title: Ititle}},
+		{$group: {_id: {userid: "$userid", user: "$user"}, userCount : {$sum:1}}},
+		{$sort: {userCount:-1}},
+		{$limit:5}
+	]).exec(callback)
+}
+
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 
 module.exports = Revision
