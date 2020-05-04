@@ -16,12 +16,12 @@ export const OverallArticles = props => {
 
 
     const topRevisionsDisplay = topRevisions.map(article => {
-      return (<Result><b>Article:</b> {article.title} <br></br><b>Number of Revisions:</b>
+      return (<Result><b>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count}
       </Result>)
     })
 
     const lowestRevisionsDisplay = lowestRevisions.map(article => {
-      return (<Result><b>Article:</b> {article.title} <br></br><b>Number of Revisions:</b>
+      return (<Result><b>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count}
       </Result>)
     })
 

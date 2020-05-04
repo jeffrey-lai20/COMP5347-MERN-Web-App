@@ -76,6 +76,16 @@ RevisionSchema.static.findShortestHistory = function(noOfArticle, callback) {
 	]).exec(callback)
 }
 
+/*
+	Individual Articles
+*/
+
+RevisionSchema.statics.findAllArticles = function(callback){
+	return this.aggregate([
+		{$group : {_id : {title : "$title"}, count : {$sum : 1}}}
+	]).exec(callback)
+}
+
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 
 module.exports = Revision
