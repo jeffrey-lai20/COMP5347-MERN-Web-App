@@ -8,6 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { IndividualArticlesCharts } from "./charts/main";
 
 
 export const IndividualArticles = () => {
@@ -45,7 +46,6 @@ export const IndividualArticles = () => {
   </TableBody>
     )
   })
-
     return (
         <div>
         <ArticleHeading>Individual Articles</ArticleHeading>
@@ -79,42 +79,11 @@ export const IndividualArticles = () => {
 
       </Table>
       </UserTable>
-        
-        <br></br>
-
-        <a><b>Top 3 News Articles:</b></a>
 
         </Result>
 
-        <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>
-
-        <br></br>
+        <IndividualArticlesCharts></IndividualArticlesCharts>
         
-        <div>
-        <a><b>Pie Chart Showing User Type Distribution:</b></a>
-        <Pie
-        data={{
-          labels: ['User Type 1', 'User Type 2', 'UserType 3'],
-          datasets: [{
-            data: [2000, 4000, 2450],
-            backgroundColor: ['red', 'blue', 'green']
-          }]
-        }}
-        height='75%'/>
-        
-        </div>
-
-        <br></br>
-    
-       
-        <a><b>Bar Chart:</b></a>
-
-        
-        
-       
-
-        
-
     </div>
 
     )
