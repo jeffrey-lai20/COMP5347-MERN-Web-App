@@ -54,7 +54,7 @@ module.exports.getSmallestArticleGroup = function(req, res) {
     })
 }
 
-module.export.getLongestHistory = function(req, res) {
+module.exports.getLongestHistory = function(req, res) {
     noOfArticles = 2;
 
     Revision.findLongestHistory(noOfArticles, function(error, result) {
@@ -67,7 +67,7 @@ module.export.getLongestHistory = function(req, res) {
     })
 }
 
-module.export.getShortestHistory = function(req, res) {
+module.exports.getShortestHistory = function(req, res) {
     noOfArticles = 2;
 
     Revision.findShortestHistory(noOfArticles, function(error, result) {
