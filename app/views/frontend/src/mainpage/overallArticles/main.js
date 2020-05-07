@@ -5,12 +5,12 @@ import Select from '@atlaskit/select';
 
 export const OverallArticles = props => {
 
-  const [topRevisions, setTopRevisions] = useState([]);
-  const [lowestRevisions, setLowestRevisions] = useState([]);
-  const [largestGroup, setLargestGroup] = useState([]);
-  const [smallestGroup, setSmallestGroup] = useState([]);
-  const [longestHistory, setLongestHistory] = useState([]);
-  const [shortestHistory, setShortestHistory] = useState([]);
+	const [topRevisions, setTopRevisions] = useState([]);
+	const [lowestRevisions, setLowestRevisions] = useState([]);
+	const [largestGroup, setLargestGroup] = useState([]);
+	const [smallestGroup, setSmallestGroup] = useState([]);
+	const [longestHistory, setLongestHistory] = useState([]);
+	const [shortestHistory, setShortestHistory] = useState([]);
 
 
   // Retrieve list from Express App
@@ -36,12 +36,12 @@ export const OverallArticles = props => {
   })
 
   const largestGroupDisplay = largestGroup.map(article => {
-    return (<Result><b>Article:</b> {article._id} <br></br><b>Number of Users:</b> {article.count}
+    return (<Result><b>Article:</b> {article._id} <br></br><b>Number of Users:</b> {article.titleCount}
     </Result>)
   })
 
   const smallestGroupDisplay = smallestGroup.map(article => {
-    return (<Result><b>Article:</b> {article._id} <br></br><b>Number of Users:</b> {article.count}
+    return (<Result><b>Article:</b> {article._id} <br></br><b>Number of Users:</b> {article.titleCount}
     </Result>)
   })
 

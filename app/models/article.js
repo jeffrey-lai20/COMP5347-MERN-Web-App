@@ -1,20 +1,24 @@
 var mongoose = require('./db')
+var fs = require('fs');
+var readline = require('readline');
 
 var RevisionSchema = new mongoose.Schema(
-		{title: String, 
-		 timestamp:String, 
-		 user:String, 
-		 anon:String},
-		 {
+		{title		: String, 
+		 timestamp	: Date, 
+		 user		: String, 
+		 anon		: String,
+		 usertype	: String
+		 }, {
 		 	versionKey: false
-		})
+		 })
+
 
 // Query to find the top n articles with highest revisions
 RevisionSchema.statics.findHighestRevisions = function(noOfArticle, callback){
 
 	return this.aggregate([
 		{$group : {_id : {title : "$title"}, count : {$sum : 1}}},
-		{$sort 	: {count:-1}},
+		{$sort 	: {count : -1}},
 		{$limit : noOfArticle}
 	]).exec(callback)
 }
@@ -24,7 +28,7 @@ RevisionSchema.statics.findLowestRevisions = function(noOfArticle, callback){
 	
 	return this.aggregate([
 		{$group : {_id : {title : "$title"}, count : {$sum : 1}}},
-		{$sort 	: {count:1}},
+		{$sort 	: {count : 1}},
 		{$limit : noOfArticle}
 	]).exec(callback)
 }
@@ -34,9 +38,10 @@ RevisionSchema.statics.findLowestRevisions = function(noOfArticle, callback){
 RevisionSchema.statics.findEditLargestGroup = function(noOfArticle, callback){
 
 	return this.aggregate([
+		{$match	: {usertype : 'registered'}},
 		{$group : {_id : {"title" : "$title", "user" : "$user"}, count : {$sum : 1}}},
-		{$group : {_id : "$_id.title", count : {$sum : 1}}},
-		{$sort 	: {count : -1}},
+		{$group : {_id : "$_id.title", titleCount : {$sum : 1}}},
+		{$sort 	: {titleCount : -1}},
 		{$limit : noOfArticle}
 	]).exec(callback)
 }
@@ -46,9 +51,10 @@ RevisionSchema.statics.findEditLargestGroup = function(noOfArticle, callback){
 RevisionSchema.statics.findEditSmallestGroup = function(noOfArticle, callback) {
 
 	return this.aggregate([
+		{$match	: {usertype : 'registered'}},
 		{$group : {_id : {"title" : "$title", "user" : "$user"}, count : {$sum : 1}}},
-		{$group : {_id : "$_id.title", count : {$sum : 1}}},
-		{$sort 	: {count : 1}},
+		{$group : {_id : "$_id.title", titleCount : {$sum : 1}}},
+		{$sort 	: {titleCount : 1}},
 		{$limit : noOfArticle}
 	]).exec(callback)
 }
@@ -95,5 +101,36 @@ RevisionSchema.statics.findTopFiveUsers = function(Ititle, callback) {
 }
 
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
+
+/*
+	Constructing Usertype with text file
+*/
+// Reading text:
+function addUsertypeFromTxt(model, path, type){
+	var userArray = [];
+	fs.readFileSync(path).toString().split('\n').forEach(line=>{ userArray.push(line); })
+	model.updateMany(
+		{ $and: [{ user : {$in : userArray}}, {usertype : {$exists : false}}]},
+		{ $set:{"usertype":type}},
+	    function(error){ if(error){ console.error(error)} }
+  )
+}
+
+// Administrator : admin
+// Bot : bot
+// Registered User : registered
+addUsertypeFromTxt(Revision, './app/views/frontend/administrators.txt', "admin")
+addUsertypeFromTxt(Revision, './app/views/frontend/bots.txt', "bot")
+Revision.updateMany(
+    { $and:[{usertype:{$exists:false}},{anon:{$exists:false}}] },
+    { $set:{"usertype":"registered"}},
+    function(error){ if(error){ console.error(error)} }
+)
+// If Anon is true, anonymous
+Revision.updateMany(
+    {$and : [{usertype : {$exists : false}}, {anon : {$exists : true}}]},
+    {$set : {"usertype":"anonymous"}},
+    function(error){ if(error){ console.error(error)} }
+)
 
 module.exports = Revision
