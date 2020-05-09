@@ -1,7 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
 
-import Select from '@atlaskit/select';
-
 import { ArticleHeading, Result } from "./styled"
 
 
@@ -23,13 +21,6 @@ export const AuthorAnalytics = () => {
     return (
         <div>
             <ArticleHeading>Author Analytics</ArticleHeading>
-            {/* <AuthorSelect>
-            <Select
-             options = {allAuthorsOptions}
-             placeholder = "Search for an author...">
-
-            </Select>
-            </AuthorSelect> */}
 
         <Result>
 

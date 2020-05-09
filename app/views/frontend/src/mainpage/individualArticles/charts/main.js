@@ -37,7 +37,7 @@ export const IndividualArticlesCharts = () => {
           <Result>
 
           {chartType==1
-        ? <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>: <br></br>}
+        ? <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>: <a></a>}
 
         {/* BAR CHART */}
 
