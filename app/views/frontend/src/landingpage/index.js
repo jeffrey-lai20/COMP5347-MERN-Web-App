@@ -1,5 +1,4 @@
 import React from "react";
-
 import Button, { ButtonAppearances } from '@atlaskit/button';
 
 export const LandingPage = () => {
