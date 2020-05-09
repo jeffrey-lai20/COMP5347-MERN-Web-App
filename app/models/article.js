@@ -190,4 +190,4 @@ Revision.updateMany(
     }
 )
 
-module.exports = Revision
+module.exports = Revision;
