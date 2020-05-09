@@ -8,6 +8,7 @@ router.get('/api/individual/getAllArticles', controller.getAllArticles);
 router.get('/api/individual/getTopFiveUsers', controller.getTopFiveUsers);
 
 router.get('/api/individual/getIndividualBarChartData', controller.getBarChartData)
+router.get('/api/individual/getLatestRevision', controller.getLatestRevisionForArticle)
 
 // router.get('/reddit', controller.reddit);
 

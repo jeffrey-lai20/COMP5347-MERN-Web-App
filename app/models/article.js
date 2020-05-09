@@ -109,6 +109,14 @@ RevisionSchema.statics.getIndividualBarChartData = function(Ititle, callback) {
 	]).exec(callback)
 }
 
+RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
+	this.aggregate([
+		{$match: {title: Ititle}},
+		{$sort 	: {minTimestamp : -1}},
+		{$limit:1}
+	])
+}
+
 /*
 	Author Analytics
 */

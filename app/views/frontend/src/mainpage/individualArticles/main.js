@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import {ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect} from "./styled";
+import {ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect, DateSelect} from "./styled";
 import Select from '@atlaskit/select';
 import { Pie } from 'react-chartjs-2';
 
@@ -17,6 +17,10 @@ export const IndividualArticles = () => {
   const [currentArticle, setCurrentArticle] = useState([]);
   const [currentArticleTitle, setCurrentArticleTitle] = useState("");
   const [topFiveUsers, setTopFiveUsers] = useState([]);
+  const [latestRevision, setLatestRevision] = useState([]);
+  const [fromYear, setFromYear] = useState([]);
+  const [toYear, setToYear] = useState([]);
+
   var topThreeNews;
    // Retrieve list from Express App
    useEffect(() => {
@@ -47,16 +51,22 @@ export const IndividualArticles = () => {
       // GET request
       fetch('/api/individual/getTopFiveUsers/?title=' + value._id.title).then(res => res.json()).then(list => setTopFiveUsers(list)); 
 
-      // r.getTop(currentArticleTitle, {limit: 3}).map(post => {
-      //   var news = {title:post.title, url:post.url};
-      //   topThreeNews.push(news);
-      // })
-      
+      fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
+
+      topThreeNews = [];
+
+      r.getTop(currentArticleTitle, {limit: 3}).map(post => {
+        var news = {title:post.title, url:post.url};
+        topThreeNews.push(news);
+      })
   }
 
-  var news = topThreeNews.map((item, key) =>
-    <li>{item.title}</li>
-  );
+  // var news = topThreeNews.map(item => {
+  //   return (
+  //     <li>{item.title}</li>
+  //   )
+  // }
+  // );
 
   var topFiveUsersTable = topFiveUsers.map(user => {
   
@@ -79,7 +89,49 @@ export const IndividualArticles = () => {
           options = {allArticlesOptions}
           placeholder = "Select an article...">
           </Select>
+
           </ArticleSelect>
+
+          <DateSelect>
+          <Select 
+          onChange = {e => setFromYear(e.value)}
+          options = {[
+          {label: "2010", value: "2010"},
+          {label: "2011", value: "2011"},
+          {label: "2012", value: "2012"},
+          {label: "2013", value: "2013"},
+          {label: "2014", value: "2014"},
+          {label: "2015", value: "2015"},
+          {label: "2016", value: "2016"},
+          {label: "2017", value: "2017"},
+          {label: "2018", value: "2018"},
+          {label: "2019", value: "2019"},
+          {label: "2020", value: "2020"}
+        ]}
+          placeholder = "From: ">
+          </Select>
+
+          <br></br>
+
+          <Select 
+           onChange = {e => setToYear(e.value)}
+           options = {[
+            {label: "2010", value: "2010"},
+            {label: "2011", value: "2011"},
+            {label: "2012", value: "2012"},
+            {label: "2013", value: "2013"},
+            {label: "2014", value: "2014"},
+            {label: "2015", value: "2015"},
+            {label: "2016", value: "2016"},
+            {label: "2017", value: "2017"},
+            {label: "2018", value: "2018"},
+            {label: "2019", value: "2019"},
+            {label: "2020", value: "2020"}
+          ]}
+          placeholder = "To: ">
+          </Select>
+          </DateSelect>
+         
 
           <SubHeading>Summary Information</SubHeading>
         <Result>
@@ -106,7 +158,7 @@ export const IndividualArticles = () => {
 
       <br></br>
         <a><b>News:</b></a>
-        <ul>{news}</ul>
+        {/* <ul>{news}</ul> */}
 
         </Result>
 
