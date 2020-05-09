@@ -91,15 +91,14 @@ RevisionSchema.statics.findShortestHistory = function(noOfArticle, callback) {
 
 RevisionSchema.statics.barChartDistributionYear = function(callback) {
 	return this.aggregate([
-		{$group : 	{_id : {year : {$substr : ["$timestamp", 0, 4]}},
-						registered 	: { "$cond" : [{"$eq" : ["$usertype", "registered"]}, 1, 0] },
-						admin 		: { "$cond" : [{"$eq" : ["$usertype", "admin"]}, 1, 0] },
-						bot 		: { "$cond" : [{"$eq" : ["$usertype", "bot"]}, 1, 0] },
-						anonymous 	: { "$cond" : [{"$eq" : ["$usertype", "anonymous"]}, 1, 0] }
-					}
-		},
-		{$sort : {"_id" : 1}}
-	]).exec(callback)
+	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
+	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
+	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
+	          admin: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "admin" ]},1,0] }},
+	          bot: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "bot" ]},1,0] }}}
+	       },
+	       {$sort:{"_id":1}}
+	     ]).exec(callback)
 }
 
 

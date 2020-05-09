@@ -14,8 +14,8 @@ export const OverallArticles = props => {
 	const [longestHistory, setLongestHistory] = useState([]);
 	const [shortestHistory, setShortestHistory] = useState([]);
 	// Overall: Chart
-	const [pieChartDist, setPieChartDist] = useState([]);
 	const [barChartDist, setBarChartDist] = useState([]);	
+	const [pieChartDist, setPieChartDist] = useState([]);
 
 
   // Retrieve list from Express App
@@ -28,8 +28,8 @@ export const OverallArticles = props => {
     fetch('/api/longesArticletHistory').then(res => res.json()).then(list => setLongestHistory(list));
     fetch('/api/shortestArticleHistory').then(res => res.json()).then(list => setShortestHistory(list));
 	// Overall: Chart
-    fetch('/api/barChartDistYear').then(res => res.json()).then(list => setPieChartDist(list));
-    fetch('/api/pieChartDistUsertype').then(res => res.json()).then(list => setBarChartDist(list));
+    fetch('/api/barChartDistYear').then(res => res.json()).then(list => setBarChartDist(list));
+    fetch('/api/pieChartDistUsertype').then(res => res.json()).then(list => setPieChartDist(list));
   }, [])
 
 
@@ -62,7 +62,113 @@ export const OverallArticles = props => {
     return (<Result><b>Article:</b> {article._id} <br></br><b>Age:</b> {article.minTimestamp}
     </Result>)
   })
-
+  
+  
+  const bar_years = [];
+  const bar_registered = [];
+  const bar_anonymous = [];
+  const bar_admin = [];
+  const bar_bot = [];
+  
+  const barChartDistDisplay = barChartDist.map(article => {
+	  
+	  // X axis:
+	  bar_years.push(article._id.year);
+	  
+	  // Y axis:
+	  bar_registered.push(article.registered);
+	  bar_anonymous.push(article.anonymous);
+	  bar_admin.push(article.admin);
+	  bar_bot.push(article.bot);
+	  
+	  const data = {
+			  labels: bar_years,
+			  datasets: [
+			    {
+				      label: 'Registered',
+				      backgroundColor: 'rgba(255,99,132,0.2)',
+				      borderColor: 'rgba(255,99,132,1)',
+				      borderWidth: 1,
+				      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+				      hoverBorderColor: 'rgba(255,99,132,1)',
+				      data: bar_registered
+			    },
+			    {
+				      label: 'Anonymous',
+				      backgroundColor: 'rgba(250,255,10,0.2)',
+				      borderColor: 'rgba(250,255,10,1)',
+				      borderWidth: 1,
+				      hoverBackgroundColor: 'rgba(250,255,10,0.4)',
+				      hoverBorderColor: 'rgba(250,255,10,1)',
+				      data: bar_anonymous
+				},
+				{
+				      label: 'Administrator',
+				      backgroundColor: 'rgba(18,10,255,0.2)',
+				      borderColor: 'rgba(18,10,255,1)',
+				      borderWidth: 1,
+				      hoverBackgroundColor: 'rgba(18,10,255,0.4)',
+				      hoverBorderColor: 'rgba(18,10,255,1)',
+				      data: bar_admin
+				},
+				{
+				      label: 'Bot',
+				      backgroundColor: 'rgba(22,255,10,0.2)',
+				      borderColor: 'rgba(22,255,10,1)',
+				      borderWidth: 1,
+				      hoverBackgroundColor: 'rgba(22,255,10,0.4)',
+				      hoverBorderColor: 'rgba(22,255,10,1)',
+				      data: bar_bot
+				}
+			  ]
+	  };
+	  return (
+		      <div>
+		        <Bar
+		          data={data}
+		          width={100}
+		          height={800}
+		          options={{
+		            maintainAspectRatio: false
+		          }}
+		        />
+		      </div>
+	  )
+  })
+ 
+  const dataType = [];
+  const dataCount = [];
+  
+  const pieChartDisplay = pieChartDist.map(article => {
+	  dataType.push(article._id.usertype);
+	  dataCount.push(article.count);
+	  
+	  const data = {
+				labels: dataType,
+				datasets: [{
+					data: dataCount,
+					backgroundColor: [
+					'#FF6384',
+					'#36A2EB',
+					'#FFCE56',
+					'#00FF00'
+					],
+					hoverBackgroundColor: [
+					'#FF6384',
+					'#36A2EB',
+					'#FFCE56',
+					'#00FF00'
+					]
+				}]
+		};
+	  
+	  return (
+		      <div>
+		        <Pie data={data} />
+		      </div>
+	  )
+  })
+  
   const NumberOfArticlesSelect = () => (
     <Select
       options={[
@@ -79,33 +185,7 @@ export const OverallArticles = props => {
     />
   );
   
-//  const pieChartDisplay = pieChartDist.map(article => {
-//	  return (
-//			  <div>
-//				  <canvas id="chart"></canvas>
-//				  <script>
-//				  	const context = document.getElementById('chart').getContext();
-//				  	const xlabels = [article._id.usertype];
-//				  	const ylabels = [article.count];
-//				  	const myChart = new Chart(context, {
-//				  		type: 'pie',
-//				  		data: [{ 
-//				  			labels: xlabels,
-//				  			datasets: [{
-//				  				label: 'Revision number distribution',
-//				  				data: ylabels,
-//				  				backgroundColour: [
-//				  					'rgba(255,105,145,0.6)',
-//				  					'rgba(155,100,210,0.6)',
-//				  					'rgba(90,178,255,0.6)',
-//				  					'rgba(240,134,67,0.6)'
-//				  				]
-//				  			}]
-//				  		}]
-//				  	});
-//				  	</script>
-//			  	</div>)
-//  })
+
   
   return (
       <div>
@@ -142,7 +222,11 @@ export const OverallArticles = props => {
         
         <SubHeading> Bar chart of revision number distribution by year and by user types</SubHeading>
         
+        {barChartDistDisplay}
+        
         <SubHeading> Pie chart of revision number distribution by user types</SubHeading>
+        
+        {pieChartDisplay}
                 
         </div>
   );
