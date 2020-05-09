@@ -1,27 +1,35 @@
 import React, { useState, Component, useEffect } from "react";
 import { ArticleHeading, SubHeading, Result } from "./styled"
 import Select from '@atlaskit/select';
+import {Bar, Pie} from 'react-chartjs-2';
 
 
 export const OverallArticles = props => {
 
+	// Overall: Data
 	const [topRevisions, setTopRevisions] = useState([]);
 	const [lowestRevisions, setLowestRevisions] = useState([]);
 	const [largestGroup, setLargestGroup] = useState([]);
 	const [smallestGroup, setSmallestGroup] = useState([]);
 	const [longestHistory, setLongestHistory] = useState([]);
 	const [shortestHistory, setShortestHistory] = useState([]);
+	// Overall: Chart
+	const [pieChartDist, setPieChartDist] = useState([]);
+	const [barChartDist, setBarChartDist] = useState([]);	
 
 
   // Retrieve list from Express App
   useEffect(() => {
+	// Overall: Data
     fetch('/api/topArticleRevisions').then(res => res.json()).then(list => setTopRevisions(list));
     fetch('/api/lowestArticleRevisions').then(res => res.json()).then(list => setLowestRevisions(list));
     fetch('/api/largestArticleGroup').then(res => res.json()).then(list => setLargestGroup(list));
     fetch('/api/smallestArticleGroup').then(res => res.json()).then(list => setSmallestGroup(list));
     fetch('/api/longesArticletHistory').then(res => res.json()).then(list => setLongestHistory(list));
     fetch('/api/shortestArticleHistory').then(res => res.json()).then(list => setShortestHistory(list));
-
+	// Overall: Chart
+    fetch('/api/barChartDistYear').then(res => res.json()).then(list => setPieChartDist(list));
+    fetch('/api/pieChartDistUsertype').then(res => res.json()).then(list => setBarChartDist(list));
   }, [])
 
 
@@ -70,7 +78,35 @@ export const OverallArticles = props => {
       placeholder="Select number of articles"
     />
   );
-
+  
+//  const pieChartDisplay = pieChartDist.map(article => {
+//	  return (
+//			  <div>
+//				  <canvas id="chart"></canvas>
+//				  <script>
+//				  	const context = document.getElementById('chart').getContext();
+//				  	const xlabels = [article._id.usertype];
+//				  	const ylabels = [article.count];
+//				  	const myChart = new Chart(context, {
+//				  		type: 'pie',
+//				  		data: [{ 
+//				  			labels: xlabels,
+//				  			datasets: [{
+//				  				label: 'Revision number distribution',
+//				  				data: ylabels,
+//				  				backgroundColour: [
+//				  					'rgba(255,105,145,0.6)',
+//				  					'rgba(155,100,210,0.6)',
+//				  					'rgba(90,178,255,0.6)',
+//				  					'rgba(240,134,67,0.6)'
+//				  				]
+//				  			}]
+//				  		}]
+//				  	});
+//				  	</script>
+//			  	</div>)
+//  })
+  
   return (
       <div>
 
@@ -101,7 +137,11 @@ export const OverallArticles = props => {
         <SubHeading>Top articles with the shortest history</SubHeading>
 
         {shortestHistoryDisplay}
-      
+        
+        <SubHeading> Bar chart of revision number distribution by year and by user types</SubHeading>
+        
+        <SubHeading> Pie chart of revision number distribution by user types</SubHeading>
+                
         </div>
   );
 

@@ -79,3 +79,25 @@ module.exports.getShortestHistory = function(req, res) {
         }
     })
 }
+
+module.exports.getBarChartDistributionYear = function(req, res) {
+    Revision.barChartDistributionYear(function(error, result) {
+        if (error) {
+            console.log("Cannot find revision number distribution by year")
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+module.exports.getPieChartDistributionUsertype = function(req, res) {
+    Revision.pieChartDistributionUsertype(function(error, result) {
+        if (error) {
+            console.log("Cannot find revision number distribution by user type")
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
