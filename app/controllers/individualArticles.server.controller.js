@@ -27,3 +27,31 @@ module.exports.getTopFiveUsers = function(req, res) {
         }
     })
 }
+
+
+module.exports.getBarChartData = function(req, res) {
+    title = req.query.title;
+
+    Revision.getIndividualBarChartData(title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+// Author analytics controller
+module.exports.getAllAuthors = function(req, res) {
+
+    Revision.findAllAuthors(function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+

@@ -9,33 +9,57 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { IndividualArticlesCharts } from "./charts/main";
+import { RedditArticles } from "./reddit/main"
 
 
 export const IndividualArticles = () => {
   const [allArticles, setAllArticles] = useState([]);
   const [currentArticle, setCurrentArticle] = useState([]);
-  const [currentArticleTitle, setCurrentArticleTitle] = useState([]);
+  const [currentArticleTitle, setCurrentArticleTitle] = useState("");
   const [topFiveUsers, setTopFiveUsers] = useState([]);
-  const [topThreeNews, setTopThreeNews] = useState([]);
-
+  var topThreeNews;
    // Retrieve list from Express App
    useEffect(() => {
+     // GET request
     fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
   }, [])
 
+  const Snoowrap = require('snoowrap');
+    var topThreeNews = [];
+
+    // Build Snoowrap and Snoostorm clients
+    const r = new Snoowrap({
+        userAgent: 'reddit-bot-example-node',
+        clientId: 'QO4LJaIJYqoScQ',
+        clientSecret: 'n5iwkKIRcAnpW_a0Q9x9j9oGUtw',
+        username: 'ritacheung9',
+        password: 'comp5347'
+    });
+
   const allArticlesOptions = allArticles.map(article => ({
-    label: "Title: " + article._id.title + "               " + "Number of Revisions: " + article.count,
+    label: "Title: " + article._id.title + " " + "Number of Revisions: " + article.count,
     value: article
   }))
 
   const articleSelected = (value) => {
       setCurrentArticleTitle(value._id.title);
       setCurrentArticle(value);
-      fetch('/api/individual/getTopFiveUsers/?title=' + currentArticleTitle).then(res => res.json()).then(list => setTopFiveUsers(list));
+      // GET request
+      fetch('/api/individual/getTopFiveUsers/?title=' + value._id.title).then(res => res.json()).then(list => setTopFiveUsers(list)); 
+
+      // r.getTop(currentArticleTitle, {limit: 3}).map(post => {
+      //   var news = {title:post.title, url:post.url};
+      //   topThreeNews.push(news);
+      // })
+      
   }
 
+  var news = topThreeNews.map((item, key) =>
+    <li>{item.title}</li>
+  );
+
   var topFiveUsersTable = topFiveUsers.map(user => {
-    // return (<div><a>Username: {user._id.user} Count: {user.userCount}</a><br></br></div>)
+  
     return (
       <TableBody>
       <TableRow>
@@ -79,6 +103,10 @@ export const IndividualArticles = () => {
 
       </Table>
       </UserTable>
+
+      <br></br>
+        <a><b>News:</b></a>
+        <ul>{news}</ul>
 
         </Result>
 

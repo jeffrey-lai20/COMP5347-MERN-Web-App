@@ -6,41 +6,20 @@ import { Pie } from 'react-chartjs-2';
 export const IndividualArticlesCharts = () => {
   
   const [chartType, setChartType] = useState([]);
+  const [userTypeNumbers, setUserTypeNumbers] = useState([]);
 
-  const renderChart = () => {
-      if (chartType == '1') {
-        return (
-          <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>
-        )
-      }
-      else if (chartType == '2') {
-        return (
-          <div>
-          <a><b>Pie Chart Showing User Type Distribution:</b></a>
-          <Pie
-          data={{
-            labels: ['User Type 1', 'User Type 2', 'UserType 3'],
-            datasets: [{
-              data: [2000, 4000, 2450],
-              backgroundColor: ['red', 'blue', 'green']
-            }]
-          }}
-          height='75%'/>
-          
-          </div>
-        )
-      }
-      else if (chartType == '3') {
-        return (
-          <a><b>Top 3 News Articles:</b></a>
-        )
-      }
-      else {
-        return (
-          <a><b>No chart type selected</b></a>
-        )
-      }
-  }
+  var pieChartLabels = ['anon'];
+  var pieChartData = [1];
+
+  useEffect(() => {
+    // GET request
+   fetch('/api/individual/getIndividualBarChartData/?title=Australia').then(res => res.json()).then(list => setUserTypeNumbers(list));
+ }, [])
+
+//  var barChartLabelling = userTypeNumbers.map(userType => {
+//    pieChartLabels.push(userType.userType);
+//    pieChartData.push(userType.count)
+//  })
 
     return (
         <div>
@@ -56,8 +35,27 @@ export const IndividualArticlesCharts = () => {
           </Select>
           </ArticleSelect>
 
-          {renderChart}
+          {chartType==1
+        ? <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a> : <br></br>}
+
+        {chartType==2
+        ?  <div>
+        <a><b>Pie Chart Showing User Type Distribution:</b></a>
+        <Pie
+        data={{
+          labels: ['User Type 1', 'User Type 2', 'UserType 3'],
+          datasets: [{
+            data: [2000, 4000, 2450],
+            backgroundColor: ['red', 'blue', 'green']
+          }]
+        }}
+        height='75%'/>
         
+        </div> : <br></br>}
+
+        {chartType==3
+        ? <a><b>Bar Chart Showing Revision Number Distributed By Year Made By One of the Top 5 Regular Users:</b></a> : <br></br>}
+
           </div>
     )
 
