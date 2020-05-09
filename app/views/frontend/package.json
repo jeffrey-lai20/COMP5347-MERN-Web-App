@@ -20,10 +20,7 @@
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
     "react": "^16.13.1",
-<<<<<<< HEAD
-=======
     "react-apexcharts": "^1.3.7",
->>>>>>> a2677076531ae1c3a353cba886a43699779d1c1c
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
