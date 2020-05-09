@@ -79,6 +79,7 @@ module.exports.getShortestHistory = function(req, res) {
         }
     })
 }
+<<<<<<< HEAD
 
 module.exports.getBarChartDistributionYear = function(req, res) {
     Revision.barChartDistributionYear(function(error, result) {
@@ -101,3 +102,5 @@ module.exports.getPieChartDistributionUsertype = function(req, res) {
         }
     })
 }
+=======
+>>>>>>> a2677076531ae1c3a353cba886a43699779d1c1c

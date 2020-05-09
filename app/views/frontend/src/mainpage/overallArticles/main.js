@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import { ArticleHeading, SubHeading, Result } from "./styled"
+import { ArticleHeading, SubHeading, Result, ArticleSelect } from "./styled"
 import Select from '@atlaskit/select';
 import {Bar, Pie} from 'react-chartjs-2';
 
@@ -112,7 +112,9 @@ export const OverallArticles = props => {
 
         <ArticleHeading>Overall Article Analytics</ArticleHeading>
        
+        <ArticleSelect>
         <NumberOfArticlesSelect></NumberOfArticlesSelect>
+        </ArticleSelect>
       
         <SubHeading>Top articles with the highest number of revisions</SubHeading>
        

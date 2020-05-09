@@ -113,18 +113,37 @@ RevisionSchema.statics.pieChartDistributionUsertype = function(callback) {
  *	Individual Articles
  */
 
+// Query to return titles of all articles
 RevisionSchema.statics.findAllArticles = function(callback){
 	return this.aggregate([
 		{$group : {_id : {title : "$title"}, count : {$sum : 1}}}
-	]).exec(callback)
+	]).sort({name : 1}).exec(callback)
 }
 
+// Query to find the top five users of an article 
 RevisionSchema.statics.findTopFiveUsers = function(Ititle, callback) {
 	this.aggregate([
-		{$match: {title: Ititle}},
+		{$match: {title: Ititle, usertype : 'registered'}},
 		{$group: {_id: {userid: "$userid", user: "$user"}, userCount : {$sum:1}}},
 		{$sort: {userCount:-1}},
 		{$limit:5}
+	]).exec(callback)
+}
+
+RevisionSchema.statics.getIndividualBarChartData = function(Ititle, callback) {
+	this.aggregate([
+		{$match: {title: Ititle}},
+		{$group: {_id: {usertype: "$usertype"}, userCount : {$sum:1}}},
+	]).exec(callback)
+}
+
+/*
+	Author Analytics
+*/
+
+RevisionSchema.statics.findAllAuthors = function(callback) {
+	return this.aggregate([
+		{$group: {_id : {userid: "$userid", user : "$user"}}}
 	]).exec(callback)
 }
 
