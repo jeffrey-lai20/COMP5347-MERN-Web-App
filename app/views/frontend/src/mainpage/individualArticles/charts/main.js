@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import {ArticleSelect} from "./styled";
+import {ArticleSelect, Result} from "./styled";
 import Select from '@atlaskit/select';
 import { Pie } from 'react-chartjs-2';
 
@@ -34,12 +34,15 @@ export const IndividualArticlesCharts = () => {
           placeholder = "Select a chart...">
           </Select>
           </ArticleSelect>
+          <Result>
 
           {chartType==1
-        ? <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a> : <br></br>}
+        ? <a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>: <br></br>}
+
+        {/* BAR CHART */}
 
         {chartType==2
-        ?  <div>
+        ?  <div> 
         <a><b>Pie Chart Showing User Type Distribution:</b></a>
         <Pie
         data={{
@@ -51,10 +54,12 @@ export const IndividualArticlesCharts = () => {
         }}
         height='75%'/>
         
-        </div> : <br></br>}
+      </div> : <br></br>}
 
-        {chartType==3
+      {chartType==3
         ? <a><b>Bar Chart Showing Revision Number Distributed By Year Made By One of the Top 5 Regular Users:</b></a> : <br></br>}
+
+      </Result>
 
           </div>
     )
