@@ -2,6 +2,7 @@ import React, { useState, Component } from "react";
 import { MainPage } from "./mainpage";
 import { Login } from "./login";
 import { LandingPage } from "./landingpage"
+import { SignUp } from "./signup"
 import {
   Route, BrowserRouter as Router, Switch, Redirect, NavLink
 } from "react-router-dom";
@@ -23,6 +24,7 @@ export default () => {
         <Route path="/" component = {LandingPage}/>
         <Route path="/login" component={Login}/>
         <Route path="/main" component = {MainPage}/>
+        <Route path="/signup" component={SignUp}/>
 
       </Router>
       </div>
