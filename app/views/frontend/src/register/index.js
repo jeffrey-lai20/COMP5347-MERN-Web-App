@@ -4,12 +4,12 @@ import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
 
-export const SignUp = ({signUpFunction}) => {
+export const Register = ({signUpFunction}) => {
 
     return (
         <div className="col-sm-6">
-            <h2>Please Sign Up</h2>
-            <form action='/signup' method='POST' id='signupForm'>
+            <h2>Please Register Your Account</h2>
+            <form action='/register' method='POST' id='signupForm'>
                 <div>
                     <Tag text="First Name:" color="greyLight"/>
                     <Textfield className="form-control" placeholder="First Name" type="text" name="firstname" pattern="[A-Z]{1}[a-z]+" title="Please enter a valid first name"></Textfield>
@@ -30,7 +30,7 @@ export const SignUp = ({signUpFunction}) => {
                     <Tag text="Password:" color="greyLight"/>
                     <Textfield class="form-control" placeholder="Password" type="password" name="password"></Textfield>
                 </div>
-                    <Button appearance="primary" className="button" type="submit" value="Sign Up">Sign Up</Button>
+                    <Button appearance="primary" className="button" type="submit" value="Register">Register</Button>
                     <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
                 <div id="loginStatus"></div>
             </form>
