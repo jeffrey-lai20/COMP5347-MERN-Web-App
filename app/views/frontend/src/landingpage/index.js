@@ -1,5 +1,7 @@
 import React from "react";
 import Button, { ButtonAppearances } from '@atlaskit/button';
+import { Login } from './loginDialog/main'
+import { Register } from './registerDialog/main'
 
 export const LandingPage = () => {
 
@@ -11,7 +13,9 @@ export const LandingPage = () => {
                 <p>Little description on what this is, stuff like wikipedia articles
                 and revisions idk</p>
             </div>
-            <div id="image_section">
+
+
+            {/* <div id="image_section">
                 <div class = "col-sm-6">
                     <h2>Description of first image</h2>
                     <img src="image URL goes here" alt="First image here"></img>
@@ -20,9 +24,11 @@ export const LandingPage = () => {
                     <h2>Description of second image</h2>
                     <img src="image URL goes here" alt="Second image here"></img>
                 </div>
-            </div>
-            <Button appearance="primary" href="/login">Login</Button>
-            <Button  appearance="primary" href="/register">Sign Up</Button>
+            </div> */}
+            {/* <Button appearance="primary" href="/login">Login</Button>
+            <Button  appearance="primary" href="/register">Sign Up</Button> */}
+            <Login></Login>
+            <Register></Register>
         </div>
     )
 }
