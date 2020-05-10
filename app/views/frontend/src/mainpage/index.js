@@ -1,15 +1,36 @@
 import React, { useState, Component, useEffect } from "react";
 import { OverallArticles } from "./overallArticles/main";
 import { IndividualArticles } from "./individualArticles/main";
+import { AuthorAnalytics } from "./authorAnalytics/main"
 import { Heading } from "./styled";
+import Select from '@atlaskit/select';
 
 export const MainPage = props => {
+
+  const [analyticsType, setAnalyticsType] = useState([]);
 
   return (
     <div>
       <Heading>Wikipedia Analytics</Heading>
-      <OverallArticles></OverallArticles>
-      <IndividualArticles></IndividualArticles>
+
+      <Select
+        onChange={e => setAnalyticsType(e.value)}
+        options={[
+          { label: 'Overall Analytics', value: '1' },
+          { label: 'Individual Article Analytics', value: '2' },
+          { label: 'Author Analytics', value: '3' },
+        ]}
+      >
+      </Select>
+      {analyticsType == 1
+        ? <OverallArticles></OverallArticles> : <br></br>}
+      {analyticsType == 2
+        ? <IndividualArticles></IndividualArticles> : <br></br>}
+
+      {analyticsType == 3
+        ? <AuthorAnalytics></AuthorAnalytics> : <br></br>}
+
+
     </div>
   )
 }
