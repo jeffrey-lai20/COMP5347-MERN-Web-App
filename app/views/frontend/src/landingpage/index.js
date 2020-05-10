@@ -22,7 +22,7 @@ export const LandingPage = () => {
                 </div>
             </div>
             <Button appearance="primary" href="/login">Login</Button>
-            <Button  appearance="primary" href="/signup">Sign Up</Button>
+            <Button  appearance="primary" href="/register">Sign Up</Button>
         </div>
     )
 }

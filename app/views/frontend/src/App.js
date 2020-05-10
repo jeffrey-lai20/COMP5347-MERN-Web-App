@@ -2,7 +2,7 @@ import React, { useState, Component } from "react";
 import { MainPage } from "./mainpage";
 import { Login } from "./login";
 import { LandingPage } from "./landingpage"
-import { SignUp } from "./signup"
+import { SignUp } from "./register"
 import {
   Route, BrowserRouter as Router, Switch, Redirect, NavLink
 } from "react-router-dom";
