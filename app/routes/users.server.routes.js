@@ -11,7 +11,7 @@ router.get('/logout', function (req, res, next) {
     res.redirect('/');
 });
 
-router.post('/register', controller.registerUser);
-router.post('/login', controller.loginProcess);
+router.post('/register',controller.registerUser);
+router.post('/login',controller.loginProcess);
 
 module.exports = router;

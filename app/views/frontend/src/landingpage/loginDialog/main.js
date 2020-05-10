@@ -20,20 +20,20 @@ export const Login = ({loginFunction}) => {
         <ModalTransition>
           {isOpen && (
             <Modal onClose={() => setIsOpen(false)} heading="Login">
-            {/* <form action='/login' method='POST' id='loginForm'> */}
-                <div>
-                    <Tag text="Username:" color="greyLight"/>
-                    <Textfield className="form-control" type="text" placeholder="Username" name="username"
-                           required></Textfield>
-                </div>
-                <div>
-                    <Tag text="Password:" color="greyLight"/>
-                    <Textfield className="form-control" type="password" placeholder="Password" name="password"></Textfield>
-                </div>
+                <form action='/login' method='POST' id='loginForm'>
+                    <div>
+                        <Tag text="Username:" color="greyLight"/>
+                        <Textfield className="form-control" type="text" placeholder="Username" name="userName"
+                               required></Textfield>
+                    </div>
+                    <div>
+                        <Tag text="Password:" color="greyLight"/>
+                        <Textfield className="form-control" type="password" placeholder="Password" name="password"></Textfield>
+                    </div>
                     <Button appearance="primary" className="button" type="submit" value="Login">Login</Button>
                     <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
-                <div id="loginStatus"></div>
-
+                    <Button appearance="primary" className="button" type="button" value="Forgot">Forgot Password/Username</Button>
+                </form>
             </Modal>
           )}
         </ModalTransition>
