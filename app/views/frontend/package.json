@@ -7,12 +7,13 @@
     "@atlaskit/checkbox": "^10.1.11",
     "@atlaskit/dynamic-table": "^13.7.4",
     "@atlaskit/form": "^7.2.1",
+    "@atlaskit/modal-dialog": "^10.5.8",
     "@atlaskit/select": "^11.0.10",
-    "@material-ui/core": "^4.9.12",
     "@atlaskit/tag": "^9.1.0",
     "@atlaskit/textarea": "^2.2.7",
     "@atlaskit/textfield": "^3.1.9",
     "@atlaskit/tooltip": "^15.2.6",
+    "@material-ui/core": "^4.9.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -25,7 +26,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "typeface-roboto": "0.0.75"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -12,6 +12,9 @@ var RevisionSchema = new mongoose.Schema(
 		 	versionKey: false
 		 })
 
+/* 
+ * 	Overall Articles: Count
+ */
 
 // Query to find the top n articles with highest revisions
 RevisionSchema.statics.findHighestRevisions = function(noOfArticle, callback){
@@ -81,9 +84,33 @@ RevisionSchema.statics.findShortestHistory = function(noOfArticle, callback) {
 	]).exec(callback)
 }
 
+
+/* 
+ * 	Overall Articles: Charts
+ */
+
+RevisionSchema.statics.barChartDistributionYear = function(callback) {
+	return this.aggregate([
+	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
+	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
+	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
+	          admin: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "admin" ]},1,0] }},
+	          bot: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "bot" ]},1,0] }}}
+	       },
+	       {$sort:{"_id":1}}
+	     ]).exec(callback)
+}
+
+
+RevisionSchema.statics.pieChartDistributionUsertype = function(callback) {
+	return this.aggregate([
+		{$group : {_id : {usertype : "$usertype"}, count : {$sum : 1}}}
+	]).exec(callback)
+}
+
 /*
-	Individual Articles
-*/
+ *	Individual Articles
+ */
 
 // Query to return titles of all articles
 RevisionSchema.statics.findAllArticles = function(callback){
@@ -109,6 +136,14 @@ RevisionSchema.statics.getIndividualBarChartData = function(Ititle, callback) {
 	]).exec(callback)
 }
 
+RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
+	this.aggregate([
+		{$match: {title: Ititle}},
+		{$sort 	: {minTimestamp : -1}},
+		{$limit:1}
+	])
+}
+
 /*
 	Author Analytics
 */
@@ -122,34 +157,44 @@ RevisionSchema.statics.findAllAuthors = function(callback) {
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 
 /*
-	Constructing Usertype with text file
-*/
+ *	Constructing Usertype with text file
+ */
 // Reading text:
 function addUsertypeFromTxt(model, path, type){
 	var userArray = [];
 	fs.readFileSync(path).toString().split('\n').forEach(line=>{ userArray.push(line); })
 	model.updateMany(
 		{ $and: [{ user : {$in : userArray}}, {usertype : {$exists : false}}]},
-		{ $set:{"usertype":type}},
+		{ $set:{"usertype" : type}},
 	    function(error){ if(error){ console.error(error)} }
   )
 }
 
-// Administrator : admin
-// Bot : bot
-// Registered User : registered
+// Administrator : "admin"
+// Bot : "bot"
 addUsertypeFromTxt(Revision, './app/views/frontend/administrators.txt', "admin")
 addUsertypeFromTxt(Revision, './app/views/frontend/bots.txt', "bot")
+
+// Registered User : registered
 Revision.updateMany(
     { $and:[{usertype:{$exists:false}},{anon:{$exists:false}}] },
     { $set:{"usertype":"registered"}},
-    function(error){ if(error){ console.error(error)} }
+    function(error){ 
+    	if(error){ 
+    		console.error("While updating registered users: " + error)
+    	} 
+    }
 )
+
 // If Anon is true, anonymous
 Revision.updateMany(
     {$and : [{usertype : {$exists : false}}, {anon : {$exists : true}}]},
     {$set : {"usertype":"anonymous"}},
-    function(error){ if(error){ console.error(error)} }
+    function(error){ 
+    	if(error){ 
+    		console.error("While updating anonymous users: " + error)
+    	} 
+    }
 )
 
-module.exports = Revision
+module.exports = Revision;

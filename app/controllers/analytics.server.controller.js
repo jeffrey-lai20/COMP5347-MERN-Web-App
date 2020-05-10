@@ -3,7 +3,7 @@ var express = require('express');
 var Revision = require("../models/article")
 
 module.exports.getTopArticleRevisions = function(req, res) {
-    noOfArticles = 2;
+    noOfArticles = Number(req.query.topcount);
 
     Revision.findHighestRevisions(noOfArticles, function(error, result) {
         if (error) {
@@ -16,7 +16,7 @@ module.exports.getTopArticleRevisions = function(req, res) {
 }
 
 module.exports.getLowestArticleRevisions = function(req, res) {
-    noOfArticles = 2;
+    noOfArticles = Number(req.query.topcount);
 
     Revision.findLowestRevisions(noOfArticles, function(error, result) {
         if (error) {
@@ -29,7 +29,7 @@ module.exports.getLowestArticleRevisions = function(req, res) {
 }
 
 module.exports.getLargestArticleGroup = function(req, res) {
-    noOfArticles = 2;
+    noOfArticles = Number(req.query.topcount);
 
     Revision.findEditLargestGroup(noOfArticles, function(error, result) {
         if (error) {
@@ -42,7 +42,7 @@ module.exports.getLargestArticleGroup = function(req, res) {
 }
 
 module.exports.getSmallestArticleGroup = function(req, res) {
-    noOfArticles = 2;
+    noOfArticles = Number(req.query.topcount);
 
     Revision.findEditSmallestGroup(noOfArticles, function(error, result) {
         if (error) {
@@ -55,7 +55,7 @@ module.exports.getSmallestArticleGroup = function(req, res) {
 }
 
 module.exports.getLongestHistory = function(req, res) {
-    noOfArticles = 2;
+    noOfArticles = Number(req.query.topcount);
 
     Revision.findLongestHistory(noOfArticles, function(error, result) {
         if (error) {
@@ -68,7 +68,7 @@ module.exports.getLongestHistory = function(req, res) {
 }
 
 module.exports.getShortestHistory = function(req, res) {
-    noOfArticles = 2;
+    noOfArticles = Number(req.query.topcount);
 
     Revision.findShortestHistory(noOfArticles, function(error, result) {
         if (error) {
@@ -79,3 +79,26 @@ module.exports.getShortestHistory = function(req, res) {
         }
     })
 }
+
+module.exports.getBarChartDistributionYear = function(req, res) {
+    Revision.barChartDistributionYear(function(error, result) {
+        if (error) {
+            console.log("Cannot find revision number distribution by year")
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+module.exports.getPieChartDistributionUsertype = function(req, res) {
+    Revision.pieChartDistributionUsertype(function(error, result) {
+        if (error) {
+            console.log("Cannot find revision number distribution by user type")
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+

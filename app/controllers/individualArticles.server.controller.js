@@ -42,6 +42,21 @@ module.exports.getBarChartData = function(req, res) {
     })
 }
 
+module.exports.getLatestRevisionForArticle = function(req, res) {
+    title = req.query.title;
+
+    Revision.getLatestRevision(title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+
+
+}
+
 // Author analytics controller
 module.exports.getAllAuthors = function(req, res) {
 

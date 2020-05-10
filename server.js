@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', analyticsRouter);
 app.use('/', individualArticlesRouter);
-app.use('/', userRouter);
+//app.use('/', userRouter);
 
 app.listen(5000, function () {
   console.log('survey app listening on port 5000!')
