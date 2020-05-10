@@ -10,7 +10,7 @@ import {
 import { SideBar } from "./styled"
 
 export default () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const login = () => {
     setLoggedIn(true);
@@ -18,13 +18,15 @@ export default () => {
 
   return (
     <div>
-     
       <Router>
-
+      {/* Must be logged in to view main page */}
+      {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/login"/>)}
+     
         <Route path="/" component = {LandingPage}/>
         <Route path="/login" component={Login}/>
-        <Route path="/main" component = {MainPage}/>
         <Route path="/signup" component={SignUp}/>
+        <Route path="/main" component = {MainPage}/>
+        
 
       </Router>
       </div>
