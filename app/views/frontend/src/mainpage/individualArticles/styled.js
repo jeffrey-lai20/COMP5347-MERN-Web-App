@@ -1,21 +1,21 @@
 import styled from "styled-components";
 
 export const ArticleHeading = styled.div`
-    font-family: 'Roboto'
+    font-family: 'Arial'
     text-align: center;
     font-size: 35px;
     padding: 40px;
 `;
 
 export const SubHeading = styled.div`
-    font-family: 'Roboto';
+    font-family: 'Arial';
     font-size: 30px;
     padding: 30px;
     color: #103989;
 `;
 
 export const Result = styled.div`
-    font-family: 'Roboto';
+    font-family: 'Arial';
     font-size: 20px;
     background: #103989;
     color:white;
@@ -28,7 +28,7 @@ export const Result = styled.div`
 `;
 
 export const ArticleSelect = styled.div`
-font-family: 'Roboto';
+font-family: 'Arial';
 font-size: 20px;
 background: white;
 color:black;
@@ -41,7 +41,7 @@ margin-left: 80px;
 `;
 
 export const DateSelect = styled.div`
-font-family: 'Roboto';
+font-family: 'Arial';
 font-size: 20px;
 background: white;
 color:black;
@@ -54,14 +54,14 @@ margin-left: 500px;
 `;
 
 export const UserTable = styled.div`
-font-family: 'Roboto';
+font-family: 'Arial';
 font-size: 20px;
 background: white;
 width: 500px;
 `;
 
 export const Chart = styled.div`
-    font-family: 'Roboto';
+    font-family: 'Arial';
     font-size: 20px;
     background: white;
     color:white;

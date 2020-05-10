@@ -2,7 +2,7 @@ const bcrypt = require ('bcrypt');
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/Wikipedia/Users', { useNewUrlParser: true, useUnifiedTopology: true  }, function () {
+mongoose.connect('mongodb://localhost/WikipediaArticles', { useNewUrlParser: true, useUnifiedTopology: true  }, function () {
     console.log('mongodb connected')
 });
 
