@@ -15,12 +15,15 @@ module.exports.register = function (req, res) {
 module.exports.registerUser = function (req, res) {
     // Validation
 
-    if (req.body.firstName && req.body.lastName && req.body.email && req.body.userName &&
-        req.body.password && req.body.password === req.body.password2) {
+    if (req.body.firstName && req.body.lastName && req.body.email
+        && req.body.userName && req.body.resetQuestion && req.body.resetAnswer
+        && req.body.password && req.body.password === req.body.password2) {
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
         var email = req.body.email;
         var userName = req.body.userName;
+        var resetQuestion = req.body.resetQuestion;
+        var resetAnswer = req.body.resetAnswer;
         var password = req.body.password;
         var password2 = req.body.password2;
 
@@ -48,7 +51,10 @@ module.exports.registerUser = function (req, res) {
                         lastName: lastName,
                         email: email,
                         userName: userName,
-                        password: password
+                        password: password,
+                        password2: password2,
+                        resetQuestion: resetQuestion,
+                        resetAnswer: resetAnswer
                     });
                     User.createUser(newUser, function (err, user) {
                         if (err) throw err;
@@ -62,13 +68,15 @@ module.exports.registerUser = function (req, res) {
         //}
     }
     else {
-        console.log("Invalid input.")
+        // console.log("Invalid input.")
         // console.log("We have: " + req.body.firstName);
         // console.log("We have: " + req.body.lastName);
         // console.log("We have: " + req.body.email);
         // console.log("We have: " + req.body.userName);
+        // console.log("We have: " + resetQuestion);
+        // console.log("We have: " + resetQuestion);
         // console.log("We have: " + req.body.password);
-        // console.log("We have: " + req.body.password2);
+        // console.log("We have: " + password2);
     }
 };
 
@@ -97,3 +105,38 @@ module.exports.loginProcess = function (req, res) {
         res.redirect('/login');
     }
 };
+
+
+module.exports.resetPasswordUsername = function (req, res) {
+    // User.findOne({
+    //     userName: userName
+    // }, function (err, user) {
+    //     if (user) {
+    //         res.redirect('/resetPasswordAnswer')
+    res.render("app/views/frontend/src/landingpage/resetPassword/resetPasswordAnswerDialog/main.js");
+
+
+    //     } else {
+    //         console.log("Username not found.");
+    //
+    //     }
+    // })
+}
+
+
+module.exports.resetPasswordAnswer = function (req, res) {
+    res.render("app/views/frontend/src/landingpage/resetPassword/resetPasswordAnswerDialog/main.js");
+}
+
+module.exports.resetPasswordNew = function (req, res) {
+
+    res.redirect('/login');
+}
+
+
+//
+// module.exports.resetPasswordAnswerProcess = function (req, res) {
+//     // res.redirect('/login');
+//     res.render("app/views/frontend/src/landingpage/loginDialog/main.js");
+//
+// }

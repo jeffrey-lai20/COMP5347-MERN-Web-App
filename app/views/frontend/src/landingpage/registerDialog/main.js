@@ -18,7 +18,7 @@ export const Register = ({signUpFunction}) => {
 <ModalTransition>
   {isOpen && (
     <Modal onClose={() => setIsOpen(false)} heading="Login">
-         <form action='/register' method='POST' id='loginForm'>
+         <form action='/register' method='POST' id='registerForm'>
             <div>
                 <Tag text="First Name:" color="greyLight"/>
                 <Textfield className="form-control" placeholder="First Name" type="text" name="firstName" placeholder='Firstname'/>
@@ -42,6 +42,14 @@ export const Register = ({signUpFunction}) => {
              <div>
                  <Tag text="Confirm Password:" color="greyLight"/>
                  <Textfield class="form-control" placeholder="Password" type="password" name="password2"/>
+             </div>
+             <div>
+                 <Tag text="Reset Question:" color="greyLight"/>
+                 <Textfield class="form-control" placeholder="Enter a question to reset your password." type="text" name="resetQuestion"/>
+             </div>
+             <div>
+                 <Tag text="Reset Answer:" color="greyLight"/>
+                 <Textfield class="form-control" placeholder="Enter the answer to reset your password." type="text" name="resetAnswer"/>
              </div>
              <Button appearance="primary" className="button" type="submit" value="Register">Register</Button>
              <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>

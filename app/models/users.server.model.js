@@ -1,14 +1,5 @@
 const bcrypt = require('bcrypt');
 var mongoose = require('./db')
-//
-// var mongoose = require('mongoose');
-//
-//
-// mongoose.connect('mongodb://localhost/WikipediaArticles', { useNewUrlParser: true, useUnifiedTopology: true  }, function () {
-//     console.log('mongodb connected')
-// });
-//
-// module.exports = mongoose;
 
 const UserSchema = mongoose.Schema({
 
@@ -40,7 +31,16 @@ const UserSchema = mongoose.Schema({
     },
     password2: {
         type: String,
+        required: true
     },
+    resetQuestion: {
+        type: String,
+        required: true
+    },
+    resetAnswer: {
+        type: String,
+        required: true
+    }
 
 });
 
@@ -48,6 +48,7 @@ UserSchema.statics.createUser=function(newUser,callback){
     bcrypt.genSalt(10,function(err,salt){
         bcrypt.hash(newUser.password,salt,function(err,hash){
             newUser.password=hash;
+            newUser.password2=hash;
             newUser.save(callback);
         })
     })
@@ -62,7 +63,6 @@ UserSchema.statics.getUserById=function(id,callback){
     User.findById(id,callback);
 }
 
-//from github
 UserSchema.statics.comparePassword = function comparePassword(candidatePassword,hash,callback) {
     bcrypt.compare(candidatePassword, hash,function (err, isMatch){
         if (err) throw err;
@@ -90,5 +90,6 @@ UserSchema.statics.auth = function (userName, password, callback) {
             })
         });
 }
+
 var User = mongoose.model('User', UserSchema);
 module.exports = User;

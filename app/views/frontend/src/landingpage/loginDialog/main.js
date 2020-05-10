@@ -3,15 +3,12 @@ import React, { useState, Component, useEffect } from "react";
 import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
+import { ResetPasswordUsername } from '../resetPassword/resetPasswordUsernameDialog/main.js'
 
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
 export const Login = ({loginFunction}) => {
     const [isOpen, setIsOpen] = useState("");
-
-    // const actions = [
-    //     { text: 'Login', onClick: setIsOpen(false) },
-    // ];
 
     return (
         <div>
@@ -23,16 +20,15 @@ export const Login = ({loginFunction}) => {
                 <form action='/login' method='POST' id='loginForm'>
                     <div>
                         <Tag text="Username:" color="greyLight"/>
-                        <Textfield className="form-control" type="text" placeholder="Username" name="userName"
-                               required></Textfield>
+                        <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
                     </div>
                     <div>
                         <Tag text="Password:" color="greyLight"/>
-                        <Textfield className="form-control" type="password" placeholder="Password" name="password"></Textfield>
+                        <Textfield className="form-control" type="password" placeholder="Password" name="password" required/>
                     </div>
                     <Button appearance="primary" className="button" type="submit" value="Login">Login</Button>
                     <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
-                    <Button appearance="primary" className="button" type="button" value="Forgot">Forgot Password/Username</Button>
+                    <ResetPasswordUsername/>
                 </form>
             </Modal>
           )}
