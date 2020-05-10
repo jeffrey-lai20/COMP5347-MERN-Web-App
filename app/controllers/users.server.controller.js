@@ -6,7 +6,7 @@ module.exports.showIndex = function (req, res) {
 };
 
 module.exports.register = function (req, res) {
-    res.render('app/views/frontend/src/register/index.js');
+    res.render('app/views/frontend/src/landingpage/registerDialog/main.js');
 };
 
 module.exports.registerUser = function (req, res) {
@@ -51,7 +51,7 @@ module.exports.registerUser = function (req, res) {
                         console.log(user);
                     });
                     req.flash('success_msg', 'Registered successfully');
-                    res.redirect('app/views/frontend/src/login/index.js');
+                    res.redirect('app/views/frontend/src/landingpage/loginDialog/main.js');
                 }
             });
         });
@@ -71,17 +71,17 @@ module.exports.loginProcess = function (req, res) {
         User.auth(req.body.userName, req.body.password, function (error, user) {
             if (error || !user) {
                 req.flash('error', 'Username and password are incorrect');
-                res.redirect('app/views/frontend/src/login/index.js');
+                res.redirect('app/views/frontend/src/landingpage/loginDialog/main.js');
             } else {
                 req.session.authenticated = true;
                 req.session.user=req.body.userName;
                 console.log("Successfully login!")
                 req.flash('info', 'Login successfully!')
-                res.redirect('app/views/frontend/src/mainpage/index.js');
+                res.redirect('app/views/frontend/src/landingpage/index.js');
             }
         });
     } else {
         req.flash('error', 'Username and password are incorrect');
-        res.redirect('app/views/frontend/src/login/index.js');
+        res.redirect('app/views/frontend/src/landingpage/loginDialog/main.js');
     }
 };

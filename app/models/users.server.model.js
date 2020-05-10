@@ -2,13 +2,13 @@ const bcrypt = require ('bcrypt');
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/Wikipedia/Users', { useNewUrlParser: true, useUnifiedTopology: true  }, function () {
-    console.log('mongodb connected')
-});
+// mongoose.connect('mongodb://localhost/WikipediaArticles/Users', { useNewUrlParser: true, useUnifiedTopology: true  }, function () {
+//     console.log('mongodb connected')
+// });
 
 module.exports = mongoose;
 
-const UserSchema = mongoose.Schema ({
+var UserSchema = new mongoose.Schema ({
     firstName: {
         type: String,
         require: true,
