@@ -108,20 +108,20 @@ module.exports.loginProcess = function (req, res) {
 
 
 module.exports.resetPasswordUsername = function (req, res) {
-    console.log("Reached reset");
     var userName = req.body.userName;
-
     User.findOne({
-        userName:userName
-    }, function(err, user) {
+        userName: {
+            "$regex": "^" + userName + "\\b",
+            "$options": "i"
+        }
+    }, function (err, user) {
         if (user) {
-            console.log("IDK BRO.");
-            // console.log(req.body.resetQuestion)
-            // console.log(user.body.resetQuestion);
-        } else {
-            console.log("Username not found");
+            console.log("Question: " + user.resetQuestion)
+            req.flash('info', 'Login failed!');
 
-            req.flash('error', 'Username not found.');
+        } else {
+            console.log("User does not exist.")
+            console.log(err)
             res.redirect('/login');
         }
     });
@@ -129,75 +129,57 @@ module.exports.resetPasswordUsername = function (req, res) {
 
 module.exports.getResetPasswordQuestion = function (req, res) {
     var userName = req.body.userName;
-    var resetQuestion = req.body.resetQuestion;
     console.log("Reached question stuff idk");
-
     User.findOne({
         userName: {
             "$regex": "^" + userName + "\\b",
             "$options": "i"
         }
     }, function (err, user) {
-        User.findOne({
-            email: {
-                "$regex": "^" + resetQuestion + "\\b",
-                "$options": "i"
-            }
-        }, function (err, resetQuestion) {
-            if (err||resetQuestion) {
-                console.log(userName);
-                // console.log(resetQuestion);
-                console.log("yeah the question");
-            } else {
-                console.log("fail");
-                console.log(err);
-                res.redirect('/login');
-            }
-        });
+        if (user) {
+            console.log(user.resetQuestion)
+        } else {
+            console.log("User does not exist.")
+            console.log(err)
+            res.redirect('/login');
+        }
     });
 }
 
 
 module.exports.resetPasswordAnswer = function (req, res) {
-    console.log("Reached asnewrhusrefdg");
-    // var firstName = req.body.firstName;
-    // var lastName = req.body.lastName;
-    var email = req.body.email;
     var userName = req.body.userName;
-    // var resetQuestion = req.body.resetQuestion;
-    // var resetAnswer = req.body.resetAnswer;
-    // var password = req.body.password;
-    // var password2 = req.body.password2;
-
-
     User.findOne({
         userName: {
             "$regex": "^" + userName + "\\b",
             "$options": "i"
         }
     }, function (err, user) {
-            console.log("Reached 123456");
-
             if (user) {
-                console.log("Reached 321564987");
-                console.log(user);
-                console.log("Almost");
-                user.password = req.body.password
-                user.password2 = req.body.password2
-                User.resetPassword(user, function (err, user) {
-                    if (err) throw err;
-                    console.log(user);
-                });
-                console.log("Password has been reset.")
-                req.flash('success_msg', 'Registration successful.');
-                res.redirect('/login');
+                if (user.resetAnswer === req.body.resetAnswer) {
+                    if (req.body.password === req.body.password2) {
+                        user.password = req.body.password
+                        user.password2 = req.body.password2
+                        User.resetPassword(user, function (err, user) {
+                            if (err) throw err;
+                            console.log(user);
+                        });
+                        console.log("Password has been reset.")
+                        req.flash('success_msg', 'Registration successful.');
+                        res.redirect('/login');
+                    } else {
+                        console.log("Mismatching Passwords.");
+                        res.redirect('/login');
+                    }
+                } else {
+                    console.log("Wrong Password Reset Answer.");
+                    res.redirect('/login');
+                }
 
             } else {
-                console.log("Here 12 830")
-
+                console.log("User does not exist.")
+                console.log(err)
                 res.redirect('/login');
             }
-
     });
-
 }

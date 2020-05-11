@@ -1,15 +1,16 @@
 import React, { useState, Component, useEffect } from "react";
-
 import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
-import { ResetPasswordAnswer } from '../resetPasswordAnswerDialog/main.js'
+import Popup from '@atlaskit/popup';
 
+import { ResetPasswordAnswer } from '../resetPasswordAnswerDialog/main.js'
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
+import MediaServicesAddCommentIcon from '@atlaskit/icon/glyph/media-services/add-comment';
 
 export const ResetPasswordUsername = ({ResetPasswordUsername}) => {
     const [isOpen, setIsOpen] = useState("");
-
+    // const [isOpen2, setIsOpen2] = useState(false);
     return (
         <div>
             <Button onClick={() => setIsOpen(true)}>Reset Password</Button>
@@ -27,6 +28,27 @@ export const ResetPasswordUsername = ({ResetPasswordUsername}) => {
                     </Modal>
                 )}
             </ModalTransition>
+            {/*<Popup*/}
+            {/*    isOpen={isOpen2}*/}
+            {/*    onClose={() => setIsOpen2(false)}*/}
+            {/*    placement="bottom-start"*/}
+            {/*    content={() => (*/}
+            {/*        <div*/}
+            {/*            css={{*/}
+            {/*                width: 175,*/}
+            {/*                height: 250,*/}
+            {/*            }}*/}
+            {/*        > HELLO </div>*/}
+            {/*    )}*/}
+            {/*    trigger={triggerProps => (*/}
+            {/*        <Button*/}
+            {/*            {...triggerProps}*/}
+            {/*            isSelected={isOpen}*/}
+            {/*            onClick={() => setIsOpen2(!isOpen2)}*/}
+            {/*            iconBefore={<MediaServicesAddCommentIcon label="Add" />}*/}
+            {/*        />*/}
+            {/*    )}*/}
+            {/*/>*/}
         </div>
     )
 }
