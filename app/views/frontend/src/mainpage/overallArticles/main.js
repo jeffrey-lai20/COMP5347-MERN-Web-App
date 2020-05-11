@@ -159,6 +159,25 @@ export const OverallArticles = props => {
       }]
     };
   })
+  
+  // Display percentage on pie chart (when hovered)
+var pieHoverOption = {
+  tooltips: {
+    callbacks: {
+      label: function(tooltipItem, pieChartData) {
+        var dataset = pieChartData.datasets[tooltipItem.datasetIndex];
+        var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+        var total = meta.total;
+        var currentValue = dataset.data[tooltipItem.index];
+        var percentage = parseFloat((currentValue/total*100).toFixed(1));
+        return currentValue + ' (' + percentage + '%)';
+      },
+      title: function(tooltipItem, pieChartData) {
+        return pieChartData.labels[tooltipItem[0].index];
+      }
+    }
+  }
+}
 
   const NumberOfArticlesSelect = () => (
     <Select
@@ -248,7 +267,7 @@ export const OverallArticles = props => {
 
           {pieChartDisplay}
           <div>
-            <Pie data={pieChartData} />
+            <Pie data={pieChartData} options={pieHoverOption}/>
           </div>
 
         </div>
