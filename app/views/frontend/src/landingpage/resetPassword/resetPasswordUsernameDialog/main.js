@@ -15,8 +15,8 @@ export const ResetPasswordUsername = ({ResetPasswordUsername}) => {
             <Button onClick={() => setIsOpen(true)}>Reset Password</Button>
             <ModalTransition>
                 {isOpen && (
-                    <Modal onClose={() => setIsOpen(false)} heading="Reset Password">
-                        <form action='/resetPasswordUsername' method='GET' id='resetPasswordUsernameForm'>
+                    <Modal onClose={() => setIsOpen(false)} heading="resetPasswordUsername">
+                        <form action='/resetPasswordUsername' method='POST' id='resetPasswordUsernameForm'>
                             <div>
                                 <Tag text="Username:" color="greyLight"/>
                                 <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
@@ -28,6 +28,5 @@ export const ResetPasswordUsername = ({ResetPasswordUsername}) => {
                 )}
             </ModalTransition>
         </div>
-
     )
 }

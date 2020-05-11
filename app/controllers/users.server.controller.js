@@ -41,7 +41,7 @@ module.exports.registerUser = function (req, res) {
                 }
             }, function (err, mail) {
                 if (user || mail) {
-                    res.render('register', {
+                    res.render('/register', {
                         user: user,
                         mail: mail
                     });
@@ -68,7 +68,7 @@ module.exports.registerUser = function (req, res) {
         //}
     }
     else {
-        // console.log("Invalid input.")
+        console.log("Invalid input.")
         // console.log("We have: " + req.body.firstName);
         // console.log("We have: " + req.body.lastName);
         // console.log("We have: " + req.body.email);
@@ -95,8 +95,8 @@ module.exports.loginProcess = function (req, res) {
                 req.session.authenticated = true;
                 req.session.user=req.body.userName;
                 //req.session.userId = user._id;
-                console.log("Logged in successfully.")
-                req.flash('info', 'Login successfully!')
+                console.log("Logged in successfully.");
+                req.flash('info', 'Login successfully!');
                 res.redirect('/main');
             }
         });
@@ -108,35 +108,96 @@ module.exports.loginProcess = function (req, res) {
 
 
 module.exports.resetPasswordUsername = function (req, res) {
-    // User.findOne({
-    //     userName: userName
-    // }, function (err, user) {
-    //     if (user) {
-    //         res.redirect('/resetPasswordAnswer')
-    res.render("app/views/frontend/src/landingpage/resetPassword/resetPasswordAnswerDialog/main.js");
+    console.log("Reached reset");
+    var userName = req.body.userName;
 
+    User.findOne({
+        userName:userName
+    }, function(err, user) {
+        if (user) {
+            console.log("IDK BRO.");
+            // console.log(req.body.resetQuestion)
+            // console.log(user.body.resetQuestion);
+        } else {
+            console.log("Username not found");
 
-    //     } else {
-    //         console.log("Username not found.");
-    //
-    //     }
-    // })
+            req.flash('error', 'Username not found.');
+            res.redirect('/login');
+        }
+    });
+}
+
+module.exports.getResetPasswordQuestion = function (req, res) {
+    var userName = req.body.userName;
+    var resetQuestion = req.body.resetQuestion;
+    console.log("Reached question stuff idk");
+
+    User.findOne({
+        userName: {
+            "$regex": "^" + userName + "\\b",
+            "$options": "i"
+        }
+    }, function (err, user) {
+        User.findOne({
+            email: {
+                "$regex": "^" + resetQuestion + "\\b",
+                "$options": "i"
+            }
+        }, function (err, resetQuestion) {
+            if (err||resetQuestion) {
+                console.log(userName);
+                // console.log(resetQuestion);
+                console.log("yeah the question");
+            } else {
+                console.log("fail");
+                console.log(err);
+                res.redirect('/login');
+            }
+        });
+    });
 }
 
 
 module.exports.resetPasswordAnswer = function (req, res) {
-    res.render("app/views/frontend/src/landingpage/resetPassword/resetPasswordAnswerDialog/main.js");
+    console.log("Reached asnewrhusrefdg");
+    // var firstName = req.body.firstName;
+    // var lastName = req.body.lastName;
+    var email = req.body.email;
+    var userName = req.body.userName;
+    // var resetQuestion = req.body.resetQuestion;
+    // var resetAnswer = req.body.resetAnswer;
+    // var password = req.body.password;
+    // var password2 = req.body.password2;
+
+
+    User.findOne({
+        userName: {
+            "$regex": "^" + userName + "\\b",
+            "$options": "i"
+        }
+    }, function (err, user) {
+            console.log("Reached 123456");
+
+            if (user) {
+                console.log("Reached 321564987");
+                console.log(user);
+                console.log("Almost");
+                user.password = req.body.password
+                user.password2 = req.body.password2
+                User.resetPassword(user, function (err, user) {
+                    if (err) throw err;
+                    console.log(user);
+                });
+                console.log("Password has been reset.")
+                req.flash('success_msg', 'Registration successful.');
+                res.redirect('/login');
+
+            } else {
+                console.log("Here 12 830")
+
+                res.redirect('/login');
+            }
+
+    });
+
 }
-
-module.exports.resetPasswordNew = function (req, res) {
-
-    res.redirect('/login');
-}
-
-
-//
-// module.exports.resetPasswordAnswerProcess = function (req, res) {
-//     // res.redirect('/login');
-//     res.render("app/views/frontend/src/landingpage/loginDialog/main.js");
-//
-// }

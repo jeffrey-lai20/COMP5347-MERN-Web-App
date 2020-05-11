@@ -13,7 +13,6 @@ export const Login = ({loginFunction}) => {
     return (
         <div>
         <Button onClick={() => setIsOpen(true)}>Login</Button>
-
         <ModalTransition>
           {isOpen && (
             <Modal onClose={() => setIsOpen(false)} heading="Login">

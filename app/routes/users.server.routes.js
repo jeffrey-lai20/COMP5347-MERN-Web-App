@@ -10,10 +10,10 @@ router.get('/logout', function (req, res, next) {
     delete req.session.user;
     res.redirect('/');
 });
-router.get('/resetPasswordUsername', controller.resetPasswordUsername);
-router.get('/resetPasswordAnswer', controller.resetPasswordAnswer);
-router.get('/resetPasswordNew', controller.resetPasswordNew);
+// router.get("/getResetPasswordQuestion", controller.getResetPasswordQuestion);
+router.post('/resetPasswordUsername', controller.resetPasswordUsername);
 
+router.post('/getResetPasswordAnswer', controller.resetPasswordAnswer);
 router.post('/register',controller.registerUser);
 router.post('/login',controller.loginProcess);
 
