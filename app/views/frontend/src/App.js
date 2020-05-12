@@ -20,11 +20,29 @@ export default () => {
   return (
     <div>
       <Body>
-      <Router>
-      {/* Must be logged in to view main page */}
-      {/* {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/"/>)}
+        <Router>
+          {/* Must be logged in to view main page */}
+          {/* {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/"/>)}
       */}
-      <Screen>
+
+          {loggedIn ? <Screen>
+
+            <SideBar>
+              <NavigationBar></NavigationBar>
+            </SideBar>
+            <Content>
+              <Switch>
+                <Route path="/main" component={MainPage} />
+              </Switch>
+            </Content>
+          </Screen> : 
+          <Screen>
+          <Switch>
+              <Route path="/" component={LandingPage} />
+            </Switch>
+          </Screen>}
+          {/* <Screen>
+
         <SideBar>
           <NavigationBar></NavigationBar>
         </SideBar>
@@ -36,10 +54,10 @@ export default () => {
         
      
       </Content>
-      </Screen>
-      </Router>
+      </Screen> */}
+        </Router>
       </Body>
-      </div>
+    </div>
   )
-  
+
 }

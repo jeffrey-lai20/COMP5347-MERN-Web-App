@@ -120,9 +120,10 @@ RevisionSchema.statics.findAllArticles = function(callback){
 }
 
 // Query to find the top five users of an article 
-RevisionSchema.statics.findTopFiveUsers = function(Ititle, callback) {
+RevisionSchema.statics.findTopFiveUsers = function(Ititle, fromYear, toYear, callback) {
 	this.aggregate([
-		{$match: {title: Ititle, usertype : 'registered'}},
+		{$match: {title: Ititle, usertype : 'registered'}}, 
+		//timestamp : { $gte: new Date("2001-1-1"), $lte: new Date("2020-12-31")}}},
 		{$group: {_id: {userid: "$userid", user: "$user"}, userCount : {$sum:1}}},
 		{$sort: {userCount:-1}},
 		{$limit:5}

@@ -4,6 +4,8 @@ import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
 
+import { DialogBox, Heading } from "./styled"
+
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
 export const Register = ({signUpFunction}) => {
@@ -17,7 +19,9 @@ export const Register = ({signUpFunction}) => {
 
 <ModalTransition>
   {isOpen && (
-    <Modal onClose={() => setIsOpen(false)} heading="Login">
+    <Modal onClose={() => setIsOpen(false)}>
+        <DialogBox>
+            <Heading>Create an Account</Heading>
          <form action='/register' method='POST' id='registerForm'>
             <div>
                 <Tag text="First Name:" color="greyLight"/>
@@ -54,6 +58,7 @@ export const Register = ({signUpFunction}) => {
              <Button appearance="primary" className="button" type="submit" value="Register">Register</Button>
              <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
          </form>
+         </DialogBox>
     </Modal>
   )}
 </ModalTransition>

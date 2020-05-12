@@ -17,8 +17,10 @@ module.exports.getAllArticles = function(req, res) {
 
 module.exports.getTopFiveUsers = function(req, res) {
     title = req.query.title;
+    fromYear = req.query.from;
+    toYear = req.query.to;
 
-    Revision.findTopFiveUsers(title, function(error, result) {
+    Revision.findTopFiveUsers(title, fromYear, toYear, function(error, result) {
         if (error) {
             console.log(error)
         } else {

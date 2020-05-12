@@ -17,7 +17,7 @@ export const SubHeading = styled.div`
 export const Result = styled.div`
 font-family: 'Arial';
 font-size: 20px;
-background: #103989;
+background: #0D65A5;
 color:white;
 padding: 10px;
 line-height: 300%;
@@ -29,7 +29,7 @@ margin-left: 80px;
 
 export const ArticleSelect = styled.div`
 font-family: 'Arial';
-font-size: 20px;
+font-size: 15px;
 background: white;
 color:black;
 padding: 10px;

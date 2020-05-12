@@ -1,7 +1,6 @@
 import React, { useState, Component, useEffect } from "react";
 import {ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect, DateSelect} from "./styled";
 import Select from '@atlaskit/select';
-import { Pie } from 'react-chartjs-2';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -55,10 +54,10 @@ export const IndividualArticles = () => {
 
       topThreeNews = [];
 
-      r.getTop(currentArticleTitle, {limit: 3}).map(post => {
-        var news = {title:post.title, url:post.url};
-        topThreeNews.push(news);
-      })
+      // r.getTop(currentArticleTitle, {limit: 3}).map(post => {
+      //   var news = {title:post.title, url:post.url};
+      //   topThreeNews.push(news);
+      // })
   }
 
   // var news = topThreeNews.map(item => {
@@ -162,7 +161,7 @@ export const IndividualArticles = () => {
 
         </Result>
 
-        <IndividualArticlesCharts></IndividualArticlesCharts>
+        <IndividualArticlesCharts currentArticle={currentArticleTitle}></IndividualArticlesCharts>
         
     </div>
 

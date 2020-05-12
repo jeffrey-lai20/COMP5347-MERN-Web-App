@@ -19,9 +19,7 @@ export const OverallArticles = props => {
 
 	// Select Statement States
 	const [chartType, setChartType] = useState([]);
-	const [selectedNumber, setSelectedNumber] = useState("2");
-
-
+	const [selectedNumber, setSelectedNumber] = useState([2]);
 
 	// Retrieve list from Express App
 	useEffect(() => {
@@ -200,9 +198,15 @@ export const OverallArticles = props => {
 		}
 	}
 
-	const NumberOfArticlesSelect = () => (
+	return (
+			<div>
+
+			<ArticleHeading>Overall Article Analytics</ArticleHeading>
+
+			<ArticleSelect>
+
 			<Select
-			onChange = {e => setSelectedNumber(e.value)}
+			onChange={e => setSelectedNumber(e.value)}
 			options={[
 				{ label: '1', value: '1' },
 				{ label: '2', value: '2' },
@@ -214,19 +218,7 @@ export const OverallArticles = props => {
 				{ label: '8', value: '8' },
 				]}
 			placeholder="Select number of articles"
-				/>
-	);
-
-
-
-	return (
-			<div>
-
-			<ArticleHeading>Overall Article Analytics</ArticleHeading>
-
-			<ArticleSelect>
-			
-			<NumberOfArticlesSelect></NumberOfArticlesSelect>
+				></Select>
 
 			</ArticleSelect>
 
@@ -289,12 +281,13 @@ export const OverallArticles = props => {
 					</div>
 					
 					{calculateSummary()}
-					<div>The graph shows the revision number distribution by user type, in which {totalCount} number 
+					<Result>The graph shows the revision number distribution by user type, in which {totalCount} number 
 						of users are taken into consideration for this analysis. From the pie chart, 
-						it is clear that the revisions were made mostly by {dataType[pieSortIndex[0]]} users that cover for {pieSortPercent[0]} percent, 
-						followed by {dataType[pieSortIndex[1]]} users with {pieSortPercent[1]} percent. The {dataType[pieSortIndex[2]]} users stands at {pieSortPercent[2]} percent, which is larger 
-						than revision made by {dataType[pieSortIndex[3]]} users ({pieSortPercent[3]} percent).
-					</div>
+						it is clear that the revisions were made mostly by <b>{dataType[pieSortIndex[0]]}</b> users that cover for <b>{pieSortPercent[0]}</b> percent, 
+						followed by <b>{dataType[pieSortIndex[1]]}</b> users with <b>{pieSortPercent[1]}</b> percent. 
+						The <b>{dataType[pieSortIndex[2]]}</b> users stands at <b>{pieSortPercent[2]}</b> percent, which is larger 
+						than revision made by <b>{dataType[pieSortIndex[3]]}</b> users (<b>{pieSortPercent[3]}</b> percent).
+					</Result>
 				</div>
 				: <a></a>}
 			</div>

@@ -9,6 +9,7 @@ import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
 export const Login = ({loginFunction}) => {
     const [isOpen, setIsOpen] = useState("");
+    const [resetPasswordIsOpen, setResetPasswordIsOpen] = useState("");
 
     return (
         <div>
