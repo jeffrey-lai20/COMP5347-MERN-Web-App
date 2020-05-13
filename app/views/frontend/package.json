@@ -26,6 +26,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "request": "^2.88.2",
     "styled-components": "^5.1.0",
     "typeface-roboto": "0.0.75"
   },

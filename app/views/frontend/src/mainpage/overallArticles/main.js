@@ -3,6 +3,7 @@ import { ArticleHeading, SubHeading, Result, ArticleSelect } from "./styled"
 import Select from '@atlaskit/select';
 import { Bar, Pie } from 'react-chartjs-2';
 
+var defaultArticleNum = 2;
 
 export const OverallArticles = props => {
 
@@ -19,13 +20,12 @@ export const OverallArticles = props => {
 
 	// Select Statement States
 	const [chartType, setChartType] = useState([]);
-	const [selectedNumber, setSelectedNumber] = useState("2");
+	const [selectedNumber, setSelectedNumber] = useState([defaultArticleNum]);
 
 
 
 	// Retrieve list from Express App
 	useEffect(() => {
-		console.log(selectedNumber);
 		// Overall: Data
 		fetch('/api/topArticleRevisions/?topcount=' + selectedNumber).then(res => res.json()).then(list => setTopRevisions(list));
 		fetch('/api/lowestArticleRevisions/?topcount=' + selectedNumber).then(res => res.json()).then(list => setLowestRevisions(list));
@@ -199,24 +199,11 @@ export const OverallArticles = props => {
 			pieSortPercent[i] = ((pieSortPercent[i]/totalCount)*100).toFixed(1);
 		}
 	}
-
-	const NumberOfArticlesSelect = () => (
-			<Select
-			onChange = {e => setSelectedNumber(e.value)}
-			options={[
-				{ label: '1', value: '1' },
-				{ label: '2', value: '2' },
-				{ label: '3', value: '3' },
-				{ label: '4', value: '4' },
-				{ label: '5', value: '5' },
-				{ label: '6', value: '6' },
-				{ label: '7', value: '7' },
-				{ label: '8', value: '8' },
-				]}
-			placeholder="Select number of articles"
-				/>
-	);
-
+	
+	const articlesSelect = (e) => {
+		setSelectedNumber([e.value]);
+		console.log(selectedNumber);
+	}
 
 
 	return (
@@ -226,7 +213,20 @@ export const OverallArticles = props => {
 
 			<ArticleSelect>
 			
-			<NumberOfArticlesSelect></NumberOfArticlesSelect>
+			<Select
+				onChange = {articlesSelect}
+				options={[
+					{ label: '1', value: 1 },
+					{ label: '2', value: 2 },
+					{ label: '3', value: 3 },
+					{ label: '4', value: 4 },
+					{ label: '5', value: 5 },
+					{ label: '6', value: 6 },
+					{ label: '7', value: 7 },
+					{ label: '8', value: 8 },
+					]}
+				placeholder="Select number of articles"
+			/>
 
 			</ArticleSelect>
 

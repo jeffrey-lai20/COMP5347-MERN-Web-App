@@ -1,6 +1,8 @@
 var mongoose = require('./db')
 var fs = require('fs');
 var readline = require('readline');
+var request = require('request');
+var querystring = require('querystring');
 
 var RevisionSchema = new mongoose.Schema(
 		{title		: String, 
@@ -141,7 +143,78 @@ RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 		{$match: {title: Ititle}},
 		{$sort 	: {minTimestamp : -1}},
 		{$limit:1}
-	])
+	]).exec(callback)
+}
+
+/*
+ *	Update Article
+ */
+
+RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
+	var endpoint = "https://en.wikipedia.org/w/api.php";
+	var model= this;
+	// URL for HTTP GET:
+	var url = endpoint + "?"  
+		+ "action = query"
+		+ "& format = json"
+		+ "& prop = articles"
+		+ "& titles = " + querystring.escape(title)
+		+ "& rvlimit = max"
+		+ "& rvstart = " + querystring.escape(lastDate.toISOString())
+		+ "& rvdir = newer"
+		+ "& rvprop = " + querystring.escape("timestamp|userid|user|ids");
+	console.log("Data pulling request: Sent request to: " + url);
+	var options = {
+			url: url,
+			method: 'POST',
+			json: true,
+			accept: 'application/json',
+			connection : 'keep-alive'
+	}
+	
+	// Requesting:
+	request(options, function(error, res, data) {
+		if (error) {
+			console.log(error);
+		} else if (res.statusCode >= 200 || res.statusCode <= 299) {
+			console.log("Not successful response: " + res.statusCode);
+		} else {
+			// Getting Articles
+			var dataPages = data.query.pages;
+			var articles = dataPages[Object.keys(dataPages)[0].articles];
+			
+			// Updating Articles objects
+			if (articles) {
+				var updates = [];
+				
+				// Iterating over all articles to check for update:
+				for (let i = 0; i < articles.length; i++) {
+					var article = articles[i];
+					
+					// If not updated, update article
+					if (updates.timestamp.substring(0,19) != lastDate.toISOString().substring(0,19)) {
+						var new_article = {
+								'title' : title,
+								'user' : article.user,
+								'user_id' : article.userid,
+								'timestamp' : article.timestamp
+						}
+						updates.push(new_article);
+					}
+				}
+				console.log("Updated all articles");
+				model.insertMany(updates, function(error, res) {
+					if (error) {
+						console.log(error);
+					} else {
+						callback(null, updates.length);
+					}
+				})
+			} else {
+				callback(null, 1);
+			}
+		}
+	})
 }
 
 /*
@@ -175,6 +248,7 @@ function addUsertypeFromTxt(model, path, type){
 addUsertypeFromTxt(Revision, './app/views/frontend/administrators.txt', "admin")
 addUsertypeFromTxt(Revision, './app/views/frontend/bots.txt', "bot")
 
+// No user type: Assigned by "anon"
 // Registered User : registered
 Revision.updateMany(
     { $and:[{usertype:{$exists:false}},{anon:{$exists:false}}] },
