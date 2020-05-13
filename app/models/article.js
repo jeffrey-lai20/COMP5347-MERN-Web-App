@@ -141,6 +141,7 @@ RevisionSchema.statics.getIndividualBarChartData = function(Ititle, callback) {
 RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 	this.aggregate([
 		{$match: {title: Ititle}},
+		{$project: {"date":"$timestamp"}},
 		{$sort 	: {minTimestamp : -1}},
 		{$limit:1}
 	]).exec(callback)
@@ -169,16 +170,18 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 			method: 'POST',
 			json: true,
 			accept: 'application/json',
-			connection : 'keep-alive'
+			headers: {
+				connection : 'keep-alive'}
 	}
 	
 	// Requesting:
 	request(options, function(error, res, data) {
 		if (error) {
 			console.log(error);
-		} else if (res.statusCode >= 200 || res.statusCode <= 299) {
+		} else if (res.statusCode < 200 || res.statusCode >= 300) {
 			console.log("Not successful response: " + res.statusCode);
 		} else {
+			console.log(data.getArgs);
 			// Getting Articles
 			var dataPages = data.query.pages;
 			var articles = dataPages[Object.keys(dataPages)[0].articles];

@@ -44,16 +44,15 @@ module.exports.getBarChartData = function(req, res) {
 
 module.exports.getLatestRevisionForArticle = function(req, res) {
     title = req.query.title;
-    console.log("Entered Lastest Revision");
     Revision.getLatestRevision(title, function(error, articleResult) {
     	let currentDate = new Date();
-    	console.log(currentDate);
     	let prevDate = new Date(articleResult[0].date);
+    	
     	let timeDifference = Math.floor((currentDate - prevDate)/(1000 * 60 * 60 * 24));
-        console.log("calculated time");
+        console.log("Previous Date of the article: " + prevDate + "Time Difference: " + timeDifference);
+
     	// For Articles older than 24 hours: Update
     	if (timeDifference > 1) {
-            console.log("Entering query wiki");
     		Revision.queryWiki(title, prevDate, function(error, result) {
     			res.send({result:result});
     		})
