@@ -156,21 +156,21 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 	var model= this;
 	// URL for HTTP GET:
 	var url = endpoint + "?"  
-		+ "action = query"
-		+ "& format = json"
-		+ "& prop = articles"
-		+ "& titles = " + querystring.escape(title)
-		+ "& rvlimit = max"
-		+ "& rvstart = " + querystring.escape(lastDate.toISOString())
-		+ "& rvdir = newer"
-		+ "& rvprop = " + querystring.escape("timestamp|userid|user|ids");
+		+ "action=query"
+		+ "&format=json"
+		+ "&prop=revisions"
+		+ "&rvlimit=max"
+		+ "&rvdir=newer"
+		+ "&rvstart=" + querystring.escape(lastDate.toISOString())
+		+ "&rvprop=timestamp|user"
+		+ "&titles=" + querystring.escape(title);
 	console.log("Data pulling request: Sent request to: " + url);
 	var options = {
 			url: url,
-			method: 'POST',
+			method: 'GET',
 			json: true,
-			accept: 'application/json',
 			headers: {
+				accept: 'application/json',
 				connection : 'keep-alive'}
 	}
 	
@@ -181,29 +181,23 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 		} else if (res.statusCode < 200 || res.statusCode >= 300) {
 			console.log("Not successful response: " + res.statusCode);
 		} else {
-			console.log(data.getArgs);
+			// Checking data format:
+			//console.log("This is data: " + JSON.stringify(data.query.pages));
+						
 			// Getting Articles
 			var dataPages = data.query.pages;
-			var articles = dataPages[Object.keys(dataPages)[0].articles];
-			
-			// Updating Articles objects
-			if (articles) {
-				var updates = [];
+
+			var updates =[];		
+			for (var i in dataPages) {
+				article = dataPages[i].revisions;
 				
-				// Iterating over all articles to check for update:
-				for (let i = 0; i < articles.length; i++) {
-					var article = articles[i];
-					
-					// If not updated, update article
-					if (updates.timestamp.substring(0,19) != lastDate.toISOString().substring(0,19)) {
-						var new_article = {
-								'title' : title,
-								'user' : article.user,
-								'user_id' : article.userid,
-								'timestamp' : article.timestamp
-						}
-						updates.push(new_article);
+				if (article.timestamp != lastDate.toISOString()) {
+					var new_article = {
+						'title' : title,
+						'user' : article.user,
+						'timestamp' : article.timestamp
 					}
+					updates.push(new_article);
 				}
 				console.log("Updated all articles");
 				model.insertMany(updates, function(error, res) {
@@ -213,8 +207,6 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 						callback(null, updates.length);
 					}
 				})
-			} else {
-				callback(null, 1);
 			}
 		}
 	})
