@@ -1,6 +1,8 @@
 var mongoose = require('./db')
 var fs = require('fs');
 var readline = require('readline');
+var request = require('request');
+var querystring = require('querystring');
 
 var RevisionSchema = new mongoose.Schema(
 		{title		: String, 
@@ -140,9 +142,75 @@ RevisionSchema.statics.getIndividualBarChartData = function(Ititle, callback) {
 RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 	this.aggregate([
 		{$match: {title: Ititle}},
+		{$project: {"date":"$timestamp"}},
 		{$sort 	: {minTimestamp : -1}},
 		{$limit:1}
-	])
+	]).exec(callback)
+}
+
+/*
+ *	Update Article
+ */
+
+RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
+	var endpoint = "https://en.wikipedia.org/w/api.php";
+	var model= this;
+	// URL for HTTP GET:
+	var url = endpoint + "?"  
+		+ "action=query"
+		+ "&format=json"
+		+ "&prop=revisions"
+		+ "&rvlimit=max"
+		+ "&rvdir=newer"
+		+ "&rvstart=" + querystring.escape(lastDate.toISOString())
+		+ "&rvprop=timestamp|user"
+		+ "&titles=" + querystring.escape(title);
+	console.log("Data pulling request: Sent request to: " + url);
+	var options = {
+			url: url,
+			method: 'GET',
+			json: true,
+			headers: {
+				accept: 'application/json',
+				connection : 'keep-alive'}
+	}
+	
+	// Requesting:
+	request(options, function(error, res, data) {
+		if (error) {
+			console.log(error);
+		} else if (res.statusCode < 200 || res.statusCode >= 300) {
+			console.log("Not successful response: " + res.statusCode);
+		} else {
+			// Checking data format:
+			//console.log("This is data: " + JSON.stringify(data.query.pages));
+						
+			// Getting Articles
+			var dataPages = data.query.pages;
+
+			var updates =[];		
+			for (var i in dataPages) {
+				article = dataPages[i].revisions;
+				
+				if (article.timestamp != lastDate.toISOString()) {
+					var new_article = {
+						'title' : title,
+						'user' : article.user,
+						'timestamp' : article.timestamp
+					}
+					updates.push(new_article);
+				}
+				console.log("Updated all articles");
+				model.insertMany(updates, function(error, res) {
+					if (error) {
+						console.log(error);
+					} else {
+						callback(null, updates.length);
+					}
+				})
+			}
+		}
+	})
 }
 
 /*
@@ -178,6 +246,7 @@ function addUsertypeFromTxt(model, path, type){
 addUsertypeFromTxt(Revision, './app/views/frontend/administrators.txt', "admin")
 addUsertypeFromTxt(Revision, './app/views/frontend/bots.txt', "bot")
 
+// No user type: Assigned by "anon"
 // Registered User : registered
 Revision.updateMany(
     { $and:[{usertype:{$exists:false}},{anon:{$exists:false}}] },
