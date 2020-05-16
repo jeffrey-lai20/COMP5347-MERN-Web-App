@@ -149,8 +149,10 @@ RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 	Author Analytics
 */
 
+// Authors are either admin or bots
 RevisionSchema.statics.findAllAuthors = function(callback) {
 	return this.aggregate([
+		{$match: {usertype : 'admin' || 'bot' }}, 
 		{$group: {_id : {userid: "$userid", user : "$user"}}}
 	]).exec(callback)
 }
