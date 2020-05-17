@@ -121,23 +121,54 @@ RevisionSchema.statics.findAllArticles = function(callback){
 	]).sort({name : 1}).exec(callback)
 }
 
+RevisionSchema.statics.getRevisionNumber = function (Ititle, fromYear, toYear, callback) {
+	return this.aggregate([
+		{$match: {title: Ititle}},
+		{$group : {_id : {title : "$title"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+}
+
 // Query to find the top five users of an article 
 RevisionSchema.statics.findTopFiveUsers = function(Ititle, fromYear, toYear, callback) {
 	this.aggregate([
-		{$match: {title: Ititle, usertype : 'registered'}}, 
-		//timestamp : { $gte: new Date("2001-1-1"), $lte: new Date("2020-12-31")}}},
+		{$match: {title: Ititle, usertype : 'registered', timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 		{$group: {_id: {userid: "$userid", user: "$user"}, userCount : {$sum:1}}},
 		{$sort: {userCount:-1}},
 		{$limit:5}
 	]).exec(callback)
 }
 
-RevisionSchema.statics.getIndividualBarChartData = function(Ititle, callback) {
+RevisionSchema.statics.getIndividualPieChartData = function(Ititle, callback) {
 	this.aggregate([
 		{$match: {title: Ititle}},
 		{$group: {_id: {usertype: "$usertype"}, userCount : {$sum:1}}},
 	]).exec(callback)
 }
+
+RevisionSchema.statics.individualBarChartDistributionYear = function(Ititle, callback) {
+	return this.aggregate([
+		{$match: {title: Ititle}},
+	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
+	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
+	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
+	          admin: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "admin" ]},1,0] }},
+	          bot: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "bot" ]},1,0] }}}
+	       },
+	       {$sort:{"_id":1}}
+	     ]).exec(callback)
+}
+
+RevisionSchema.statics.individualBarChartDistributionYearUser = function(Ititle, Iuser, callback) {
+	return this.aggregate([
+		{$match: {title: Ititle, user: Iuser}},
+	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
+	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }}
+	       }},
+	       {$sort:{"_id":1}}
+	     ]).exec(callback)
+}
+
+
 
 RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 	this.aggregate([

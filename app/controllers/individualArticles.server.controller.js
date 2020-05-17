@@ -14,11 +14,28 @@ module.exports.getAllArticles = function(req, res) {
     })
 }
 
+module.exports.getNumberOfRevisionsForArticle = function(req, res) {
+    title = req.query.title;
+    fromYear = req.query.fromYear;
+    toYear = req.query.toYear;
+
+   
+
+    Revision.getRevisionNumber(title, fromYear, toYear, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
 
 module.exports.getTopFiveUsers = function(req, res) {
-    title = req.query.title;
-    fromYear = req.query.from;
-    toYear = req.query.to;
+    title = req.params.title;
+    fromYear = req.params.fromYear;
+    toYear = req.params.toYear;
 
     Revision.findTopFiveUsers(title, fromYear, toYear, function(error, result) {
         if (error) {
@@ -31,10 +48,40 @@ module.exports.getTopFiveUsers = function(req, res) {
 }
 
 
-module.exports.getBarChartData = function(req, res) {
-    title = req.query.title;
+module.exports.getPieChartData = function(req, res) {
+    title = req.params.title;
+    // fromYear = req.params.fromYear;
+    // toYear = req.params.toYear;
 
-    Revision.getIndividualBarChartData(title, function(error, result) {
+    Revision.getIndividualPieChartData(title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+module.exports.getIndividualBarChartData = function(req, res) {
+    title = req.params.title;
+
+    Revision.individualBarChartDistributionYear(title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+
+module.exports.getIndividualBarChartDataUser = function(req, res) {
+    title = req.params.title;
+    user = req.params.user;
+
+    Revision.individualBarChartDistributionYearUser(title, user, function(error, result) {
         if (error) {
             console.log(error)
         } else {

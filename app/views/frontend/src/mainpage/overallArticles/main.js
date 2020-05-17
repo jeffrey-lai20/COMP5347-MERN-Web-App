@@ -20,13 +20,9 @@ export const OverallArticles = props => {
 
 	// Select Statement States
 	const [chartType, setChartType] = useState([]);
-<<<<<<< HEAD
-	const [selectedNumber, setSelectedNumber] = useState([2]);
-=======
 	const [selectedNumber, setSelectedNumber] = useState([defaultArticleNum]);
 
 
->>>>>>> 239f07603ff7dce4474800c086cafb96be90be68
 
 	// Retrieve list from Express App
 	useEffect(() => {

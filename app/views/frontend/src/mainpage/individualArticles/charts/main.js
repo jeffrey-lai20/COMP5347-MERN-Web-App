@@ -7,14 +7,16 @@ export const IndividualArticlesCharts = props => {
   
   const [chartType, setChartType] = useState([]);
   const [userTypeNumbers, setUserTypeNumbers] = useState([]);
+  const [barChartDist, setBarChartDist] = useState([]);
 
   // var pieChartLabels = ['anon'];
   // var pieChartData = [1];
 
   useEffect(() => {
     // GET request
-   fetch('/api/individual/getIndividualBarChartData/?title=Australia').then(res => res.json()).then(list => setUserTypeNumbers(list));
-   console.log(props.currentArticleTitle);
+   fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle)
+   .then(res => res.json()).then(list => setUserTypeNumbers(list));
+   fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle).then(res => res.json()).then(list => setBarChartDist(list));
  }, [])
 
 //  var barChartLabelling = userTypeNumbers.map(userType => {
@@ -69,51 +71,75 @@ var pieHoverOption = {
     }
   }
 }
+/*
+	 *  BAR CHART
+	 */
+	const bar_years = [];
+	const bar_registered = [];
+	const bar_anonymous = [];
+	const bar_admin = [];
+	const bar_bot = [];
 
-const barChartData = {
-  labels: [1, 2, 3],
-  datasets: [
-    {
-      label: 'Registered',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [1, 1, 1]
-    },
-    {
-      label: 'Anonymous',
-      backgroundColor: 'rgba(250,255,10,0.2)',
-      borderColor: 'rgba(250,255,10,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(250,255,10,0.4)',
-      hoverBorderColor: 'rgba(250,255,10,1)',
-      data: [2, 2, 2]
-    },
-    {
-      label: 'Administrator',
-      backgroundColor: 'rgba(18,10,255,0.2)',
-      borderColor: 'rgba(18,10,255,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(18,10,255,0.4)',
-      hoverBorderColor: 'rgba(18,10,255,1)',
-      data: [3, 3, 3]
-    },
-    {
-      label: 'Bot',
-      backgroundColor: 'rgba(22,255,10,0.2)',
-      borderColor: 'rgba(22,255,10,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(22,255,10,0.4)',
-      hoverBorderColor: 'rgba(22,255,10,1)',
-      data: [4, 4, 4]
-    }
-    ]
-};
+	var barChartData = [];
+
+	const barChartDistDisplay = barChartDist.map(article => {
+
+		// X axis:
+		bar_years.push(article._id.year);
+
+		// Y axis:
+		bar_registered.push(article.registered);
+		bar_anonymous.push(article.anonymous);
+		bar_admin.push(article.admin);
+		bar_bot.push(article.bot);
+
+		barChartData = {
+				labels: bar_years,
+				datasets: [
+					{
+						label: 'Registered',
+						backgroundColor: 'rgba(255,99,132,0.2)',
+						borderColor: 'rgba(255,99,132,1)',
+						borderWidth: 1,
+						hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+						hoverBorderColor: 'rgba(255,99,132,1)',
+						data: bar_registered
+					},
+					{
+						label: 'Anonymous',
+						backgroundColor: 'rgba(250,255,10,0.2)',
+						borderColor: 'rgba(250,255,10,1)',
+						borderWidth: 1,
+						hoverBackgroundColor: 'rgba(250,255,10,0.4)',
+						hoverBorderColor: 'rgba(250,255,10,1)',
+						data: bar_anonymous
+					},
+					{
+						label: 'Administrator',
+						backgroundColor: 'rgba(18,10,255,0.2)',
+						borderColor: 'rgba(18,10,255,1)',
+						borderWidth: 1,
+						hoverBackgroundColor: 'rgba(18,10,255,0.4)',
+						hoverBorderColor: 'rgba(18,10,255,1)',
+						data: bar_admin
+					},
+					{
+						label: 'Bot',
+						backgroundColor: 'rgba(22,255,10,0.2)',
+						borderColor: 'rgba(22,255,10,1)',
+						borderWidth: 1,
+						hoverBackgroundColor: 'rgba(22,255,10,0.4)',
+						hoverBorderColor: 'rgba(22,255,10,1)',
+						data: bar_bot
+					}
+					]
+		};
+	})
 
     return (
         <div>
+          <a>Charts for article: </a>{props.currentArticleTitle}
+          
         <ArticleSelect>
         <Select 
           onChange = {e => setChartType(e.value)}
@@ -155,14 +181,7 @@ const barChartData = {
 
       {chartType==3
         ? <div><a><b>Bar Chart Showing Revision Number Distributed By Year Made By One of the Top 5 Regular Users:</b></a>
-         <Bar
-        data={barChartData}
-        width={100}
-        height={800}
-        options={{
-          maintainAspectRatio: false
-        }}
-        />
+        {barChartDistDisplay}
         </div> : <br></br>}
         </Result>
 

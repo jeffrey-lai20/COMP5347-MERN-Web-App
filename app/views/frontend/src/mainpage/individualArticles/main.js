@@ -15,10 +15,11 @@ export const IndividualArticles = () => {
   const [allArticles, setAllArticles] = useState([]);
   const [currentArticle, setCurrentArticle] = useState([]);
   const [currentArticleTitle, setCurrentArticleTitle] = useState("");
+  const [currentRevisions, setCurrentRevisions] = useState([]);
   const [topFiveUsers, setTopFiveUsers] = useState([]);
   const [latestRevision, setLatestRevision] = useState([]);
-  const [fromYear, setFromYear] = useState([]);
-  const [toYear, setToYear] = useState([]);
+  const [fromYear, setFromYear] = useState("1990");
+  const [toYear, setToYear] = useState("2020");
 
   var topThreeNews;
    // Retrieve list from Express App
@@ -48,9 +49,9 @@ export const IndividualArticles = () => {
       setCurrentArticleTitle(value._id.title);
       setCurrentArticle(value);
       // GET request
-      fetch('/api/individual/getTopFiveUsers/?title=' + value._id.title).then(res => res.json()).then(list => setTopFiveUsers(list)); 
+      fetch('/api/individual/getTopFiveUsers/'+ value._id.title + '/' + fromYear + '/' + toYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
 
-      fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
+      //fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
 
       topThreeNews = [];
 
@@ -58,6 +59,12 @@ export const IndividualArticles = () => {
       //   var news = {title:post.title, url:post.url};
       //   topThreeNews.push(news);
       // })
+  }
+
+  const updateSummaryInfo = (value) => {
+
+      //fetch('/api/individual/getTopFiveUsers/'+ value._id.title + '/' + fromYear + '/' + toYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
+
   }
 
   // var news = topThreeNews.map(item => {
@@ -90,6 +97,11 @@ export const IndividualArticles = () => {
           </Select>
 
           </ArticleSelect>
+
+
+         {currentArticle != "" 
+				? <div>
+          <SubHeading>Summary Information</SubHeading>
 
           <DateSelect>
           <Select 
@@ -130,9 +142,7 @@ export const IndividualArticles = () => {
           placeholder = "To: ">
           </Select>
           </DateSelect>
-         
 
-          <SubHeading>Summary Information</SubHeading>
         <Result>
        
         <a><b>Title:</b> {currentArticleTitle}</a>
@@ -161,7 +171,10 @@ export const IndividualArticles = () => {
 
         </Result>
 
-        <IndividualArticlesCharts currentArticle={currentArticleTitle}></IndividualArticlesCharts>
+        <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={fromYear} toYear={toYear}></IndividualArticlesCharts>
+        </div>
+
+        : <div></div>}
         
     </div>
 
