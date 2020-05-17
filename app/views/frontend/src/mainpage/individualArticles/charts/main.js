@@ -3,36 +3,34 @@ import {ArticleSelect, Result} from "./styled";
 import Select from '@atlaskit/select';
 import { Bar, Pie } from 'react-chartjs-2';
 
+import { RadioGroup } from '@atlaskit/radio';
+
 export const IndividualArticlesCharts = props => {
   
   const [chartType, setChartType] = useState([]);
   const [userTypeNumbers, setUserTypeNumbers] = useState([]);
   const [barChartDist, setBarChartDist] = useState([]);
-
-  // var pieChartLabels = ['anon'];
-  // var pieChartData = [1];
+  const [barChartDistUser, setBarChartDistUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState([]);
 
   useEffect(() => {
     // GET request
-   fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle)
-   .then(res => res.json()).then(list => setUserTypeNumbers(list));
+   fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle).then(res => res.json()).then(list => setUserTypeNumbers(list));
    fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle).then(res => res.json()).then(list => setBarChartDist(list));
- }, [])
+   fetch('/api/individual/barChartDistYear/'+ props.currentArticleTitle + '/' + selectedUser).then(res => res.json()).then(list => setBarChartDistUser(list));
+ }, [props.currentArticleTitle, selectedUser])
 
-//  var barChartLabelling = userTypeNumbers.map(userType => {
-//    pieChartLabels.push(userType.userType);
-//    pieChartData.push(userType.count)
-//  })
+const radioValues = props.topFiveUsers.map(user => ({
+  name: user._id.user, value: user._id.user, label: user._id.user
+}))
 
 var dataType = [];
 var dataCount = [];
-var pieSortPercent = [];
 var pieChartData;
 
 const pieChartDisplay = userTypeNumbers.map(user => {
   dataType.push(user._id.usertype);
   dataCount.push(user.userCount);
-  pieSortPercent.push(user.userCount);
 
   pieChartData = {
       labels: dataType,
@@ -71,7 +69,7 @@ var pieHoverOption = {
     }
   }
 }
-/*
+  /*
 	 *  BAR CHART
 	 */
 	const bar_years = [];
@@ -134,7 +132,40 @@ var pieHoverOption = {
 					}
 					]
 		};
-	})
+  })
+
+   /*
+	 *  BAR CHART
+	 */
+	const bar_years_user = [];
+	const bar_registered_user = [];
+
+	var barChartDataUser = [];
+
+	const barChartDistUserDisplay = barChartDistUser.map(article => {
+
+		// X axis:
+		bar_years_user.push(article._id.year);
+
+		// Y axis:
+		bar_registered_user.push(article.registered);
+
+		barChartDataUser = {
+				labels: bar_years_user,
+				datasets: [
+					{
+						label: 'Registered',
+						backgroundColor: 'rgba(255,99,132,0.2)',
+						borderColor: 'rgba(255,99,132,1)',
+						borderWidth: 1,
+						hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+						hoverBorderColor: 'rgba(255,99,132,1)',
+						data: bar_registered_user
+					}
+					]
+		};
+  })
+
 
     return (
         <div>
@@ -142,7 +173,7 @@ var pieHoverOption = {
           
         <ArticleSelect>
         <Select 
-          onChange = {e => setChartType(e.value)}
+          onChange = {e =>  setChartType(e.value)}
           options={[
             { label: 'Revision number distributed by year and user type', value: '1' },
             { label: 'Revision number distributed based on user type', value: '2' },
@@ -156,7 +187,7 @@ var pieHoverOption = {
           {chartType==1
         ? 
         <div><a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>
-        
+        {barChartDistDisplay}
         <Bar
         data={barChartData}
         width={100}
@@ -181,7 +212,23 @@ var pieHoverOption = {
 
       {chartType==3
         ? <div><a><b>Bar Chart Showing Revision Number Distributed By Year Made By One of the Top 5 Regular Users:</b></a>
-        {barChartDistDisplay}
+        <a>Select from top 5 users</a>
+        <RadioGroup
+        label="Pick a user"
+        onChange={e =>  setSelectedUser(e.value)}
+        defaultValue={radioValues[0].value}
+        options={radioValues}
+      />
+
+        {barChartDistUserDisplay}
+        <Bar
+        data={barChartDataUser}
+        width={100}
+        height={800}
+        options={{
+          maintainAspectRatio: false
+        }}
+        />
         </div> : <br></br>}
         </Result>
 

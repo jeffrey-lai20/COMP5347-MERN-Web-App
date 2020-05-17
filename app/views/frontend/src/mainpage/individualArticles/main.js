@@ -171,7 +171,7 @@ export const IndividualArticles = () => {
 
         </Result>
 
-        <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={fromYear} toYear={toYear}></IndividualArticlesCharts>
+        <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={fromYear} toYear={toYear} topFiveUsers = {topFiveUsers}></IndividualArticlesCharts>
         </div>
 
         : <div></div>}
