@@ -11,14 +11,15 @@ export const IndividualArticlesCharts = props => {
   const [userTypeNumbers, setUserTypeNumbers] = useState([]);
   const [barChartDist, setBarChartDist] = useState([]);
   const [barChartDistUser, setBarChartDistUser] = useState([]);
-  const [selectedUser, setSelectedUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
 
   useEffect(() => {
     // GET request
-   fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle).then(res => res.json()).then(list => setUserTypeNumbers(list));
-   fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle).then(res => res.json()).then(list => setBarChartDist(list));
-   fetch('/api/individual/barChartDistYear/'+ props.currentArticleTitle + '/' + selectedUser).then(res => res.json()).then(list => setBarChartDistUser(list));
- }, [props.currentArticleTitle, selectedUser])
+   fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setUserTypeNumbers(list));
+   fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle+ '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDist(list));
+   fetch('/api/individual/barChartDistYearUser/'+ props.currentArticleTitle + '/' + selectedUser+ '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDistUser(list));
+   console.log(selectedUser);
+ }, [props.currentArticleTitle, selectedUser, props.fromYear, props.toYear])
 
 const radioValues = props.topFiveUsers.map(user => ({
   name: user._id.user, value: user._id.user, label: user._id.user
@@ -154,12 +155,12 @@ var pieHoverOption = {
 				labels: bar_years_user,
 				datasets: [
 					{
-						label: 'Registered',
-						backgroundColor: 'rgba(255,99,132,0.2)',
-						borderColor: 'rgba(255,99,132,1)',
-						borderWidth: 1,
-						hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-						hoverBorderColor: 'rgba(255,99,132,1)',
+						label: selectedUser,
+						backgroundColor: 'rgba(2,60,103,0.8)',
+						borderColor: 'rgba(2,50,85,1)',
+						borderWidth: 5,
+						hoverBackgroundColor: 'rgba(2,60,103,1)',
+						hoverBorderColor: 'rgba(2,60,103,1)',
 						data: bar_registered_user
 					}
 					]
@@ -169,8 +170,7 @@ var pieHoverOption = {
 
     return (
         <div>
-          <a>Charts for article: </a>{props.currentArticleTitle}
-          
+        
         <ArticleSelect>
         <Select 
           onChange = {e =>  setChartType(e.value)}
@@ -215,8 +215,7 @@ var pieHoverOption = {
         <a>Select from top 5 users</a>
         <RadioGroup
         label="Pick a user"
-        onChange={e =>  setSelectedUser(e.value)}
-        defaultValue={radioValues[0].value}
+        onChange={e => setSelectedUser(e.currentTarget.value)}
         options={radioValues}
       />
 

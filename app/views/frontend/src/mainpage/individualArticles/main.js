@@ -1,6 +1,7 @@
 import React, { useState, Component, useEffect } from "react";
 import {ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect, DateSelect} from "./styled";
 import Select from '@atlaskit/select';
+import Button from '@atlaskit/button';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,15 +19,18 @@ export const IndividualArticles = () => {
   const [currentRevisions, setCurrentRevisions] = useState([]);
   const [topFiveUsers, setTopFiveUsers] = useState([]);
   const [latestRevision, setLatestRevision] = useState([]);
-  const [fromYear, setFromYear] = useState("1990");
-  const [toYear, setToYear] = useState("2020");
+  const [fromYear, setFromYear] = useState("");
+  const [toYear, setToYear] = useState("");
+  const [validatedFromYear, setValidatedFromYear] = useState("1990");
+  const [validatedToYear, setValidatedToYear] = useState("2020");
 
   var topThreeNews;
    // Retrieve list from Express App
    useEffect(() => {
      // GET request
     fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
-  }, [])
+    fetch('/api/individual/getTopFiveUsers/'+ currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
+  }, [currentArticleTitle, validatedFromYear, validatedToYear])
 
   const Snoowrap = require('snoowrap');
     var topThreeNews = [];
@@ -40,6 +44,13 @@ export const IndividualArticles = () => {
         password: 'comp5347'
     });
 
+  const setYearRange = () => {
+    // some year validation
+
+    setValidatedFromYear(fromYear);
+    setValidatedToYear(toYear);
+  }
+
   const allArticlesOptions = allArticles.map(article => ({
     label: "Title: " + article._id.title + " " + "Number of Revisions: " + article.count,
     value: article
@@ -49,7 +60,7 @@ export const IndividualArticles = () => {
       setCurrentArticleTitle(value._id.title);
       setCurrentArticle(value);
       // GET request
-      fetch('/api/individual/getTopFiveUsers/'+ value._id.title + '/' + fromYear + '/' + toYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
+      //fetch('/api/individual/getTopFiveUsers/'+ value._id.title + '/' + fromYear + '/' + toYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
 
       //fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
 
@@ -74,12 +85,14 @@ export const IndividualArticles = () => {
   // }
   // );
 
+  var num = 0;
+
   var topFiveUsersTable = topFiveUsers.map(user => {
-  
+    num = num + 1;
     return (
       <TableBody>
       <TableRow>
-        <TableCell align="right">1</TableCell>
+        <TableCell align="right">{num}</TableCell>
         <TableCell align="right">{user._id.user}</TableCell>
         <TableCell align="right">{user.userCount}</TableCell>
       </TableRow>
@@ -101,7 +114,7 @@ export const IndividualArticles = () => {
 
          {currentArticle != "" 
 				? <div>
-          <SubHeading>Summary Information</SubHeading>
+          <SubHeading>Summary Information - {currentArticleTitle} </SubHeading>
 
           <DateSelect>
           <Select 
@@ -143,10 +156,10 @@ export const IndividualArticles = () => {
           </Select>
           </DateSelect>
 
+          <Button onClick = {setYearRange}>Update</Button>
+
         <Result>
        
-        <a><b>Title:</b> {currentArticleTitle}</a>
-        <br></br>
         <a><b>Total Number of Revisions:</b> {currentArticle.count}</a>
         <br></br>
         <a><b>Top 5 Regular Users:</b></a>
@@ -171,7 +184,7 @@ export const IndividualArticles = () => {
 
         </Result>
 
-        <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={fromYear} toYear={toYear} topFiveUsers = {topFiveUsers}></IndividualArticlesCharts>
+        <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={validatedFromYear} toYear={validatedToYear} topFiveUsers = {topFiveUsers}></IndividualArticlesCharts>
         </div>
 
         : <div></div>}

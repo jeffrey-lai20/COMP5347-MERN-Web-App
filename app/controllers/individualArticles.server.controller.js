@@ -50,10 +50,10 @@ module.exports.getTopFiveUsers = function(req, res) {
 
 module.exports.getPieChartData = function(req, res) {
     title = req.params.title;
-    // fromYear = req.params.fromYear;
-    // toYear = req.params.toYear;
+    fromYear = req.params.fromYear;
+    toYear = req.params.toYear;
 
-    Revision.getIndividualPieChartData(title, function(error, result) {
+    Revision.getIndividualPieChartData(title, fromYear, toYear, function(error, result) {
         if (error) {
             console.log(error)
         } else {
@@ -65,8 +65,10 @@ module.exports.getPieChartData = function(req, res) {
 
 module.exports.getIndividualBarChartData = function(req, res) {
     title = req.params.title;
+    fromYear = req.params.fromYear;
+    toYear = req.params.toYear;
 
-    Revision.individualBarChartDistributionYear(title, function(error, result) {
+    Revision.individualBarChartDistributionYear(title, fromYear, toYear, function(error, result) {
         if (error) {
             console.log(error)
         } else {
@@ -76,12 +78,13 @@ module.exports.getIndividualBarChartData = function(req, res) {
     })
 }
 
-
 module.exports.getIndividualBarChartDataUser = function(req, res) {
     title = req.params.title;
     user = req.params.user;
+    fromYear = req.params.fromYear;
+    toYear = req.params.toYear;
 
-    Revision.individualBarChartDistributionYearUser(title, user, function(error, result) {
+    Revision.individualBarChartDistributionYearUser(title, user, fromYear, toYear, function(error, result) {
         if (error) {
             console.log(error)
         } else {

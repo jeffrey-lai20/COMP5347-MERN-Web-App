@@ -22,8 +22,6 @@ export const OverallArticles = props => {
 	const [chartType, setChartType] = useState([]);
 	const [selectedNumber, setSelectedNumber] = useState([defaultArticleNum]);
 
-
-
 	// Retrieve list from Express App
 	useEffect(() => {
 		// Overall: Data
@@ -36,7 +34,7 @@ export const OverallArticles = props => {
 		// Overall: Chart
 		fetch('/api/barChartDistYear').then(res => res.json()).then(list => setBarChartDist(list));
 		fetch('/api/pieChartDistUsertype').then(res => res.json()).then(list => setPieChartDist(list));
-	}, [])
+	}, [selectedNumber])
 
 
 	const topRevisionsDisplay = topRevisions.map(article => {

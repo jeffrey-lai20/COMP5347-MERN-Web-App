@@ -138,16 +138,16 @@ RevisionSchema.statics.findTopFiveUsers = function(Ititle, fromYear, toYear, cal
 	]).exec(callback)
 }
 
-RevisionSchema.statics.getIndividualPieChartData = function(Ititle, callback) {
+RevisionSchema.statics.getIndividualPieChartData = function(Ititle, fromYear, toYear, callback) {
 	this.aggregate([
-		{$match: {title: Ititle}},
+		{$match: {title: Ititle, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 		{$group: {_id: {usertype: "$usertype"}, userCount : {$sum:1}}},
 	]).exec(callback)
 }
 
-RevisionSchema.statics.individualBarChartDistributionYear = function(Ititle, callback) {
+RevisionSchema.statics.individualBarChartDistributionYear = function(Ititle, fromYear, toYear, callback) {
 	return this.aggregate([
-		{$match: {title: Ititle}},
+		{$match: {title: Ititle, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
 	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
 	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
@@ -158,17 +158,15 @@ RevisionSchema.statics.individualBarChartDistributionYear = function(Ititle, cal
 	     ]).exec(callback)
 }
 
-RevisionSchema.statics.individualBarChartDistributionYearUser = function(Ititle, Iuser, callback) {
+RevisionSchema.statics.individualBarChartDistributionYearUser = function(Ititle, Iuser, fromYear, toYear, callback) {
 	return this.aggregate([
-		{$match: {title: Ititle, user: Iuser}},
+		{$match: {title: Ititle, user: Iuser, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
 	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }}
 	       }},
 	       {$sort:{"_id":1}}
 	     ]).exec(callback)
 }
-
-
 
 RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 	this.aggregate([
