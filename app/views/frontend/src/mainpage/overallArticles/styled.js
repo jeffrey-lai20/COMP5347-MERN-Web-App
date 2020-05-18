@@ -1,23 +1,23 @@
 import styled from "styled-components";
 
 export const ArticleHeading = styled.div`
-    font-family: 'Roboto'
+    font-family: 'Arial'
     text-align: center;
     font-size: 35px;
     padding: 40px;
 `;
 
 export const SubHeading = styled.div`
-    font-family: 'Roboto';
+    font-family: 'Arial';
     font-size: 20px;
     padding: 30px;
     color: #103989;
 `;
 
 export const Result = styled.div`
-font-family: 'Roboto';
+font-family: 'Arial';
 font-size: 20px;
-background: #103989;
+background: #0D65A5;
 color:white;
 padding: 10px;
 line-height: 300%;
@@ -28,8 +28,8 @@ margin-left: 80px;
 `;
 
 export const ArticleSelect = styled.div`
-font-family: 'Roboto';
-font-size: 20px;
+font-family: 'Arial';
+font-size: 15px;
 background: white;
 color:black;
 padding: 10px;

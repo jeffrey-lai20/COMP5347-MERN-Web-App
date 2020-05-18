@@ -1,90 +1,100 @@
-const bcrypt = require ('bcrypt');
+const bcrypt = require('bcrypt');
+var mongoose = require('./db')
 
-var mongoose = require('mongoose');
+const UserSchema = mongoose.Schema({
 
-mongoose.connect('mongodb://localhost/Wikipedia/Users', { useNewUrlParser: true, useUnifiedTopology: true  }, function () {
-    console.log('mongodb connected')
-});
-
-module.exports = mongoose;
-
-const UserSchema = mongoose.Schema ({
-    firstName: {
-        type: String,
-        require: true,
-        trim: true
-    },
-
-    lastName: {
+    firstName:{
         type: String,
         required: true,
-        trim: true
+        trim:true
     },
-
-    email: {
-        type:String,
+    lastName:{
+        type: String,
+        required: true,
+        trim:true
+    },
+    email:{
+        type: String,
         unique: true,
         required: true,
-        trim: true
+        trim:true
     },
-
-    username: {
+    userName: {
         type: String,
         unique: true,
         required: true,
         trim: true
     },
-
     password: {
         type: String,
         required: true,
+    },
+    password2: {
+        type: String,
+        required: true
+    },
+    resetQuestion: {
+        type: String,
+        required: true
+    },
+    resetAnswer: {
+        type: String,
+        required: true
     }
+
 });
 
-UserSchema.statics.createUser = function (newUser, callback) {
-    bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(newUser.password, salt, function(err, hash) {
-            newUser.password = hash;
+UserSchema.statics.createUser=function(newUser,callback){
+    bcrypt.genSalt(10,function(err,salt){
+        bcrypt.hash(newUser.password,salt,function(err,hash){
+            newUser.password=hash;
+            newUser.password2=hash;
             newUser.save(callback);
         })
     })
 }
 
-UserSchema.statics.getUserByUserName = function (userName, callback) {
-    var query = {userName: userName};
-    User.findOne(query, callback);
+UserSchema.statics.getUserByUserName=function(userName,callback){
+    var query={userName:userName};
+    User.findOne(query,callback);
 }
 
-UserSchema.statics.getUserById = function (id, callback) {
-    User.findById(id, callback);
-}
-
-UserSchema.statics.comparePassword = function comparePassword(candidatePassword, hash, callback) {
-    bcrypt.compare(candidatePassword, has, function(err, isMatch) {
+UserSchema.statics.comparePassword = function comparePassword(candidatePassword,hash,callback) {
+    bcrypt.compare(candidatePassword, hash,function (err, isMatch){
         if (err) throw err;
         callback(null, isMatch);
     });
 }
-
 UserSchema.statics.auth = function (userName, password, callback) {
     User.findOne({
-       userName: userName
-    }).exec(function(err, user) {
-        if (err) {
-            return callback(err)
-        } else if (!user) {
-            var err = new Error('User not found');
-            err.status = 401;
-            return callback(err);
-        }
-        bcrypt.compare(password, user.password, function(err, result) {
-            if (result === true) {
-                return callback(null, user);
-            } else {
-                return callback();
+        userName: userName
+    })
+        .exec(function (err, user) {
+            if (err) {
+                return callback(err)
+            } else if (!user) {
+                var err = new Error('User not found.');
+                err.status = 401;
+                return callback(err);
             }
+            bcrypt.compare(password, user.password, function (err, result) {
+                if (result === true) {
+                    return callback(null, user);
+                } else {
+                    return callback();
+                }
+            })
+        });
+}
+
+UserSchema.statics.resetPassword=function(user,callback){
+    bcrypt.genSalt(10,function(err,salt){
+        bcrypt.hash(user.password,salt,function(err,hash){
+            user.password=hash;
+            user.password2=hash;
+            user.save(callback);
         })
-    });
+    })
 }
 
 var User = mongoose.model('User', UserSchema);

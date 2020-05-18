@@ -2,7 +2,7 @@ import React, { useState, Component, useEffect } from "react";
 import { OverallArticles } from "./overallArticles/main";
 import { IndividualArticles } from "./individualArticles/main";
 import { AuthorAnalytics } from "./authorAnalytics/main"
-import { Heading } from "./styled";
+import { Heading, SearchSelect } from "./styled";
 import Select from '@atlaskit/select';
 
 export const MainPage = props => {
@@ -12,7 +12,7 @@ export const MainPage = props => {
   return (
     <div>
       <Heading>Wikipedia Analytics</Heading>
-
+      <SearchSelect>
       <Select
         onChange={e => setAnalyticsType(e.value)}
         options={[
@@ -22,6 +22,7 @@ export const MainPage = props => {
         ]}
       >
       </Select>
+      </SearchSelect>
       {analyticsType == 1
         ? <OverallArticles></OverallArticles> : <br></br>}
       {analyticsType == 2

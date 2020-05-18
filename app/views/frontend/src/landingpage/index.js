@@ -27,8 +27,8 @@ export const LandingPage = () => {
             </div> */}
             {/* <Button appearance="primary" href="/login">Login</Button>
             <Button  appearance="primary" href="/register">Sign Up</Button> */}
-            <Login></Login>
-            <Register></Register>
+            <Login/>
+            <Register/>
         </div>
     )
 }
