@@ -16,7 +16,7 @@ export const IndividualArticlesCharts = props => {
   useEffect(() => {
     // GET request
    fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setUserTypeNumbers(list));
-   fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle+ '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDist(list));
+   fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDist(list));
    
    if (selectedUser != "") {
     fetch('/api/individual/barChartDistYearUser/'+ props.currentArticleTitle + '/' + selectedUser + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDistUser(list));

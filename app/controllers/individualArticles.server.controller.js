@@ -15,11 +15,9 @@ module.exports.getAllArticles = function(req, res) {
 }
 
 module.exports.getNumberOfRevisionsForArticle = function(req, res) {
-    title = req.query.title;
-    fromYear = req.query.fromYear;
-    toYear = req.query.toYear;
-
-   
+    title = req.params.title;
+    fromYear = req.params.fromYear;
+    toYear = req.params.toYear;
 
     Revision.getRevisionNumber(title, fromYear, toYear, function(error, result) {
         if (error) {
@@ -139,10 +137,7 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
             console.log(res);
         }
     })
-
-
 }
-
 
 // Author analytics controller
 module.exports.getAllAuthors = function(req, res) {

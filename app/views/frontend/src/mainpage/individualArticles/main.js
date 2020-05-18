@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import { ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect, DateSelect } from "./styled";
+import { ArticleHeading, SubHeading, Result, UserTable, ArticleSelect, DateSelect } from "./styled";
 import Select from '@atlaskit/select';
 import Button from '@atlaskit/button';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
@@ -11,7 +11,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { IndividualArticlesCharts } from "./charts/main";
 import { RedditArticles } from "./reddit/main"
-
 
 export const IndividualArticles = props => {
   const [allArticles, setAllArticles] = useState([]);
@@ -33,6 +32,7 @@ export const IndividualArticles = props => {
     fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
     if (currentArticleTitle != "") {
       fetch('/api/individual/getTopFiveUsers/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list));
+      fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setCurrentRevisions(list))
     }
   }, [currentArticleTitle, validatedFromYear, validatedToYear])
 
@@ -56,7 +56,7 @@ export const IndividualArticles = props => {
     setCurrentArticleTitle(value._id.title);
     setCurrentArticle(value);
     // GET request
-    //fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
+    fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
   }
 
   var num = 0;
