@@ -47,9 +47,6 @@ To import all the json files into mongodb:
 
 ```for %i in (C:\full-path-to-database-file\*.json)do "C:\Program Files\MongoDB\Server\4.2\bin\mongoimport.exe" --db wikidb --collection wikicollection --type json --file %i --jsonArray```
 
-Change timestamp format:
+Change timestamp format to ISODate:
 
-```db.articles.find().forEach(function(doc){
-    doc.timestamp = new ISODate(doc.timestamp);
-    db.articles.save(doc)
-});```
+```db.articles.find().forEach(function(doc){ doc.timestamp = new ISODate(doc.timestamp); db.articles.save(doc)});```

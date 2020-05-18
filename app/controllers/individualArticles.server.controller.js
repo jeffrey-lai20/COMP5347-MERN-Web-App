@@ -47,6 +47,32 @@ module.exports.getTopFiveUsers = function(req, res) {
     })
 }
 
+module.exports.getArticleMinYear = function(req, res) {
+    title = req.params.title;
+
+    Revision.getMinArticleYears(title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+module.exports.getArticleMaxYear = function(req, res) {
+    title = req.params.title;
+
+    Revision.getMaxArticleYears(title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
 
 module.exports.getPieChartData = function(req, res) {
     title = req.params.title;

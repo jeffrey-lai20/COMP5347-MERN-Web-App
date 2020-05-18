@@ -7,6 +7,8 @@ var router = express.Router();
 router.get('/api/individual/getAllArticles', controller.getAllArticles);
 router.get('/api/individual/getTopFiveUsers/:title/:fromYear/:toYear', controller.getTopFiveUsers);
 router.get('/api/individual/getNumberOfRevisions/', controller.getNumberOfRevisionsForArticle);
+router.get('/api/individual/getMinYear/:title', controller.getArticleMinYear);
+router.get('/api/individual/getMaxYear/:title', controller.getArticleMaxYear);
 
 router.get('/api/individual/getIndividualPieChartData/:title/:fromYear/:toYear', controller.getPieChartData);
 router.get('/api/individual/barChartDistYear/:title/:fromYear/:toYear', controller.getIndividualBarChartData);

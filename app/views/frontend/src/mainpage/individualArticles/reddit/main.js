@@ -1,10 +1,12 @@
 import React, { useState, Component, useEffect } from "react";
 
 
-export const RedditArticles = () => {
+export const RedditArticles = props => {
 
     const Snoowrap = require('snoowrap');
     var topThreeNews = [];
+    const [newsLinks, setNewsLinks] = useState([]);
+    const [news1, setNews1] = useState([]);
 
     // Build Snoowrap and Snoostorm clients
     const r = new Snoowrap({
@@ -15,17 +17,26 @@ export const RedditArticles = () => {
         password: 'comp5347'
     });
 
-    var newsArticlesList = r.getTop('Australia', {limit: 3}).map(post => {
-    //console.log(post.title);
-    topThreeNews.push(post.title);
-    console.log(topThreeNews)
-    })
+    useEffect(() => {
+        r.getNew(props.currentArticleTitle, { limit: 3 }).map(post => {
+            var news = { title: post.title, url: post.url };
+            topThreeNews.push(news);
+            setNews1(news);
+          });
+          setNewsLinks(topThreeNews);
+    }, [props.currentArticleTitle]);
+   
+    const news = newsLinks.map(item => {
+      return (
+        <li><a href={item.url} target="_blank">{item.title}</a></li>
+      )
+    }
+    );
 
     return (
         <div>
             <a>(From Reddit)</a> <br></br>
-            {newsArticlesList}
-            {topThreeNews}
+            {news}
 
         </div>
     )

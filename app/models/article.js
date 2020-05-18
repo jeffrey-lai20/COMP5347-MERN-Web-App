@@ -138,6 +138,20 @@ RevisionSchema.statics.findTopFiveUsers = function(Ititle, fromYear, toYear, cal
 	]).exec(callback)
 }
 
+RevisionSchema.statics.getMinArticleYears = function(Ititle, callback) {
+	this.find({'title':Ititle})
+	.sort({'timestamp':-1})
+	.limit(1)
+	.exec(callback)
+}
+
+RevisionSchema.statics.getMaxArticleYears = function(Ititle, callback) {
+	this.find({'title':Ititle})
+	.sort({'timestamp':1})
+	.limit(1)
+	.exec(callback)
+}
+
 RevisionSchema.statics.getIndividualPieChartData = function(Ititle, fromYear, toYear, callback) {
 	this.aggregate([
 		{$match: {title: Ititle, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},

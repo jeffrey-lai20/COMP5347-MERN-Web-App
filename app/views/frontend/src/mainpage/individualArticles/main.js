@@ -1,7 +1,8 @@
 import React, { useState, Component, useEffect } from "react";
-import {ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect, DateSelect} from "./styled";
+import { ArticleHeading, SubHeading, Result, Chart, UserTable, ArticleSelect, DateSelect } from "./styled";
 import Select from '@atlaskit/select';
 import Button from '@atlaskit/button';
+import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,7 +13,7 @@ import { IndividualArticlesCharts } from "./charts/main";
 import { RedditArticles } from "./reddit/main"
 
 
-export const IndividualArticles = () => {
+export const IndividualArticles = props => {
   const [allArticles, setAllArticles] = useState([]);
   const [currentArticle, setCurrentArticle] = useState([]);
   const [currentArticleTitle, setCurrentArticleTitle] = useState("");
@@ -24,31 +25,26 @@ export const IndividualArticles = () => {
   const [validatedFromYear, setValidatedFromYear] = useState("1990");
   const [validatedToYear, setValidatedToYear] = useState("2020");
 
-  var topThreeNews;
-   // Retrieve list from Express App
-   useEffect(() => {
-     // GET request
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Retrieve list from Express App
+  useEffect(() => {
+    // GET request
     fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
-    fetch('/api/individual/getTopFiveUsers/'+ currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
+    if (currentArticleTitle != "") {
+      fetch('/api/individual/getTopFiveUsers/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list));
+    }
   }, [currentArticleTitle, validatedFromYear, validatedToYear])
-
-  const Snoowrap = require('snoowrap');
-    var topThreeNews = [];
-
-    // Build Snoowrap and Snoostorm clients
-    const r = new Snoowrap({
-        userAgent: 'reddit-bot-example-node',
-        clientId: 'QO4LJaIJYqoScQ',
-        clientSecret: 'n5iwkKIRcAnpW_a0Q9x9j9oGUtw',
-        username: 'ritacheung9',
-        password: 'comp5347'
-    });
 
   const setYearRange = () => {
     // some year validation
 
-    setValidatedFromYear(fromYear);
-    setValidatedToYear(toYear);
+    if (fromYear > toYear) {
+      setIsOpen(true);
+    } else {
+      setValidatedFromYear(fromYear);
+      setValidatedToYear(toYear);
+    }
   }
 
   const allArticlesOptions = allArticles.map(article => ({
@@ -57,33 +53,11 @@ export const IndividualArticles = () => {
   }))
 
   const articleSelected = (value) => {
-      setCurrentArticleTitle(value._id.title);
-      setCurrentArticle(value);
-      // GET request
-      //fetch('/api/individual/getTopFiveUsers/'+ value._id.title + '/' + fromYear + '/' + toYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
-
-      //fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
-
-      topThreeNews = [];
-
-      // r.getTop(currentArticleTitle, {limit: 3}).map(post => {
-      //   var news = {title:post.title, url:post.url};
-      //   topThreeNews.push(news);
-      // })
+    setCurrentArticleTitle(value._id.title);
+    setCurrentArticle(value);
+    // GET request
+    //fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
   }
-
-  const updateSummaryInfo = (value) => {
-
-      //fetch('/api/individual/getTopFiveUsers/'+ value._id.title + '/' + fromYear + '/' + toYear).then(res => res.json()).then(list => setTopFiveUsers(list)); 
-
-  }
-
-  // var news = topThreeNews.map(item => {
-  //   return (
-  //     <li>{item.title}</li>
-  //   )
-  // }
-  // );
 
   var num = 0;
 
@@ -91,106 +65,116 @@ export const IndividualArticles = () => {
     num = num + 1;
     return (
       <TableBody>
-      <TableRow>
-        <TableCell align="right">{num}</TableCell>
-        <TableCell align="right">{user._id.user}</TableCell>
-        <TableCell align="right">{user.userCount}</TableCell>
-      </TableRow>
-  </TableBody>
+        <TableRow>
+          <TableCell align="right">{num}</TableCell>
+          <TableCell align="right">{user._id.user}</TableCell>
+          <TableCell align="right">{user.userCount}</TableCell>
+        </TableRow>
+      </TableBody>
     )
   })
-    return (
-        <div>
-        <ArticleHeading>Individual Articles</ArticleHeading>
-        <ArticleSelect>
-        <Select 
-          onChange = {e => articleSelected(e.value)}
-          options = {allArticlesOptions}
-          placeholder = "Select an article...">
-          </Select>
+  return (
+    <div>
+      <ArticleHeading>Individual Articles</ArticleHeading>
+      <ArticleSelect>
+        <Select
+          onChange={e => articleSelected(e.value)}
+          options={allArticlesOptions}
+          placeholder="Select an article...">
+        </Select>
 
-          </ArticleSelect>
+      </ArticleSelect>
 
 
-         {currentArticle != "" 
-				? <div>
+      {currentArticle != ""
+        ? <div>
           <SubHeading>Summary Information - {currentArticleTitle} </SubHeading>
 
           <DateSelect>
-          <Select 
-          onChange = {e => setFromYear(e.value)}
-          options = {[
-          {label: "2010", value: "2010"},
-          {label: "2011", value: "2011"},
-          {label: "2012", value: "2012"},
-          {label: "2013", value: "2013"},
-          {label: "2014", value: "2014"},
-          {label: "2015", value: "2015"},
-          {label: "2016", value: "2016"},
-          {label: "2017", value: "2017"},
-          {label: "2018", value: "2018"},
-          {label: "2019", value: "2019"},
-          {label: "2020", value: "2020"}
-        ]}
-          placeholder = "From: ">
-          </Select>
+            <Select
+              onChange={e => setFromYear(e.value)}
+              options={[
+                { label: "2010", value: "2010" },
+                { label: "2011", value: "2011" },
+                { label: "2012", value: "2012" },
+                { label: "2013", value: "2013" },
+                { label: "2014", value: "2014" },
+                { label: "2015", value: "2015" },
+                { label: "2016", value: "2016" },
+                { label: "2017", value: "2017" },
+                { label: "2018", value: "2018" },
+                { label: "2019", value: "2019" },
+                { label: "2020", value: "2020" }
+              ]}
+              placeholder="From: ">
+            </Select>
 
-          <br></br>
+            <br></br>
 
-          <Select 
-           onChange = {e => setToYear(e.value)}
-           options = {[
-            {label: "2010", value: "2010"},
-            {label: "2011", value: "2011"},
-            {label: "2012", value: "2012"},
-            {label: "2013", value: "2013"},
-            {label: "2014", value: "2014"},
-            {label: "2015", value: "2015"},
-            {label: "2016", value: "2016"},
-            {label: "2017", value: "2017"},
-            {label: "2018", value: "2018"},
-            {label: "2019", value: "2019"},
-            {label: "2020", value: "2020"}
-          ]}
-          placeholder = "To: ">
-          </Select>
+            <Select
+              onChange={e => setToYear(e.value)}
+              options={[
+                { label: "2010", value: "2010" },
+                { label: "2011", value: "2011" },
+                { label: "2012", value: "2012" },
+                { label: "2013", value: "2013" },
+                { label: "2014", value: "2014" },
+                { label: "2015", value: "2015" },
+                { label: "2016", value: "2016" },
+                { label: "2017", value: "2017" },
+                { label: "2018", value: "2018" },
+                { label: "2019", value: "2019" },
+                { label: "2020", value: "2020" }
+              ]}
+              placeholder="To: ">
+            </Select>
           </DateSelect>
 
-          <Button onClick = {setYearRange}>Update</Button>
+          <Button onClick={setYearRange}>Update</Button>
 
-        <Result>
-       
-        <a><b>Total Number of Revisions:</b> {currentArticle.count}</a>
-        <br></br>
-        <a><b>Top 5 Regular Users:</b></a>
+          <Result>
 
-        <UserTable>
-        <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="right"><b>Rank</b></TableCell>
-            <TableCell align="right"><b>User</b></TableCell>
-            <TableCell align="right"><b>Revision Count</b></TableCell>
-          </TableRow>
-        </TableHead>
-        {topFiveUsersTable}
+            <a><b>Total Number of Revisions:</b> {currentArticle.count}</a>
+            <br></br>
+            <a><b>Top 5 Regular Users:</b></a>
 
-      </Table>
-      </UserTable>
+            <UserTable>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="right"><b>Rank</b></TableCell>
+                    <TableCell align="right"><b>User</b></TableCell>
+                    <TableCell align="right"><b>Revision Count</b></TableCell>
+                  </TableRow>
+                </TableHead>
+                {topFiveUsersTable}
 
-      <br></br>
-        <a><b>News:</b></a>
-        {/* <ul>{news}</ul> */}
+              </Table>
+            </UserTable>
 
-        </Result>
+            <br></br>
+            <a><b>News:</b></a>
+            <RedditArticles currentArticleTitle={currentArticleTitle}></RedditArticles>
 
-        <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={validatedFromYear} toYear={validatedToYear} topFiveUsers = {topFiveUsers}></IndividualArticlesCharts>
+          </Result>
+
+          <IndividualArticlesCharts currentArticleTitle={currentArticleTitle} fromYear={validatedFromYear} toYear={validatedToYear} topFiveUsers={topFiveUsers}></IndividualArticlesCharts>
         </div>
 
         : <div></div>}
-        
+
+
+      <ModalTransition>
+        {isOpen && (
+          <Modal onClose={() => setIsOpen(false)} heading="Error">
+            <a>Invalid year range entered! Please try again. </a>
+            <br></br>
+          </Modal>
+        )}
+      </ModalTransition>
+
     </div>
 
-    )
+  )
 
 }
