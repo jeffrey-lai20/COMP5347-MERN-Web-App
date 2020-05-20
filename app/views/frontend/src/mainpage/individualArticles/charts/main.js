@@ -6,73 +6,73 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { RadioGroup } from '@atlaskit/radio';
 
 export const IndividualArticlesCharts = props => {
-  
-  const [chartType, setChartType] = useState([]);
-  const [userTypeNumbers, setUserTypeNumbers] = useState([]);
-  const [barChartDist, setBarChartDist] = useState([]);
-  const [barChartDistUser, setBarChartDistUser] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
 
-  useEffect(() => {
-    // GET request
-   fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setUserTypeNumbers(list));
-   fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDist(list));
-   
-   if (selectedUser != "") {
-    fetch('/api/individual/barChartDistYearUser/'+ props.currentArticleTitle + '/' + selectedUser + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDistUser(list));
-   }
- }, [props.currentArticleTitle, selectedUser, props.fromYear, props.toYear])
+	const [chartType, setChartType] = useState([]);
+	const [userTypeNumbers, setUserTypeNumbers] = useState([]);
+	const [barChartDist, setBarChartDist] = useState([]);
+	const [barChartDistUser, setBarChartDistUser] = useState([]);
+	const [selectedUser, setSelectedUser] = useState("");
 
-const radioValues = props.topFiveUsers.map(user => ({
-  name: user._id.user, value: user._id.user, label: user._id.user
-}))
+	useEffect(() => {
+		// GET request
+		fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setUserTypeNumbers(list));
+		fetch('/api/individual/barChartDistYear/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDist(list));
 
-var dataType = [];
-var dataCount = [];
-var pieChartData;
+		if (selectedUser != "") {
+			fetch('/api/individual/barChartDistYearUser/'+ props.currentArticleTitle + '/' + selectedUser + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setBarChartDistUser(list));
+		}
+	}, [props.currentArticleTitle, selectedUser, props.fromYear, props.toYear])
 
-const pieChartDisplay = userTypeNumbers.map(user => {
-  dataType.push(user._id.usertype);
-  dataCount.push(user.userCount);
+	const radioValues = props.topFiveUsers.map(user => ({
+		name: user._id.user, value: user._id.user, label: user._id.user
+	}))
 
-  pieChartData = {
-      labels: dataType,
-      datasets: [{
-        data: dataCount,
-        backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#00FF00'
-          ],
-          hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#00FF00'
-            ]
-      }]
-  };
-})
+	var dataType = [];
+	var dataCount = [];
+	var pieChartData;
 
-var pieHoverOption = {
-  tooltips: {
-    callbacks: {
-      label: function(tooltipItem, pieChartData) {
-        var dataset = pieChartData.datasets[tooltipItem.datasetIndex];
-        var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-        var total = meta.total;
-        var currentValue = dataset.data[tooltipItem.index];
-        var percentage = parseFloat((currentValue/total*100).toFixed(1));
-        return currentValue + ' (' + percentage + '%)';
-      },
-      title: function(tooltipItem, pieChartData) {
-        return pieChartData.labels[tooltipItem[0].index];
-      }
-    }
-  }
-}
-  /*
+	const pieChartDisplay = userTypeNumbers.map(user => {
+		dataType.push(user._id.usertype);
+		dataCount.push(user.userCount);
+
+		pieChartData = {
+				labels: dataType,
+				datasets: [{
+					data: dataCount,
+					backgroundColor: [
+						'#FF6384',
+						'#36A2EB',
+						'#FFCE56',
+						'#00FF00'
+						],
+						hoverBackgroundColor: [
+							'#FF6384',
+							'#36A2EB',
+							'#FFCE56',
+							'#00FF00'
+							]
+				}]
+		};
+	})
+
+	var pieHoverOption = {
+		tooltips: {
+			callbacks: {
+				label: function(tooltipItem, pieChartData) {
+					var dataset = pieChartData.datasets[tooltipItem.datasetIndex];
+					var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+					var total = meta.total;
+					var currentValue = dataset.data[tooltipItem.index];
+					var percentage = parseFloat((currentValue/total*100).toFixed(1));
+					return currentValue + ' (' + percentage + '%)';
+				},
+				title: function(tooltipItem, pieChartData) {
+					return pieChartData.labels[tooltipItem[0].index];
+				}
+			}
+		}
+	}
+	/*
 	 *  BAR CHART
 	 */
 	const bar_years = [];
@@ -135,9 +135,9 @@ var pieHoverOption = {
 					}
 					]
 		};
-  })
+	})
 
-   /*
+	/*
 	 *  BAR CHART
 	 */
 	const bar_years_user = [];
@@ -167,73 +167,73 @@ var pieHoverOption = {
 					}
 					]
 		};
-  })
+	})
 
 
-    return (
-        <div>
-        
-        <ArticleSelect>
-        <Select 
-          onChange = {e =>  setChartType(e.value)}
-          options={[
-            { label: 'Revision number distributed by year and user type', value: '1' },
-            { label: 'Revision number distributed based on user type', value: '2' },
-            { label: 'Revision number distributed by year made by one of the top 5 regular users', value: '3' },
-          ]}
-          placeholder = "Select a chart...">
-          </Select>
-          </ArticleSelect>
-          <Result>
+	return (
+			<div>
 
-          {chartType==1
-        ? 
-        <div><a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>
-        {barChartDistDisplay}
-        <Bar
-        data={barChartData}
-        width={100}
-        height={800}
-        options={{
-          maintainAspectRatio: false
-        }}
-        />
-        </div>
-        
-        : <a></a>}
+			<ArticleSelect>
+			<Select 
+			onChange = {e =>  setChartType(e.value)}
+			options={[
+				{ label: 'Revision number distributed by year and user type', value: '1' },
+				{ label: 'Revision number distributed based on user type', value: '2' },
+				{ label: 'Revision number distributed by year made by one of the top 5 regular users', value: '3' },
+				]}
+			placeholder = "Select a chart...">
+			</Select>
+			</ArticleSelect>
+			<Result>
 
-        {/* BAR CHART */}
+			{chartType==1
+				? 
+						<div><a><b>Bar Chart Showing Yearly Revision Number Distribution:</b></a>
+						{barChartDistDisplay}
+						<Bar
+						data={barChartData}
+						width={100}
+						height={800}
+						options={{
+							maintainAspectRatio: false
+						}}
+						/>
+						</div>
 
-        {chartType==2
-        ?  <div> 
-        <a><b>Pie Chart Showing User Type Distribution:</b></a>
-        {pieChartDisplay}
-        <Pie data={pieChartData} options={pieHoverOption}/>/>
-        
-      </div> : <br></br>}
+						: <a></a>}
 
-      {chartType==3
-        ? <div><a><b>Bar Chart Showing Revision Number Distributed By Year Made By One of the Top 5 Regular Users:</b></a>
-        <a>Select from top 5 users</a>
-        <RadioGroup
-        label="Pick a user"
-        onChange={e => setSelectedUser(e.currentTarget.value)}
-        options={radioValues}
-      />
+			{/* BAR CHART */}
 
-        {barChartDistUserDisplay}
-        <Bar
-        data={barChartDataUser}
-        width={100}
-        height={800}
-        options={{
-          maintainAspectRatio: false
-        }}
-        />
-        </div> : <br></br>}
-        </Result>
+			{chartType==2
+				?  <div> 
+			<a><b>Pie Chart Showing User Type Distribution:</b></a>
+			{pieChartDisplay}
+			<Pie data={pieChartData} options={pieHoverOption}/>/>
 
-          </div>
-    )
+			</div> : <br></br>}
+
+			{chartType==3
+				? <div><a><b>Bar Chart Showing Revision Number Distributed By Year Made By One of the Top 5 Regular Users:</b></a>
+				<a>Select from top 5 users</a>
+				<RadioGroup
+				label="Pick a user"
+					onChange={e => setSelectedUser(e.currentTarget.value)}
+				options={radioValues}
+				/>
+
+				{barChartDistUserDisplay}
+				<Bar
+				data={barChartDataUser}
+				width={100}
+				height={800}
+				options={{
+					maintainAspectRatio: false
+				}}
+				/>
+				</div> : <br></br>}
+			</Result>
+
+			</div>
+	)
 
 }
