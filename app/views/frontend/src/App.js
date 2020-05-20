@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, {useState, Component, useEffect} from "react";
 import { MainPage } from "./mainpage";
 import { Login } from "./landingpage/loginDialog/main";
 import { LandingPage } from "./landingpage"
@@ -17,13 +17,21 @@ export default () => {
     setLoggedIn(true);
   }
 
+  useEffect(() => {
+    // console.log();
+    // Overall: Data
+    /*USE FETCH TO CHECK LOGGED IN */
+    fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
+
+    fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
+  }, [])
+
   return (
     <div>
       <Body>
         <Router>
           {/* Must be logged in to view main page */}
-          {/* {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/"/>)}
-      */}
+          {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/"/>)}
 
           {loggedIn ? <Screen>
 

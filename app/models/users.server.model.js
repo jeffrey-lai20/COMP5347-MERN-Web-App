@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 var mongoose = require('./db')
 
 const UserSchema = mongoose.Schema({
-
     firstName:{
         type: String,
         required: true,
@@ -40,6 +39,10 @@ const UserSchema = mongoose.Schema({
     resetAnswer: {
         type: String,
         required: true
+    },
+    loggedIn: {
+        type: bool,
+        required: false
     }
 
 });
