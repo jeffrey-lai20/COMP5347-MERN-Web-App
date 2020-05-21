@@ -14,7 +14,7 @@ router.get('/api/individual/getMaxYear/:title', controller.getArticleMaxYear);
 router.get('/api/individual/getIndividualPieChartData/:title/:fromYear/:toYear', controller.getPieChartData);
 router.get('/api/individual/barChartDistYear/:title/:fromYear/:toYear', controller.getIndividualBarChartData);
 router.get('/api/individual/barChartDistYearUser/:title/:user/:fromYear/:toYear', controller.getIndividualBarChartDataUser);
-router.get('/api/individual/getLatestRevision', controller.getLatestRevisionForArticle);
+router.get('/api/individual/getLatestRevision/:title', controller.getLatestRevisionForArticle);
 
 // router.get('/reddit', controller.reddit);
 

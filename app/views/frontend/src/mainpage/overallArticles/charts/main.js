@@ -13,7 +13,7 @@ export const OverallArticlesCharts = props => {
 		// Overall: Chart
 		fetch('/api/barChartDistYear').then(res => res.json()).then(list => setBarChartDist(list));
 		fetch('/api/pieChartDistUsertype').then(res => res.json()).then(list => setPieChartDist(list));
-	});
+	}, []);
 		
 		/*
 	 *  BAR CHART
