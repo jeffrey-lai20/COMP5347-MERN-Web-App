@@ -16,6 +16,8 @@ var session=require('express-session');
 var analyticsRouter = require('./app/routes/analytics.server.routes');
 var individualArticlesRouter = require('./app/routes/individualArticles.server.routes');
 var userRoutes = require('./app/routes/users.server.routes');
+var authorRoutes = require('./app/routes/author.analytics.server.routes')
+
 
 var app = express()
 app.use(express.static(path.join(__dirname, '/app/views/frontend')))
@@ -62,6 +64,7 @@ app.use(function (req, res, next) {
 app.use('/', analyticsRouter);
 app.use('/', individualArticlesRouter);
 app.use('/', userRoutes);
+app.use('/', authorRoutes);
 
 app.listen(5000, function () {
   console.log('survey app listening on port 5000!')

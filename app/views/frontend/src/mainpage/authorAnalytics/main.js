@@ -8,7 +8,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 export const AuthorAnalytics = () => {
-
+    const [allArticles, setAllArticles] = useState([]);
     const [allAuthors, setAllAuthors] = useState([]);
     const [currentAuthor, setCurrentAuthor] = useState([]);
 
@@ -46,17 +46,24 @@ export const AuthorAnalytics = () => {
     useEffect(() => {
         // console.log();
         // Overall: Data
-       fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
+       // fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
+        fetch('/api/authorUser').then(res => res.json()).then(list => setAllAuthors(list));
+        fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
 
-       fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
+
+        fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
     }, [])
 
     const longestHistoryDisplay = longestHistory.map(article => {
         return (<Result><b>Article:</b> {article._id} <br></br><b>Author:</b> {article.user}
         </Result>)
     })
+    const allArticlesOptions = allArticles.map(article => ({
+        label: "Title: " + article._id.title + " " + "Number of Revisions: " + article.count,
+        value: article
+    }))
 
-    const authorArticlesDisplay = currentAuthor.map(article => {
+    const authorArticlesDisplay = allAuthors.map(article => {
         return (<Result><b>Article:</b> {article._id} <br/><b>Author:</b> {article.user}</Result>)
     })
 
@@ -79,6 +86,7 @@ export const AuthorAnalytics = () => {
             <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
 
             <SubHeading>Articles the author has written/edited</SubHeading>
+            {allArticlesOptions}
             {authorArticlesDisplay}
             <SubHeading>Top articles with the longest history</SubHeading>
 

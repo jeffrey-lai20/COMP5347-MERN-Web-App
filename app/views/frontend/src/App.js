@@ -24,6 +24,7 @@ export default () => {
     // fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
     //
     // fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
+    // fetch('/api/authorUser').then(res => res.json()).then(list => );
   }, [])
 
   return (
