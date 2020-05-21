@@ -11,7 +11,7 @@ import {
 import { SideBar, Body, Screen, Content } from "./styled"
 
 export default () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const login = () => {
     setLoggedIn(true);
@@ -21,9 +21,9 @@ export default () => {
     // console.log();
     // Overall: Data
     /*USE FETCH TO CHECK LOGGED IN */
-    fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-
-    fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
+    // fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
+    //
+    // fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
   }, [])
 
   return (

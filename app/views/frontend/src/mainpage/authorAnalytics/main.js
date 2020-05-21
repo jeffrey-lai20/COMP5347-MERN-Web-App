@@ -52,12 +52,12 @@ export const AuthorAnalytics = () => {
     }, [])
 
     const longestHistoryDisplay = longestHistory.map(article => {
-        return (<Result><b>Article:</b> {article._id} <br></br><b>Age:</b> {article.minTimestamp}
+        return (<Result><b>Article:</b> {article._id} <br></br><b>Author:</b> {article.user}
         </Result>)
     })
 
     const authorArticlesDisplay = currentAuthor.map(article => {
-        return (<Result><b>Article:</b> {article._id} <br/><b>Author:</b> {article.authorName}</Result>)
+        return (<Result><b>Article:</b> {article._id} <br/><b>Author:</b> {article.user}</Result>)
     })
 
     return (

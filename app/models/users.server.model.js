@@ -41,7 +41,7 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     loggedIn: {
-        type: bool,
+        type: Boolean,
         required: false
     }
 
