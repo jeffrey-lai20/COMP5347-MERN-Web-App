@@ -13,6 +13,8 @@ export const IndividualArticlesCharts = props => {
 	const [barChartDistUser, setBarChartDistUser] = useState([]);
 	const [selectedUser, setSelectedUser] = useState("");
 
+	var barChartDataUser = [];
+
 	useEffect(() => {
 		// GET request
 		fetch('/api/individual/getIndividualPieChartData/' + props.currentArticleTitle + '/' + props.fromYear + '/' + props.toYear).then(res => res.json()).then(list => setUserTypeNumbers(list));
@@ -99,38 +101,38 @@ export const IndividualArticlesCharts = props => {
 				datasets: [
 					{
 						label: 'Registered',
-						backgroundColor: 'rgba(255,99,132,0.2)',
-						borderColor: 'rgba(255,99,132,1)',
+						backgroundColor: '#FF6384',
+						borderColor: '#FF6384',
 						borderWidth: 1,
-						hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-						hoverBorderColor: 'rgba(255,99,132,1)',
+						hoverBackgroundColor: '#FF9BB0',
+						hoverBorderColor: '#FF9BB0',
 						data: bar_registered
 					},
 					{
 						label: 'Anonymous',
-						backgroundColor: 'rgba(250,255,10,0.2)',
-						borderColor: 'rgba(250,255,10,1)',
+						backgroundColor: '#36A2EB',
+						borderColor: '#36A2EB',
 						borderWidth: 1,
-						hoverBackgroundColor: 'rgba(250,255,10,0.4)',
-						hoverBorderColor: 'rgba(250,255,10,1)',
+						hoverBackgroundColor: '#70B8E8',
+						hoverBorderColor: '#70B8E8',
 						data: bar_anonymous
 					},
 					{
 						label: 'Administrator',
-						backgroundColor: 'rgba(18,10,255,0.2)',
-						borderColor: 'rgba(18,10,255,1)',
+						backgroundColor: '#FFCE56',
+						borderColor: '#FFCE56',
 						borderWidth: 1,
-						hoverBackgroundColor: 'rgba(18,10,255,0.4)',
-						hoverBorderColor: 'rgba(18,10,255,1)',
+						hoverBackgroundColor: '#FFE4A1',
+						hoverBorderColor: '#FFE4A1',
 						data: bar_admin
 					},
 					{
 						label: 'Bot',
-						backgroundColor: 'rgba(22,255,10,0.2)',
-						borderColor: 'rgba(22,255,10,1)',
+						backgroundColor: '#00FF00',
+						borderColor: '#00FF00',
 						borderWidth: 1,
-						hoverBackgroundColor: 'rgba(22,255,10,0.4)',
-						hoverBorderColor: 'rgba(22,255,10,1)',
+						hoverBackgroundColor: '#7EFF7E',
+						hoverBorderColor: '#7EFF7E',
 						data: bar_bot
 					}
 					]
@@ -142,8 +144,6 @@ export const IndividualArticlesCharts = props => {
 	 */
 	const bar_years_user = [];
 	const bar_registered_user = [];
-
-	var barChartDataUser = [];
 
 	const barChartDistUserDisplay = barChartDistUser.map(article => {
 
@@ -158,11 +158,11 @@ export const IndividualArticlesCharts = props => {
 				datasets: [
 					{
 						label: selectedUser,
-						backgroundColor: 'rgba(2,60,103,0.8)',
-						borderColor: 'rgba(2,50,85,1)',
+						backgroundColor: '#FF6384',
+						borderColor: '#FF6384',
 						borderWidth: 5,
-						hoverBackgroundColor: 'rgba(2,60,103,1)',
-						hoverBorderColor: 'rgba(2,60,103,1)',
+						hoverBackgroundColor: '#FF9BB0',
+						hoverBorderColor: '#FF9BB0',
 						data: bar_registered_user
 					}
 					]

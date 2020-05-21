@@ -51,7 +51,6 @@ export const IndividualArticles = props => {
                 temp.push({ label: i, value: i });
               }
               setYearOptions(temp);
-              console.log(temp);
             });
         });
     }
