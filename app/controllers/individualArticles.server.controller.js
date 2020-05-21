@@ -140,9 +140,9 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
 }
 
 // Author analytics controller
-module.exports.getAllAuthors = function(req, res) {
-
-    Revision.findAllAuthors(function(error, result) {
+module.exports.getAuthor = function(req, res) {
+    author = "Ericcp3"
+    Revision.getAuthor(author, function(error, result) {
         if (error) {
             console.log(error)
         } else {
@@ -154,3 +154,26 @@ module.exports.getAllAuthors = function(req, res) {
 
 
 
+module.exports.getAuthorArticle = function(req, res) {
+    author = "Jarble"
+    Revision.getAuthor(author, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
+
+module.exports.getAllAuthors = function(req, res) {
+
+    Revision.findAllAuthors(function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}

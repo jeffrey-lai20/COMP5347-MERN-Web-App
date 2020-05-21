@@ -261,12 +261,29 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 */
 
 // Authors are either admin or bots
-RevisionSchema.statics.findAllAuthors = function(callback) {
+RevisionSchema.statics.getAllAuthors = function(callback) {
 	return this.aggregate([
-		{$match: {usertype : 'admin' || 'bot' }}, 
+		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
 		{$group: {_id : {userid: "$userid", user : "$user"}}}
 	]).exec(callback)
 }
+
+RevisionSchema.statics.getAuthor = function(author, callback) {
+	return this.aggregate([
+		{$match: {user: author} && {usertype : 'admin' || 'bot' }},
+		{$group : {_id : { user: author, title : "$title"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+
+}
+
+// Query to return titles of all articles
+RevisionSchema.statics.findAllAuthors = function(callback){
+	return this.aggregate([
+		// {$match: {usertype : 'admin' || 'bot' }},
+		{$group : {_id : {user : "$user"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+}
+
 
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 

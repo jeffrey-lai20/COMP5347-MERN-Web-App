@@ -20,5 +20,8 @@ router.get('/api/individual/getLatestRevision', controller.getLatestRevisionForA
 
 // Author analytics routes
 router.get('/api/author/getAllAuthors', controller.getAllAuthors);
+router.get('/api/author/getAuthor', controller.getAuthor);
+// router.get('/api/author/getArticles/:user', controller.getAuthorArticle);
+
 
 module.exports = router;

@@ -8,64 +8,30 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 export const AuthorAnalytics = () => {
-    const [allArticles, setAllArticles] = useState([]);
     const [allAuthors, setAllAuthors] = useState([]);
     const [currentAuthor, setCurrentAuthor] = useState([]);
 
-//
-//      // Retrieve list from Express App
-//    useEffect(() => {
-//     // GET request
-//    //fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-//  }, [])
-//
-//  const allAuthorsOptions = allAuthors.map(author => ({
-//     label: author.user,
-//     value: author
-//   }))
-//
-//     return (
-//         <div>
-//             <ArticleHeading>Author Analytics</ArticleHeading>
-//
-//         <Result>
-//
-//         <a><b>Author:</b> </a>
-//         <br></br>
-//         <a><b>Articles:</b> </a>
-//         <br></br>
-//         <a><b>Top 5 Regular Users:</b></a>
-//
-//         </Result>
-//
-//           </div>
-    //     )
-    const [longestHistory, setLongestHistory] = useState([]);
-
-    // Retrieve list from Express App
     useEffect(() => {
-        // console.log();
-        // Overall: Data
-       // fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-        fetch('/api/authorUser').then(res => res.json()).then(list => setAllAuthors(list));
-        fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
+        // GET request
+        fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
+        fetch('/api/author/getAuthor').then(res => res.json()).then(list => setCurrentAuthor(list));
 
-
-        fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
     }, [])
 
-    const longestHistoryDisplay = longestHistory.map(article => {
-        return (<Result><b>Article:</b> {article._id} <br></br><b>Author:</b> {article.user}
-        </Result>)
+    const authorCurrentDisplay = currentAuthor.map(article => {
+        return (<Result><b>Author:</b>{article._id.user}<b><br/>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count} </Result>)
     })
-    const allArticlesOptions = allArticles.map(article => ({
-        label: "Title: " + article._id.title + " " + "Number of Revisions: " + article.count,
+
+    const allAuthorOptions = allAuthors.map(article => ({
+        label: "Author: " + article._id.user + " " + "Number of Revisions: " + article.count,
         value: article
     }))
 
-    const authorArticlesDisplay = allAuthors.map(article => {
-        return (<Result><b>Article:</b> {article._id} <br/><b>Author:</b> {article.user}</Result>)
-    })
+    const authorSelected = (value) => {
+        setCurrentAuthor(value._id.user);
+        // GET request
+    }
+
 
     return (
         <div>
@@ -73,25 +39,28 @@ export const AuthorAnalytics = () => {
             <div>
                 <Tag text="Author Search:" color="greyLight"/>
                 <Textfield className="form-control" type="text" placeholder="Author's Name" name="authorName" required/>
-                <Autocomplete
-                    name="authorName"
-                    placeholder="Author's Name"
-                    options={allAuthors}
-                    getOptionLabel={(option)=>option.title}
-                    style={{ width: 300}}
-                    renderInput={(params) => <Textfield {...params} label="Combo box" variant="outlined" />}
-                    />
+                <Select
+                    onChange={e => authorSelected(e.value)}
+                    options={allAuthorOptions}
+                    placeholder="Select an author...">
+                </Select>
+
+                {/*<Autocomplete*/}
+                {/*    name="authorName"*/}
+                {/*    placeholder="Author's Name"*/}
+                {/*    options={allAuthorsOptions}*/}
+                {/*    getOptionLabel={(option)=>option.title}*/}
+                {/*    style={{ width: 300}}*/}
+                {/*    renderInput={(params) => <Textfield {...params} label="Combo box" variant="outlined" />}*/}
+                {/*    />*/}
             </div>
             <Button appearance="primary" className="button" type="submit" value="Search">Search</Button>
             <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
 
             <SubHeading>Articles the author has written/edited</SubHeading>
-            {allArticlesOptions}
-            {authorArticlesDisplay}
-            <SubHeading>Top articles with the longest history</SubHeading>
+            {/*{allAuthorsOptions}*/}
+            {authorCurrentDisplay}
 
-            {longestHistoryDisplay}
         </div>
-
     );
 }
