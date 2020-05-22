@@ -122,7 +122,7 @@ export const IndividualArticles = props => {
 
       {currentArticle != ""
         ? <div>
-          <SubHeading>Summary Information - {currentArticleTitle} </SubHeading>
+          <SubHeading>Summary Information - <i>{currentArticleTitle}</i> </SubHeading>
           <DateSelect>
             <Select
               onChange={e => setFromYear(e.value)}

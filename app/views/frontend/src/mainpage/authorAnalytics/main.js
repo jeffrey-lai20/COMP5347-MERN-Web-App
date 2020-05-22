@@ -43,7 +43,7 @@ export const AuthorAnalytics = () => {
     }
 
     const authorCurrentDisplay = currentAuthor.map(article => {
-        return (<li><a onClick={() => getArticleTimestamps(article._id.title)}>{article._id.title}</a> - <b>Number of Revisions:</b> {article.count} </li>)
+        return (<li><i onClick={() => getArticleTimestamps(article._id.title)}>{article._id.title}</i> - <b>Number of Revisions:</b> {article.count} </li>)
     })
 
     return (
@@ -72,11 +72,10 @@ export const AuthorAnalytics = () => {
 
             }
 
-        {/* <Button onClick={() => setIsOpen(true)}>Login</Button> */}
         <ModalTransition>
           {isOpen && (
             <Modal onClose={() => setIsOpen(false)}>
-                <SubHeading>Revisions made to {currentArticle} by {currentAuthorUser}</SubHeading>
+                <SubHeading>Revisions made to <i>{currentArticle}</i> by <b>{currentAuthorUser}</b></SubHeading>
 
                 <ModalResult>
                 <ul>
