@@ -16,7 +16,7 @@ export const AuthorAnalytics = () => {
     }, [])
 
     const allAuthorOptions = allAuthors.map(article => ({
-        label: "Author: " + article._id.user,
+        label: article._id.user,
         value: article
     }))
 

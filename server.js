@@ -36,7 +36,7 @@ app.use(session({
   saveUninitialized: false,
   authenticated: false,
   cookie: {
-    expires: 300000
+    expires: 600000
   }
 }));
 app.use(function(req,res,next){

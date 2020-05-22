@@ -11,45 +11,42 @@ import {
 import { SideBar, Body, Screen, Content } from "./styled"
 
 export default () => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loginValue, setLoginValue] = useState();
 
-  const login = () => {
-    setLoggedIn(true);
-  }
-
-  useEffect(() => {
-    // console.log();
-    // Overall: Data
-    /*USE FETCH TO CHECK LOGGED IN */
-    // fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-    //
-    // fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
-    // fetch('/api/authorUser').then(res => res.json()).then(list => );
-  }, [])
+  // useEffect(() => {
+  //
+  //   fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
+  // }, [])
+  fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
 
   return (
     <div>
       <Body>
         <Router>
           {/* Must be logged in to view main page */}
-          {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/"/>)}
+          {loginValue ?
+            <Screen>
+              <SideBar>
+                <NavigationBar></NavigationBar>
+              </SideBar>
+              <Content>
+                <Switch>
+                  {console.log("SKREEE" + loginValue)}
 
-          {loggedIn ? <Screen>
-
-            <SideBar>
-              <NavigationBar></NavigationBar>
-            </SideBar>
-            <Content>
+                  <Route path="/main" component={MainPage} />
+                </Switch>
+              </Content>
+            </Screen>
+                :
+            <Screen>
               <Switch>
-                <Route path="/main" component={MainPage} />
+                {console.log("AOSIHD" + loginValue)}
+                <Route path="/" component={LandingPage} />
               </Switch>
-            </Content>
-          </Screen> : 
-          <Screen>
-          <Switch>
-              <Route path="/" component={LandingPage} />
-            </Switch>
-          </Screen>}
+            </Screen>
+          }
+
+
           {/* <Screen>
 
         <SideBar>
@@ -60,13 +57,12 @@ export default () => {
         <Route path="/main" component = {MainPage}/>
         <Route path="/" component = {LandingPage}/>
         </Switch>
-        
-     
+
+
       </Content>
       </Screen> */}
         </Router>
       </Body>
     </div>
   )
-
 }

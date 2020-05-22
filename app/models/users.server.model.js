@@ -100,5 +100,19 @@ UserSchema.statics.resetPassword=function(user,callback){
     })
 }
 
+UserSchema.statics.getQuestionByUsername = function(userName, callback) {
+    return this.aggregate([
+        {$match: {userName: userName}},
+        {$group : {_id : { answer: "$answer"}}}
+    ]).sort({name : 1}).exec(callback)
+}
+
+UserSchema.statics.getLoggedByUsername = function(userName, callback) {
+    return this.aggregate([
+        {$match: {userName: userName}},
+        {$group : {_id : { loggedIn: "$loggedIn"}}}
+    ]).sort({name : 1}).exec(callback)
+}
+
 var User = mongoose.model('User', UserSchema);
 module.exports = User;
