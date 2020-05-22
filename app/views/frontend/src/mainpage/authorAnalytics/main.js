@@ -1,89 +1,55 @@
 import React, { useState, Component, useEffect } from "react";
 import { ArticleHeading, SubHeading, Result} from "./styled"
-import Select from '@atlaskit/select';
-import Button, { ButtonAppearances } from '@atlaskit/button';
-import Textfield from '@atlaskit/textfield';
-import Tag from '@atlaskit/tag';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import {TextField} from "@material-ui/core";
 
 
 export const AuthorAnalytics = () => {
-
     const [allAuthors, setAllAuthors] = useState([]);
     const [currentAuthor, setCurrentAuthor] = useState([]);
+    const [currentAuthorUser, setCurrentAuthorUser] = useState([]);
 
-//
-//      // Retrieve list from Express App
-//    useEffect(() => {
-//     // GET request
-//    //fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-//  }, [])
-//
-//  const allAuthorsOptions = allAuthors.map(author => ({
-//     label: author.user,
-//     value: author
-//   }))
-//
-//     return (
-//         <div>
-//             <ArticleHeading>Author Analytics</ArticleHeading>
-//
-//         <Result>
-//
-//         <a><b>Author:</b> </a>
-//         <br></br>
-//         <a><b>Articles:</b> </a>
-//         <br></br>
-//         <a><b>Top 5 Regular Users:</b></a>
-//
-//         </Result>
-//
-//           </div>
-    //     )
-    const [longestHistory, setLongestHistory] = useState([]);
-
-    // Retrieve list from Express App
     useEffect(() => {
-        // console.log();
-        // Overall: Data
-       fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-
-       fetch('/api/longesArticletHistory/?topcount=' + 3).then(res => res.json()).then(list => setLongestHistory(list));
+        // GET request
+        fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
+        fetch('/api/author/getAuthor').then(res => res.json()).then(list => setCurrentAuthor(list));
     }, [])
 
-    const longestHistoryDisplay = longestHistory.map(article => {
-        return (<Result><b>Article:</b> {article._id} <br></br><b>Age:</b> {article.minTimestamp}
-        </Result>)
-    })
+    const allAuthorOptions = allAuthors.map(article => ({
+        label: article._id.user,
+        value: article
+    }))
 
-    const authorArticlesDisplay = currentAuthor.map(article => {
-        return (<Result><b>Article:</b> {article._id} <br/><b>Author:</b> {article.authorName}</Result>)
+    const authorSelected = (value) => {
+        setCurrentAuthorUser(value._id.user);
+        fetch('/api/author/getAuthor/?user=' + value._id.user).then(res => res.json()).then(list => setCurrentAuthor(list));
+    }
+
+    const authorCurrentDisplay = currentAuthor.map(article => {
+        return (<Result><b>Author:</b>{article._id.user}<b><br/>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count} </Result>)
     })
 
     return (
         <div>
             <ArticleHeading>Author Article Analytics</ArticleHeading>
             <div>
-                <Tag text="Author Search:" color="greyLight"/>
-                <Textfield className="form-control" type="text" placeholder="Author's Name" name="authorName" required/>
                 <Autocomplete
-                    name="authorName"
-                    placeholder="Author's Name"
-                    options={allAuthors}
-                    getOptionLabel={(option)=>option.title}
-                    style={{ width: 300}}
-                    renderInput={(params) => <Textfield {...params} label="Combo box" variant="outlined" />}
-                    />
+                    onChange={(event, valueSelected) => {
+                        authorSelected(valueSelected.value)
+                    }}
+                    options={allAuthorOptions}
+                    getOptionLabel={(option) => option.label}
+                    style={{ width: 500 }}
+                    renderInput={(params) => <TextField {...params} label="Search for an Author" variant="outlined" />}
+                />
             </div>
-            <Button appearance="primary" className="button" type="submit" value="Search">Search</Button>
-            <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
+            {currentAuthorUser != ""
+                ? <div>
+                    <SubHeading>Articles the author has written/edited</SubHeading>
+                    {authorCurrentDisplay}
+                </div>: <div></div>
 
-            <SubHeading>Articles the author has written/edited</SubHeading>
-            {authorArticlesDisplay}
-            <SubHeading>Top articles with the longest history</SubHeading>
-
-            {longestHistoryDisplay}
+            }
         </div>
-
     );
 }

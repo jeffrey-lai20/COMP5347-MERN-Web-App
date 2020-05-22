@@ -6,11 +6,13 @@ import Popup from '@atlaskit/popup';
 
 import { ResetPasswordAnswer } from '../resetPasswordAnswerDialog/main.js'
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
-import MediaServicesAddCommentIcon from '@atlaskit/icon/glyph/media-services/add-comment';
+import {Result} from "../../../mainpage/authorAnalytics/styled";
+
+
 
 export const ResetPasswordUsername = ({ResetPasswordUsername}) => {
     const [isOpen, setIsOpen] = useState("");
-    // const [isOpen2, setIsOpen2] = useState(false);
+
     return (
         <div>
             <Button onClick={() => setIsOpen(true)}>Reset Password</Button>

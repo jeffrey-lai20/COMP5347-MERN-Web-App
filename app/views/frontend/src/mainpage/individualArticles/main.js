@@ -21,7 +21,7 @@ export const IndividualArticles = props => {
   const [latestRevision, setLatestRevision] = useState([]);
   const [fromYear, setFromYear] = useState("");
   const [toYear, setToYear] = useState("");
-  const [validatedFromYear, setValidatedFromYear] = useState("1990");
+  const [validatedFromYear, setValidatedFromYear] = useState("1800");
   const [validatedToYear, setValidatedToYear] = useState("2020");
 
   const [isOpen, setIsOpen] = useState(false);
@@ -30,8 +30,11 @@ export const IndividualArticles = props => {
 
   // Retrieve list from Express App
   useEffect(() => {
-    // GET request
     fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
+  }, [])
+
+  useEffect(() => {
+    // GET request
     if (currentArticleTitle != "") {
       fetch('/api/individual/getTopFiveUsers/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list));
       fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setCurrentRevisions(list))

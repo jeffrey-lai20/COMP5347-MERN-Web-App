@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 var mongoose = require('./db')
 
 const UserSchema = mongoose.Schema({
-
     firstName:{
         type: String,
         required: true,
@@ -40,6 +39,10 @@ const UserSchema = mongoose.Schema({
     resetAnswer: {
         type: String,
         required: true
+    },
+    loggedIn: {
+        type: Boolean,
+        required: false
     }
 
 });
@@ -95,6 +98,20 @@ UserSchema.statics.resetPassword=function(user,callback){
             user.save(callback);
         })
     })
+}
+
+UserSchema.statics.getQuestionByUsername = function(userName, callback) {
+    return this.aggregate([
+        {$match: {userName: userName}},
+        {$group : {_id : { answer: "$answer"}}}
+    ]).sort({name : 1}).exec(callback)
+}
+
+UserSchema.statics.getLoggedByUsername = function(userName, callback) {
+    return this.aggregate([
+        {$match: {userName: userName}},
+        {$group : {_id : { loggedIn: "$loggedIn"}}}
+    ]).sort({name : 1}).exec(callback)
 }
 
 var User = mongoose.model('User', UserSchema);
