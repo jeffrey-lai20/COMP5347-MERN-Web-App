@@ -162,3 +162,16 @@ module.exports.getAllAuthors = function(req, res) {
         }
     })
 }
+
+module.exports.getTimestampsAuthorArticle = function(req, res) {
+    user = req.params.user;
+    title = req.params.title;
+    Revision.findAllAuthorRevisionsOnArticle(user, title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}

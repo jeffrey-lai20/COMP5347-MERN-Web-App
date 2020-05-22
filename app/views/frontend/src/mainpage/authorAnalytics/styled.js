@@ -30,7 +30,7 @@ export const SubHeading = styled.div`
 export const Result = styled.div`
     font-family: 'Arial';
     font-size: 20px;
-    background: #103989;
+    background: #0D65A5;
     color:white;
     padding: 10px;
     line-height: 300%;
@@ -39,3 +39,17 @@ export const Result = styled.div`
     margin-right: 150px;
     margin-left: 80px;
 `;
+
+export const ModalResult = styled.div`
+    font-family: 'Arial';
+    font-size: 20px;
+    background: white;
+    color:grey;
+    padding: 10px;
+    line-height: 300%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+`;
+

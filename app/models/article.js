@@ -287,6 +287,12 @@ RevisionSchema.statics.findAllAuthors = function(callback){
 	]).sort({name : 1}).exec(callback)
 }
 
+RevisionSchema.statics.findAllAuthorRevisionsOnArticle = function(author, Ititle, callback) {
+	return this.aggregate([
+		{$match: {user: author, title: Ititle}}
+	]).exec(callback)
+}
+
 
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 

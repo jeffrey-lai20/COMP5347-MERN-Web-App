@@ -9,7 +9,9 @@ export const NavigationBar = () => {
     return (
         <NavContainer>
             <form action='/logout' method='POST'>
-                    <Button appearance="primary" className="button" type="submit" value="logout">Log Out</Button>
+            <LogoutButton>
+                    <a type="submit" value="logout">Log Out</a>
+            </LogoutButton>
             </form>
         </NavContainer>
     )

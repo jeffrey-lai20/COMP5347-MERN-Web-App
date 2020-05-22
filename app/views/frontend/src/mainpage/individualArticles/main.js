@@ -18,7 +18,8 @@ export const IndividualArticles = props => {
   const [currentArticleTitle, setCurrentArticleTitle] = useState("");
   const [currentRevisions, setCurrentRevisions] = useState([]);
   const [topFiveUsers, setTopFiveUsers] = useState([]);
-  const [latestRevision, setLatestRevision] = useState([]);
+  const [latestRevisionTimeDifference, setLatestRevisionTimeDifference] = useState([]);
+  const [numberOfRevisionsPulled, setNumberOfRevisionsPulled] = useState([]);
   const [fromYear, setFromYear] = useState("");
   const [toYear, setToYear] = useState("");
   const [validatedFromYear, setValidatedFromYear] = useState("1800");
@@ -37,7 +38,11 @@ export const IndividualArticles = props => {
     // GET request
     if (currentArticleTitle != "") {
       fetch('/api/individual/getTopFiveUsers/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list));
-      fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setCurrentRevisions(list))
+      fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear)
+      .then(res => res.json()).then(list => 
+        {
+          setCurrentRevisions(list[0].count)
+        })
     }
   }, [currentArticleTitle, validatedFromYear, validatedToYear])
 
@@ -78,8 +83,14 @@ export const IndividualArticles = props => {
   const articleSelected = (value) => {
     setCurrentArticleTitle(value._id.title);
     setCurrentArticle(value);
+    setCurrentRevisions(value.count)
     // GET request
-    fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list));
+    //fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list));
+    fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json())
+      .then(list => {
+          setLatestRevisionTimeDifference(list.timeDifference);
+          setNumberOfRevisionsPulled(list.result);
+      });
   }
 
   var num = 0;
@@ -131,8 +142,14 @@ export const IndividualArticles = props => {
           <Button onClick={setYearRange}>Update</Button>
 
           <Result>
+          <a>The last update was {latestRevisionTimeDifference} days ago.</a><br></br>
 
-            <a><b>Total Number of Revisions:</b> {currentArticle.count}</a>
+          {latestRevisionTimeDifference > 1 
+        ? <div><a>Pulling data from Media Wiki</a><br/>
+        <a>{numberOfRevisionsPulled} revisions has been added.</a><br/>
+          </div> : <a>Database is up-to-date</a> }
+          
+            <a><b>Total Number of Revisions:</b> {currentRevisions}</a>
             <br></br>
             <a><b>Top 5 Regular Users:</b></a>
 
