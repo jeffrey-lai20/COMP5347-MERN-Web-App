@@ -10,6 +10,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 export const AuthorAnalytics = () => {
     const [allAuthors, setAllAuthors] = useState([]);
     const [currentAuthor, setCurrentAuthor] = useState([]);
+    const [currentAuthorUser, setCurrentAuthorUser] = useState([]);
 
     useEffect(() => {
         // GET request
@@ -18,19 +19,24 @@ export const AuthorAnalytics = () => {
 
     }, [])
 
-    const authorCurrentDisplay = currentAuthor.map(article => {
-        return (<Result><b>Author:</b>{article._id.user}<b><br/>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count} </Result>)
-    })
+
 
     const allAuthorOptions = allAuthors.map(article => ({
-        label: "Author: " + article._id.user + " " + "Number of Revisions: " + article.count,
+        label: "Author: " + article._id.user,
         value: article
     }))
 
     const authorSelected = (value) => {
-        setCurrentAuthor(value._id.user);
+        setCurrentAuthorUser(value._id.user);
+        // console.log(value._id.user);
+        fetch('/api/author/getAuthor/?user=' + value._id.user).then(res => res.json()).then(list => setCurrentAuthor(list));
+
         // GET request
     }
+
+    const authorCurrentDisplay = currentAuthor.map(article => {
+        return (<Result><b>Author:</b>{article._id.user}<b><br/>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count} </Result>)
+    })
 
 
     return (
@@ -59,7 +65,16 @@ export const AuthorAnalytics = () => {
 
             <SubHeading>Articles the author has written/edited</SubHeading>
             {/*{allAuthorsOptions}*/}
-            {authorCurrentDisplay}
+            {console.log(currentAuthorUser)}
+            {currentAuthorUser != ""
+                ? <div>
+                    <h1>Author stuff: </h1>
+                    {authorCurrentDisplay}
+
+                </div>: <div></div>
+
+            }
+
 
         </div>
     );

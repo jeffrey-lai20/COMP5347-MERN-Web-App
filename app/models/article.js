@@ -270,7 +270,7 @@ RevisionSchema.statics.getAllAuthors = function(callback) {
 
 RevisionSchema.statics.getAuthor = function(author, callback) {
 	return this.aggregate([
-		{$match: {user: author} && {usertype : 'admin' || 'bot' }},
+		// {$match: {user: author} && {usertype : 'admin' || 'bot' }},
 		{$group : {_id : { user: author, title : "$title"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 
@@ -279,7 +279,7 @@ RevisionSchema.statics.getAuthor = function(author, callback) {
 // Query to return titles of all articles
 RevisionSchema.statics.findAllAuthors = function(callback){
 	return this.aggregate([
-		// {$match: {usertype : 'admin' || 'bot' }},
+		{$match: {usertype : 'admin' || 'bot' }},
 		{$group : {_id : {user : "$user"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 }
