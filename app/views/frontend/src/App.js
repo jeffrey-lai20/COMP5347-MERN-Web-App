@@ -11,13 +11,13 @@ import {
 import { SideBar, Body, Screen, Content } from "./styled"
 
 export default () => {
-  const [loginValue, setLoginValue] = useState(true);
+  const [loginValue, setLoginValue] = useState();
 
   // useEffect(() => {
   //
   //   fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
   // }, [])
-  // fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
+  fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
 
   return (
     <div>
@@ -48,7 +48,6 @@ export default () => {
 
 
           {/* <Screen>
-
         <SideBar>
           <NavigationBar></NavigationBar>
         </SideBar>
@@ -57,8 +56,6 @@ export default () => {
         <Route path="/main" component = {MainPage}/>
         <Route path="/" component = {LandingPage}/>
         </Switch>
-
-
       </Content>
       </Screen> */}
         </Router>

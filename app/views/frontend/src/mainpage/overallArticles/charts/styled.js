@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ArticleSelect = styled.div`
 font-family: 'Arial';
-font-size: 20px;
+font-size: 15px;
 background: white;
 color:black;
 padding: 10px;
