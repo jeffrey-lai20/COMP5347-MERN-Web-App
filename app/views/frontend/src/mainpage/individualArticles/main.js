@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import { ArticleHeading, SubHeading, Result, UserTable, ArticleSelect, DateSelect } from "./styled";
+import { ArticleHeading, SubHeading, Result, UserTable, ArticleSelect, DateSelect, DateButton, ErrorHeading, ErrorSubHeading } from "./styled";
 import Select from '@atlaskit/select';
 import Button from '@atlaskit/button';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
@@ -84,8 +84,6 @@ export const IndividualArticles = props => {
     setCurrentArticleTitle(value._id.title);
     setCurrentArticle(value);
     setCurrentRevisions(value.count)
-    // GET request
-    //fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list));
     fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json())
       .then(list => {
           setLatestRevisionTimeDifference(list.timeDifference);
@@ -139,7 +137,7 @@ export const IndividualArticles = props => {
             </Select>
           </DateSelect>
 
-          <Button onClick={setYearRange}>Update</Button>
+          <DateButton><Button onClick={setYearRange}>Update Analytics for {currentArticleTitle}</Button></DateButton>
 
           <Result>
           <a>The last update was {latestRevisionTimeDifference} days ago.</a><br></br>
@@ -180,8 +178,9 @@ export const IndividualArticles = props => {
 
       <ModalTransition>
         {isOpen && (
-          <Modal onClose={() => setIsOpen(false)} heading="Error">
-            <a>Invalid year range entered! Please try again. </a>
+          <Modal onClose={() => setIsOpen(false)}>
+            <ErrorHeading>Error</ErrorHeading>
+            <ErrorSubHeading>Invalid year range entered! Please try again. </ErrorSubHeading>
             <br></br>
           </Modal>
         )}

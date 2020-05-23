@@ -113,9 +113,7 @@ module.exports.loginProcess = function (req, res) {
                 //req.session.userId = user._id;
                 console.log("Logged in successfully.");
                 req.flash('info', 'Login successfully!');
-                res.redirect('/main');
-                // console.log("Got here");
-
+                res.redirect('/');
             }
         });
     } else {
@@ -123,7 +121,6 @@ module.exports.loginProcess = function (req, res) {
         res.redirect('/login');
     }
 };
-
 
 module.exports.resetPasswordUsername = function (req, res) {
     var userName = req.body.userName;

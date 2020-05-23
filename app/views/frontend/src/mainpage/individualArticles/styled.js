@@ -53,6 +53,10 @@ margin-right: 500px;
 margin-left: 500px;
 `;
 
+export const DateButton = styled.div`
+margin-left: 500px;
+`;
+
 export const UserTable = styled.div`
 font-family: 'Arial';
 font-size: 20px;
@@ -72,4 +76,21 @@ export const Chart = styled.div`
     margin-bottom: 50px;
     margin-right: 150px;
     margin-left: 80px;
+`;
+
+
+export const ErrorHeading = styled.div`
+    font-family: 'Arial';
+    font-size: 40px;
+    padding: 20px;
+    background: #0D65A5;
+    color: white;
+`;
+
+export const ErrorSubHeading = styled.div`
+    font-family: 'Arial';
+    font-size: 20px;
+    padding: 20px;
+    background: white;
+    color: #0D65A5;
 `;
