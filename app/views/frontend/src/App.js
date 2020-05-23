@@ -33,7 +33,7 @@ export default () => {
                 <Switch>
                   {console.log("SKREEE" + loginValue)}
 
-                  <Route path="/main" component={MainPage} />
+                  <Route path="/" component={MainPage} />
                 </Switch>
               </Content>
             </Screen>
