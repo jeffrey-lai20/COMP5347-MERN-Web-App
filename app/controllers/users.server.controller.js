@@ -164,6 +164,7 @@ module.exports.getResetPasswordQuestion = function (req, res) {
     }, function (err, user) {
         if (user) {
             console.log(user.resetQuestion)
+            res.redirect('/resetPassword?user=' + user.userName);
         } else {
             console.log("User does not exist.")
             console.log(err)
@@ -209,4 +210,32 @@ module.exports.resetPasswordAnswer = function (req, res) {
         }
     });
 }
+
+module.exports.getQuestion = function (req, res) {
+    userName = req.body.userName;
+    User.findOne({
+        userName: {
+            "$regex": "^" + userName + "\\b",
+            "$options": "i"
+        }
+    }, function (err, user) {
+        if (user) {
+            User.getQuestion(userName, function(error, result) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log(result)
+                    res.json(result);
+                }
+            })
+        } else {
+            console.log("User does not exist.")
+            console.log(err)
+            res.redirect('/login');
+        }
+    });
+}
+
+
+
 

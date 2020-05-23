@@ -11,6 +11,22 @@ export const Login = ({loginFunction}) => {
     const [isLoginOpen, setIsLoginOpen] = useState("");
     const [isResetUsernameOpen, setIsResetUsernameOpen] = useState("");
     const [isResetPasswordOpen, setIsResetPasswordOpen] = useState("");
+    const [question, setQuestion] = useState([]);
+    const [user, setUser] = useState([]);
+
+    const userData = user.map(data => ({
+        label: data.userName,
+        value: data
+    }))
+
+    const getQuestion = (user) => {
+        setUser(user);
+        fetch('/resetPassword?user=' + user.userName).then(res => res.json()).then(list => setQuestion(list));
+    }
+
+    const questionDisplay = question.map(data => {
+        return (<h3>Question: {data}</h3> )
+    })
 
     return (
         <div>
@@ -37,7 +53,7 @@ export const Login = ({loginFunction}) => {
                             </LoginButton>
 
                             <LoginButton>
-                                <Button onClick={() => {setIsLoginOpen(false); setIsResetUsernameOpen(true)}}>Reset Password</Button>
+                                <Button onClick={() => {setIsLoginOpen(false); setIsResetUsernameOpen(true);}}>Reset Password</Button>
                             </LoginButton>
                         </form>
                     </Modal>
@@ -57,7 +73,8 @@ export const Login = ({loginFunction}) => {
                             </div>
                             <LoginButton>
                                 <Button appearance="primary" className="button" type="submit" value="Continue"
-                                        onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true)}} >Continue</Button>
+                                        onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true); getQuestion("getElementByName('userName').innerHTML")}} >Continue</Button>
+                                {/**/}
                             </LoginButton>
                         </form>
                     </Modal>
@@ -75,7 +92,7 @@ export const Login = ({loginFunction}) => {
                                     <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
                                 </TextField>
                             </div>
-                            {/*{questionDisplay}*/}
+                            {questionDisplay}
                             <div>
                                 <SubHeading>Answer: </SubHeading>
                                 <TextField>

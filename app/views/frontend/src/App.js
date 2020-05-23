@@ -19,7 +19,7 @@ export default () => {
   useEffect(() => {
       fetch('/error').then(res => res.json()).then(list => setErrorValue(list));
       fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
-  }, [errorValue])
+  }, [])
 
     {console.log("ERRO VALUY " + errorValue)}
 
