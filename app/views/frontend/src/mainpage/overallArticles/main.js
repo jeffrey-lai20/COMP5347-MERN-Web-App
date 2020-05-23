@@ -37,33 +37,33 @@ export const OverallArticles = props => {
 	}, [selectedNumber])
 
 	const topRevisionsDisplay = topRevisions.map(article => {
-		return (<Result><b>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count}
-		</Result>)
+		return (<li><i>{article._id.title}</i> - <b>Number of Revisions:</b> {article.count}
+		</li>)
 	})
 
 	const lowestRevisionsDisplay = lowestRevisions.map(article => {
-		return (<Result><b>Article:</b> {article._id.title} <br></br><b>Number of Revisions:</b> {article.count}
-		</Result>)
+		return (<li><i>{article._id.title}</i> - <b>Number of Revisions:</b> {article.count}
+		</li>)
 	})
 
 	const largestGroupDisplay = largestGroup.map(article => {
-		return (<Result><b>Article:</b> {article._id} <br></br><b>Number of Users:</b> {article.titleCount}
-		</Result>)
+		return (<li><i>{article._id}</i> - <b>Number of Users:</b> {article.titleCount}
+		</li>)
 	})
 
 	const smallestGroupDisplay = smallestGroup.map(article => {
-		return (<Result><b>Article:</b> {article._id} <br></br><b>Number of Users:</b> {article.titleCount}
-		</Result>)
+		return (<li><i>{article._id}</i> - <b>Number of Users:</b> {article.titleCount}
+		</li>)
 	})
 
 	const longestHistoryDisplay = longestHistory.map(article => {
-		return (<Result><b>Article:</b> {article._id} <br></br><b>Age:</b> {article.minTimestamp}
-		</Result>)
+		return (<li><i>{article._id}</i> - <b>Age:</b> {article.minTimestamp}
+		</li>)
 	})
 
 	const shortestHistoryDisplay = shortestHistory.map(article => {
-		return (<Result><b>Article:</b> {article._id} <br></br><b>Age:</b> {article.minTimestamp}
-		</Result>)
+		return (<li><i>{article._id}</i> - <b>Age:</b> {article.minTimestamp}
+		</li>)
 	})
 	
 	const articlesSelect = (e) => {
@@ -96,28 +96,27 @@ export const OverallArticles = props => {
 			</ArticleSelect>
 
 			<SubHeading>Top articles with the highest number of revisions</SubHeading>
-
-			{topRevisionsDisplay}
+			<Result>{topRevisionsDisplay}</Result>
 
 			<SubHeading>Top articles with the lowest number of revisions</SubHeading>
 
-			{lowestRevisionsDisplay}
+			<Result>{lowestRevisionsDisplay}</Result>
 
 			<SubHeading>Top articles edited by largest group of registered users</SubHeading>
 
-			{largestGroupDisplay}
+			<Result>{largestGroupDisplay}</Result>
 
 			<SubHeading>Top articles edited by smallest group of registered users</SubHeading>
 
-			{smallestGroupDisplay}
+			<Result>{smallestGroupDisplay}</Result>
 
 			<SubHeading>Top articles with the longest history</SubHeading>
 
-			{longestHistoryDisplay}
+			<Result>{longestHistoryDisplay}</Result>
 
 			<SubHeading>Top articles with the shortest history</SubHeading>
 
-			{shortestHistoryDisplay}
+			<Result>{shortestHistoryDisplay}</Result>
 
 			<OverallArticlesCharts></OverallArticlesCharts>
 			

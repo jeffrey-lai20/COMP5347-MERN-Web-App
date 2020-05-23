@@ -235,19 +235,22 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 			for (var i in dataPages) {
 				article = dataPages[i].revisions;
 				
-				if (article.timestamp != lastDate.toISOString()) {
-					var new_article = {
-						'title' : title,
-						'user' : article.user,
-						'timestamp' : article.timestamp
+				for (var j in article) {
+					if (article[j].timestamp != lastDate.toISOString()) {
+						var new_article = {
+							'title' : title,
+							'user' : article.user,
+							'timestamp' : article.timestamp
+						}
+						updates.push(new_article);
 					}
-					updates.push(new_article);
 				}
 				console.log("Updated all articles");
 				model.insertMany(updates, function(error, res) {
 					if (error) {
 						console.log(error);
 					} else {
+						//Checking updates:
 						callback(null, updates.length);
 					}
 				})
@@ -282,6 +285,12 @@ RevisionSchema.statics.findAllAuthors = function(callback){
 		{$match: {usertype : 'admin' || 'bot' }},
 		{$group : {_id : {user : "$user"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
+}
+
+RevisionSchema.statics.findAllAuthorRevisionsOnArticle = function(author, Ititle, callback) {
+	return this.aggregate([
+		{$match: {user: author, title: Ititle}}
+	]).exec(callback)
 }
 
 
