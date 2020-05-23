@@ -15,6 +15,7 @@ var session=require('express-session');
 
 var analyticsRouter = require('./app/routes/analytics.server.routes');
 var individualArticlesRouter = require('./app/routes/individualArticles.server.routes');
+var authorAnalyticsRouter = require('./app/routes/authorAnalytics.server.routes');
 var userRoutes = require('./app/routes/users.server.routes');
 
 
@@ -62,6 +63,7 @@ app.use(function (req, res, next) {
 
 app.use('/', analyticsRouter);
 app.use('/', individualArticlesRouter);
+app.use('/', authorAnalyticsRouter);
 app.use('/', userRoutes);
 
 app.listen(5000, function () {
