@@ -10,6 +10,14 @@ module.exports.getAuth = function(req, res) {
     }
 }
 
+module.exports.logout = function(req, res) {
+    console.log("Logging out");
+    delete req.session.authenticated;
+    delete req.session.user;
+    res.redirect('/');
+}
+
+
 // Index
 module.exports.showIndex = function (req, res) {
     res.render('app/views/frontend/src/landingpage/index.js');
