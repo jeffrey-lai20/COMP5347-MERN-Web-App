@@ -113,8 +113,7 @@ module.exports.loginProcess = function (req, res) {
                 //req.session.userId = user._id;
                 console.log("Logged in successfully.");
                 req.flash('info', 'Login successfully!');
-                res.redirect('/main');
-                // console.log("Got here");
+                res.redirect('/');
             }
         });
     } else {
@@ -122,7 +121,6 @@ module.exports.loginProcess = function (req, res) {
         res.redirect('/login');
     }
 };
-
 
 module.exports.resetPasswordUsername = function (req, res) {
     var userName = req.body.userName;
@@ -172,32 +170,32 @@ module.exports.resetPasswordAnswer = function (req, res) {
             "$options": "i"
         }
     }, function (err, user) {
-            if (user) {
-                if (user.resetAnswer === req.body.resetAnswer) {
-                    if (req.body.password === req.body.password2) {
-                        user.password = req.body.password
-                        user.password2 = req.body.password2
-                        User.resetPassword(user, function (err, user) {
-                            if (err) throw err;
-                            console.log(user);
-                        });
-                        console.log("Password has been reset.")
-                        req.flash('success_msg', 'Registration successful.');
-                        res.redirect('/login');
-                    } else {
-                        console.log("Mismatching Passwords.");
-                        res.redirect('/login');
-                    }
+        if (user) {
+            if (user.resetAnswer === req.body.resetAnswer) {
+                if (req.body.password === req.body.password2) {
+                    user.password = req.body.password
+                    user.password2 = req.body.password2
+                    User.resetPassword(user, function (err, user) {
+                        if (err) throw err;
+                        console.log(user);
+                    });
+                    console.log("Password has been reset.")
+                    req.flash('success_msg', 'Registration successful.');
+                    res.redirect('/login');
                 } else {
-                    console.log("Wrong Password Reset Answer.");
+                    console.log("Mismatching Passwords.");
                     res.redirect('/login');
                 }
-
             } else {
-                console.log("User does not exist.")
-                console.log(err)
+                console.log("Wrong Password Reset Answer.");
                 res.redirect('/login');
             }
+
+        } else {
+            console.log("User does not exist.")
+            console.log(err)
+            res.redirect('/login');
+        }
     });
 }
 

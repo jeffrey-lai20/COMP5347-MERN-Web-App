@@ -18,7 +18,7 @@ export const RedditArticles = props => {
     });
 
     useEffect(() => {
-          var input = "news/?q=" + props.currentArticleTitle;
+          var input = "news/search?q=" + props.currentArticleTitle;
           r.getTop(input, {time: "all", limit: 3}).map(post => {
             var news = { title: post.title, url: post.url };
             topThreeNews.push(news);
