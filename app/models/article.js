@@ -264,16 +264,16 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 */
 
 // Authors are either admin or bots
-RevisionSchema.statics.getAllAuthors = function(callback) {
-	return this.aggregate([
-		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
-		{$group: {_id : {userid: "$userid", user : "$user"}}}
-	]).exec(callback)
-}
+// RevisionSchema.statics.getAllAuthors = function(callback) {
+// 	return this.aggregate([
+// 		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
+// 		{$group: {_id : {userid: "$userid", user : "$user"}}}
+// 	]).exec(callback)
+// }
 
 RevisionSchema.statics.getAuthor = function(author, callback) {
 	return this.aggregate([
-		{$match: {user: author} && {usertype : 'admin' || 'bot' }},
+		{$match: {user: author}},
 		{$group : {_id : { user: author, title : "$title"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 
@@ -281,8 +281,9 @@ RevisionSchema.statics.getAuthor = function(author, callback) {
 
 // Query to return titles of all articles
 RevisionSchema.statics.findAllAuthors = function(callback){
+    var types = ["admin", "bot"];
 	return this.aggregate([
-		{$match: {usertype : 'admin' || 'bot' }},
+		{$match: {usertype : {$in: types}}},
 		{$group : {_id : {user : "$user"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 }
