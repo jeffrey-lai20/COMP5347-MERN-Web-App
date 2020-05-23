@@ -10,6 +10,13 @@ module.exports.getAuth = function(req, res) {
     }
 }
 
+module.exports.getError = function(req, res) {
+    if (req.session.userName) {
+        res.json(req.session.userName)
+        delete req.session.userName;
+    }
+}
+
 module.exports.logout = function(req, res) {
     console.log("Logging out");
     delete req.session.authenticated;
@@ -105,8 +112,8 @@ module.exports.loginProcess = function (req, res) {
     if (req.body.userName && req.body.password) {
         User.auth(req.body.userName, req.body.password, function (error, user) {
             if (error || !user) {
-                req.flash('error', 'Username or password incorrect');
-                res.redirect('/login');
+                req.session.userName=req.body.userName;
+                res.redirect('/');
             } else {
                 req.session.authenticated = true;
                 req.session.user=req.body.userName;
@@ -117,8 +124,12 @@ module.exports.loginProcess = function (req, res) {
             }
         });
     } else {
-        req.flash('error', 'Username and password are incorrect');
-        res.redirect('/login');
+        // req.session.user=req.body.userName;
+        // // console.log("BRUHH");
+        //
+        // // console.log(req.session.user);
+        // req.flash('error', 'Username and password are incorrect');
+        res.redirect('/');
     }
 };
 

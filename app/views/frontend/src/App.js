@@ -11,13 +11,17 @@ import {
 import { SideBar, Body, Screen, Content } from "./styled"
 
 export default () => {
-  const [loginValue, setLoginValue] = useState();
+    const [loginValue, setLoginValue] = useState();
+    const [errorValue, setErrorValue] = useState();
+    // setErrorValue(undefined);
+    {console.log("ERRO VasdasdALUY " + errorValue)}
 
-  // useEffect(() => {
-  //
-  //   fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
-  // }, [])
-  fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
+  useEffect(() => {
+      fetch('/error').then(res => res.json()).then(list => setErrorValue(list));
+      fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
+  }, [errorValue])
+
+    {console.log("ERRO VALUY " + errorValue)}
 
   return (
     <div>
@@ -31,8 +35,6 @@ export default () => {
               </SideBar>
               <Content>
                 <Switch>
-                  {console.log("SKREEE" + loginValue)}
-
                   <Route path="/" component={MainPage} />
                 </Switch>
               </Content>
@@ -40,8 +42,11 @@ export default () => {
                 :
             <Screen>
               <Switch>
-                {console.log("AOSIHD" + loginValue)}
                 <Route path="/" component={LandingPage} />
+                  {errorValue ?
+                      (alert("Invalid input: \"" + errorValue + "\". Please try again."),
+                      setErrorValue(undefined))
+                      :<h1></h1>}   {/*Do nothing*/}
               </Switch>
             </Screen>
           }
