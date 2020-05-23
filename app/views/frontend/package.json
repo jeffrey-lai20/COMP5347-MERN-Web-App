@@ -9,7 +9,7 @@
     "@atlaskit/flag": "^12.4.0",
     "@atlaskit/form": "^7.2.1",
     "@atlaskit/inline-dialog": "^12.1.12",
-    "@atlaskit/modal-dialog": "^10.5.8",
+    "@atlaskit/modal-dialog": "^10.5.9",
     "@atlaskit/popup": "^0.4.1",
     "@atlaskit/radio": "^3.2.2",
     "@atlaskit/select": "^11.0.10",
