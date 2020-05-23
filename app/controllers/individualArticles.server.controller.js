@@ -119,7 +119,7 @@ module.exports.getIndividualBarChartDataUser = function(req, res) {
 }
 
 module.exports.getLatestRevisionForArticle = function(req, res) {
-    title = req.query.title;
+    title = req.params.title;
     Revision.getLatestRevision(title, function(error, articleResult) {
     	let currentDate = new Date();
     	let prevDate = new Date(articleResult[0].date);
@@ -130,7 +130,7 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
     	// For Articles older than 24 hours: Update
     	if (timeDifference > 1) {
     		Revision.queryWiki(title, prevDate, function(error, result) {
-    			res.send({result:result});
+                res.send({timeDifference: timeDifference, result:result});
     		})
     	// For articles within 24 hours
     	} else {
@@ -140,8 +140,19 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
 }
 
 // Author analytics controller
-module.exports.getAllAuthors = function(req, res) {
+module.exports.getAuthor = function(req, res) {
+    author = req.query.user;
+    Revision.getAuthor(author, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}
 
+module.exports.getAllAuthors = function(req, res) {
     Revision.findAllAuthors(function(error, result) {
         if (error) {
             console.log(error)
@@ -152,5 +163,15 @@ module.exports.getAllAuthors = function(req, res) {
     })
 }
 
-
-
+module.exports.getTimestampsAuthorArticle = function(req, res) {
+    user = req.params.user;
+    title = req.params.title;
+    Revision.findAllAuthorRevisionsOnArticle(user, title, function(error, result) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}

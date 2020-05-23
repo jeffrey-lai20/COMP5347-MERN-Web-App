@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, {useState, Component, useEffect} from "react";
 import { MainPage } from "./mainpage";
 import { Login } from "./landingpage/loginDialog/main";
 import { LandingPage } from "./landingpage"
@@ -11,38 +11,43 @@ import {
 import { SideBar, Body, Screen, Content } from "./styled"
 
 export default () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loginValue, setLoginValue] = useState();
 
-  const login = () => {
-    setLoggedIn(true);
-  }
+  // useEffect(() => {
+  //
+  //   fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
+  // }, [])
+  fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
 
   return (
     <div>
       <Body>
         <Router>
           {/* Must be logged in to view main page */}
-          {/* {loggedIn ? (<Redirect to="/main"/>) : (<Redirect to="/"/>)}
-      */}
+          {loginValue ?
+            <Screen>
+              <SideBar>
+                <NavigationBar></NavigationBar>
+              </SideBar>
+              <Content>
+                <Switch>
+                  {console.log("SKREEE" + loginValue)}
 
-          {loggedIn ? <Screen>
-
-            <SideBar>
-              <NavigationBar></NavigationBar>
-            </SideBar>
-            <Content>
+                  <Route path="/" component={MainPage} />
+                </Switch>
+              </Content>
+            </Screen>
+                :
+            <Screen>
               <Switch>
-                <Route path="/main" component={MainPage} />
+                {console.log("AOSIHD" + loginValue)}
+                <Route path="/" component={LandingPage} />
               </Switch>
-            </Content>
-          </Screen> : 
-          <Screen>
-          <Switch>
-              <Route path="/" component={LandingPage} />
-            </Switch>
-          </Screen>}
-          {/* <Screen>
+            </Screen>
+          }
 
+
+          {/* <Screen>
         <SideBar>
           <NavigationBar></NavigationBar>
         </SideBar>
@@ -51,13 +56,10 @@ export default () => {
         <Route path="/main" component = {MainPage}/>
         <Route path="/" component = {LandingPage}/>
         </Switch>
-        
-     
       </Content>
       </Screen> */}
         </Router>
       </Body>
     </div>
   )
-
 }

@@ -50,3 +50,7 @@ To import all the json files into mongodb:
 Change timestamp format to ISODate:
 
 ```db.articles.find().forEach(function(doc){ doc.timestamp = new ISODate(doc.timestamp); db.articles.save(doc)});```
+
+Ensure there is no time out limit otherwise the whole function won't run. If it doesn't completely run, run this:
+
+```db.articles.find().forEach(function(doc){ if (!(doc.timestamp instanceof Date)) {doc.timestamp = new ISODate(doc.timestamp); db.articles.save(doc)}});```

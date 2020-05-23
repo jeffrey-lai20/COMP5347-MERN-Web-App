@@ -18,23 +18,51 @@ export const IndividualArticles = props => {
   const [currentArticleTitle, setCurrentArticleTitle] = useState("");
   const [currentRevisions, setCurrentRevisions] = useState([]);
   const [topFiveUsers, setTopFiveUsers] = useState([]);
-  const [latestRevision, setLatestRevision] = useState([]);
+  const [latestRevisionTimeDifference, setLatestRevisionTimeDifference] = useState([]);
+  const [numberOfRevisionsPulled, setNumberOfRevisionsPulled] = useState([]);
   const [fromYear, setFromYear] = useState("");
   const [toYear, setToYear] = useState("");
-  const [validatedFromYear, setValidatedFromYear] = useState("1990");
+  const [validatedFromYear, setValidatedFromYear] = useState("1800");
   const [validatedToYear, setValidatedToYear] = useState("2020");
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const [yearOptions, setYearOptions] = useState([]);
+
   // Retrieve list from Express App
   useEffect(() => {
-    // GET request
     fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
+  }, [])
+
+  useEffect(() => {
+    // GET request
     if (currentArticleTitle != "") {
       fetch('/api/individual/getTopFiveUsers/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list));
-      fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setCurrentRevisions(list))
+      fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear)
+      .then(res => res.json()).then(list => 
+        {
+          setCurrentRevisions(list[0].count)
+        })
     }
   }, [currentArticleTitle, validatedFromYear, validatedToYear])
+
+  useEffect(() => {
+    if (currentArticleTitle != "") {
+      fetch('/api/individual/getMinYear/' + currentArticleTitle).then(res => res.json())
+        .then(list => {
+          var min = new Date(list[0].timestamp);
+          fetch('/api/individual/getMaxYear/' + currentArticleTitle).then(res => res.json())
+            .then(list => {
+              var max = new Date(list[0].timestamp);
+              var temp = []
+              for (var i = min.getFullYear(); i <= max.getFullYear(); i++) {
+                temp.push({ label: i, value: i });
+              }
+              setYearOptions(temp);
+            });
+        });
+    }
+  }, [currentArticleTitle])
 
   const setYearRange = () => {
     // some year validation
@@ -55,8 +83,14 @@ export const IndividualArticles = props => {
   const articleSelected = (value) => {
     setCurrentArticleTitle(value._id.title);
     setCurrentArticle(value);
+    setCurrentRevisions(value.count)
     // GET request
-    fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
+    //fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list));
+    fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json())
+      .then(list => {
+          setLatestRevisionTimeDifference(list.timeDifference);
+          setNumberOfRevisionsPulled(list.result);
+      });
   }
 
   var num = 0;
@@ -88,24 +122,11 @@ export const IndividualArticles = props => {
 
       {currentArticle != ""
         ? <div>
-          <SubHeading>Summary Information - {currentArticleTitle} </SubHeading>
-
+          <SubHeading>Summary Information - <i>{currentArticleTitle}</i> </SubHeading>
           <DateSelect>
             <Select
               onChange={e => setFromYear(e.value)}
-              options={[
-                { label: "2010", value: "2010" },
-                { label: "2011", value: "2011" },
-                { label: "2012", value: "2012" },
-                { label: "2013", value: "2013" },
-                { label: "2014", value: "2014" },
-                { label: "2015", value: "2015" },
-                { label: "2016", value: "2016" },
-                { label: "2017", value: "2017" },
-                { label: "2018", value: "2018" },
-                { label: "2019", value: "2019" },
-                { label: "2020", value: "2020" }
-              ]}
+              options={yearOptions}
               placeholder="From: ">
             </Select>
 
@@ -113,19 +134,7 @@ export const IndividualArticles = props => {
 
             <Select
               onChange={e => setToYear(e.value)}
-              options={[
-                { label: "2010", value: "2010" },
-                { label: "2011", value: "2011" },
-                { label: "2012", value: "2012" },
-                { label: "2013", value: "2013" },
-                { label: "2014", value: "2014" },
-                { label: "2015", value: "2015" },
-                { label: "2016", value: "2016" },
-                { label: "2017", value: "2017" },
-                { label: "2018", value: "2018" },
-                { label: "2019", value: "2019" },
-                { label: "2020", value: "2020" }
-              ]}
+              options={yearOptions}
               placeholder="To: ">
             </Select>
           </DateSelect>
@@ -133,8 +142,14 @@ export const IndividualArticles = props => {
           <Button onClick={setYearRange}>Update</Button>
 
           <Result>
+          <a>The last update was {latestRevisionTimeDifference} days ago.</a><br></br>
 
-            <a><b>Total Number of Revisions:</b> {currentArticle.count}</a>
+          {latestRevisionTimeDifference > 1 
+        ? <div><a>Pulling data from Media Wiki</a><br/>
+        <a>{numberOfRevisionsPulled} revisions has been added.</a><br/>
+          </div> : <a>Database is up-to-date</a> }
+          
+            <a><b>Total Number of Revisions:</b> {currentRevisions}</a>
             <br></br>
             <a><b>Top 5 Regular Users:</b></a>
 
@@ -162,7 +177,6 @@ export const IndividualArticles = props => {
         </div>
 
         : <div></div>}
-
 
       <ModalTransition>
         {isOpen && (

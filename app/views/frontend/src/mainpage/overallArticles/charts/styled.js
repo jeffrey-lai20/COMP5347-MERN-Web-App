@@ -13,6 +13,13 @@ margin-right: 150px;
 margin-left: 80px;
 `;
 
+export const SubHeading = styled.div`
+font-family: 'Arial';
+font-size: 20px;
+padding: 30px;
+color: #103989;
+`;
+
 export const Chart = styled.div`
     font-family: 'Arial';
     font-size: 20px;

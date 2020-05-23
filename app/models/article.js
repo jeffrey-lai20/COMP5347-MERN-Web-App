@@ -139,14 +139,14 @@ RevisionSchema.statics.findTopFiveUsers = function(Ititle, fromYear, toYear, cal
 }
 
 RevisionSchema.statics.getMinArticleYears = function(Ititle, callback) {
-	this.find({'title':Ititle})
+	this.find({'timestamp': {$exists:true, $ne: null },'title':Ititle})
 	.sort({'timestamp':1})
 	.limit(1)
 	.exec(callback)
 }
 
 RevisionSchema.statics.getMaxArticleYears = function(Ititle, callback) {
-	this.find({'title':Ititle})
+	this.find({'timestamp': {$exists:true, $ne: null }, 'title':Ititle})
 	.sort({'timestamp':-1})
 	.limit(1)
 	.exec(callback)
@@ -154,14 +154,14 @@ RevisionSchema.statics.getMaxArticleYears = function(Ititle, callback) {
 
 RevisionSchema.statics.getIndividualPieChartData = function(Ititle, fromYear, toYear, callback) {
 	this.aggregate([
-		{$match: {title: Ititle}}, //timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
+		{$match: {title: Ititle, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 		{$group: {_id: {usertype: "$usertype"}, userCount : {$sum:1}}},
 	]).exec(callback)
 }
 
 RevisionSchema.statics.individualBarChartDistributionYear = function(Ititle, fromYear, toYear, callback) {
 	return this.aggregate([
-		{$match: {title: Ititle}}, //timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
+		{$match: {title: Ititle, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
 	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
 	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
@@ -174,7 +174,7 @@ RevisionSchema.statics.individualBarChartDistributionYear = function(Ititle, fro
 
 RevisionSchema.statics.individualBarChartDistributionYearUser = function(Ititle, Iuser, fromYear, toYear, callback) {
 	return this.aggregate([
-		{$match: {title: Ititle, user: Iuser}}, //timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
+		{$match: {title: Ititle, user: Iuser, timestamp : { $gte: new Date(fromYear + "-1-1"), $lte: new Date(toYear + "-12-31")}}},
 	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
 	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }}
 	       }},
@@ -231,23 +231,26 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 			// Getting Articles
 			var dataPages = data.query.pages;
 
-			var updates =[];		
+			var updates = [];		
 			for (var i in dataPages) {
 				article = dataPages[i].revisions;
 				
-				if (article.timestamp != lastDate.toISOString()) {
-					var new_article = {
-						'title' : title,
-						'user' : article.user,
-						'timestamp' : article.timestamp
+				for (var j in article) {
+					if (article[j].timestamp != lastDate.toISOString()) {
+						var new_article = {
+							'title' : title,
+							'user' : article.user,
+							'timestamp' : article.timestamp
+						}
+						updates.push(new_article);
 					}
-					updates.push(new_article);
 				}
 				console.log("Updated all articles");
 				model.insertMany(updates, function(error, res) {
 					if (error) {
 						console.log(error);
 					} else {
+						//Checking updates:
 						callback(null, updates.length);
 					}
 				})
@@ -261,12 +264,36 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 */
 
 // Authors are either admin or bots
-RevisionSchema.statics.findAllAuthors = function(callback) {
+// RevisionSchema.statics.getAllAuthors = function(callback) {
+// 	return this.aggregate([
+// 		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
+// 		{$group: {_id : {userid: "$userid", user : "$user"}}}
+// 	]).exec(callback)
+// }
+
+RevisionSchema.statics.getAuthor = function(author, callback) {
 	return this.aggregate([
-		{$match: {usertype : 'admin' || 'bot' }}, 
-		{$group: {_id : {userid: "$userid", user : "$user"}}}
+		{$match: {user: author}},
+		{$group : {_id : { user: author, title : "$title"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+
+}
+
+// Query to return titles of all articles
+RevisionSchema.statics.findAllAuthors = function(callback){
+    var types = ["admin", "bot"];
+	return this.aggregate([
+		{$match: {usertype : {$in: types}}},
+		{$group : {_id : {user : "$user"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+}
+
+RevisionSchema.statics.findAllAuthorRevisionsOnArticle = function(author, Ititle, callback) {
+	return this.aggregate([
+		{$match: {user: author, title: Ititle}}
 	]).exec(callback)
 }
+
 
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 

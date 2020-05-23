@@ -17,6 +17,7 @@ var analyticsRouter = require('./app/routes/analytics.server.routes');
 var individualArticlesRouter = require('./app/routes/individualArticles.server.routes');
 var userRoutes = require('./app/routes/users.server.routes');
 
+
 var app = express()
 app.use(express.static(path.join(__dirname, '/app/views/frontend')))
 app.set('views', path.join(__dirname,'app/views'));
@@ -35,7 +36,7 @@ app.use(session({
   saveUninitialized: false,
   authenticated: false,
   cookie: {
-    expires: 300000
+    expires: 600000
   }
 }));
 app.use(function(req,res,next){

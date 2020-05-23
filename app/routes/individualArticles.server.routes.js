@@ -14,11 +14,14 @@ router.get('/api/individual/getMaxYear/:title', controller.getArticleMaxYear);
 router.get('/api/individual/getIndividualPieChartData/:title/:fromYear/:toYear', controller.getPieChartData);
 router.get('/api/individual/barChartDistYear/:title/:fromYear/:toYear', controller.getIndividualBarChartData);
 router.get('/api/individual/barChartDistYearUser/:title/:user/:fromYear/:toYear', controller.getIndividualBarChartDataUser);
-router.get('/api/individual/getLatestRevision', controller.getLatestRevisionForArticle);
+router.get('/api/individual/getLatestRevision/:title', controller.getLatestRevisionForArticle);
 
 // router.get('/reddit', controller.reddit);
 
 // Author analytics routes
 router.get('/api/author/getAllAuthors', controller.getAllAuthors);
+router.get('/api/author/getAuthor', controller.getAuthor);
+router.get('/api/author/getRevisionTimestamps/:user/:title', controller.getTimestampsAuthorArticle)
+
 
 module.exports = router;

@@ -4,7 +4,7 @@ import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
 
-import { DialogBox, Heading } from "./styled"
+import {SubHeading, Heading, TextField, LoginButton } from './styled';
 
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
@@ -20,45 +20,62 @@ export const Register = ({signUpFunction}) => {
 <ModalTransition>
   {isOpen && (
     <Modal onClose={() => setIsOpen(false)}>
-        <DialogBox>
+       
             <Heading>Create an Account</Heading>
          <form action='/register' method='POST' id='registerForm'>
             <div>
-                <Tag text="First Name:" color="greyLight"/>
+                <SubHeading>First name: </SubHeading>
+                <TextField>
                 <Textfield className="form-control" placeholder="First Name" type="text" name="firstName" placeholder='Firstname'/>
+                </TextField>
             </div>
              <div>
-                 <Tag text="Last Name:" color="greyLight"/>
+                 <SubHeading>Last name: </SubHeading>
+                 <TextField>
                  <Textfield className="form-control" placeholder="Last Name" type="text" name="lastName"/>
+                 </TextField>
              </div>
              <div>
-                 <Tag text="Email Address:" color="greyLight"/>
+                 <SubHeading>Email address: </SubHeading>
+                 <TextField>
                  <Textfield className="form-control" placeholder="Email Address" type="email" name="email"/>
+                 </TextField>
              </div>
              <div>
-                 <Tag text="Username:" color="greyLight"/>
+                 <SubHeading>Username: </SubHeading>
+                 <TextField>
                  <Textfield class="form-control" placeholder="Username" type="text" name="userName"/>
+                 </TextField>
              </div>
              <div>
-                 <Tag text="Password:" color="greyLight"/>
+                 <SubHeading>Password: </SubHeading>
+                 <TextField>
                  <Textfield class="form-control" placeholder="Password" type="password" name="password"/>
+                 </TextField>
              </div>
              <div>
-                 <Tag text="Confirm Password:" color="greyLight"/>
+                 <SubHeading>Confirm password: </SubHeading>
+                 <TextField>
                  <Textfield class="form-control" placeholder="Password" type="password" name="password2"/>
+                 </TextField>
              </div>
              <div>
-                 <Tag text="Reset Question:" color="greyLight"/>
+                 <SubHeading>Reset question: </SubHeading>
+                 <TextField>
                  <Textfield class="form-control" placeholder="Enter a question to reset your password." type="text" name="resetQuestion"/>
+                 </TextField>
              </div>
              <div>
-                 <Tag text="Reset Answer:" color="greyLight"/>
+                 <SubHeading>Answer: </SubHeading>
+                 <TextField>
                  <Textfield class="form-control" placeholder="Enter the answer to reset your password." type="text" name="resetAnswer"/>
+                 </TextField>
              </div>
+             <LoginButton>
              <Button appearance="primary" className="button" type="submit" value="Register">Register</Button>
-             <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
+             </LoginButton>
          </form>
-         </DialogBox>
+       
     </Modal>
   )}
 </ModalTransition>

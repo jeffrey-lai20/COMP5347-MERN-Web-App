@@ -1,6 +1,22 @@
 var express = require('express');
 const User = require('../models/users.server.model');
 
+//Check session authentication
+module.exports.getAuth = function(req, res) {
+    if (req.session.user && req.session.authenticated) {
+        res.json(req.session.user && req.session.authenticated);
+    } else {
+        res.redirect('/');
+    }
+}
+
+module.exports.logout = function(req, res) {
+    console.log("Logging out");
+    delete req.session.authenticated;
+    delete req.session.user;
+    res.redirect('/');
+}
+
 
 // Index
 module.exports.showIndex = function (req, res) {
@@ -98,6 +114,8 @@ module.exports.loginProcess = function (req, res) {
                 console.log("Logged in successfully.");
                 req.flash('info', 'Login successfully!');
                 res.redirect('/main');
+                // console.log("Got here");
+
             }
         });
     } else {
@@ -183,3 +201,4 @@ module.exports.resetPasswordAnswer = function (req, res) {
             }
     });
 }
+

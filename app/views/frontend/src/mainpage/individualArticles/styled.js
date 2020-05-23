@@ -16,7 +16,7 @@ export const SubHeading = styled.div`
 
 export const Result = styled.div`
     font-family: 'Arial';
-    font-size: 20px;
+    font-size: 15px;
     background: #0D65A5;
     color:white;
     padding: 10px;
