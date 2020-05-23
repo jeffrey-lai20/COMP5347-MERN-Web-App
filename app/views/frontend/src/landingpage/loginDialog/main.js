@@ -14,10 +14,10 @@ export const Login = ({loginFunction}) => {
     const [question, setQuestion] = useState([]);
     const [user, setUser] = useState([]);
 
-    const userData = user.map(data => ({
-        label: data.userName,
-        value: data
-    }))
+    // const userData = user.map(data => ({
+    //     label: data.userName,
+    //     value: data
+    // }))
 
     const getQuestion = (user) => {
         setUser(user);
@@ -73,7 +73,9 @@ export const Login = ({loginFunction}) => {
                             </div>
                             <LoginButton>
                                 <Button appearance="primary" className="button" type="submit" value="Continue"
-                                        onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true); getQuestion("getElementByName('userName').innerHTML")}} >Continue</Button>
+                                        onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true);
+                                        getQuestion("getElementByName('userName').innerHTML"
+                                        )}} >Continue</Button>
                                 {/**/}
                             </LoginButton>
                         </form>
