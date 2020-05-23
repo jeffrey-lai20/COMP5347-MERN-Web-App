@@ -26,6 +26,8 @@ export const IndividualArticles = props => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const [yearOptions, setYearOptions] = useState([]);
+
   // Retrieve list from Express App
   useEffect(() => {
     // GET request
@@ -35,6 +37,24 @@ export const IndividualArticles = props => {
       fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setCurrentRevisions(list))
     }
   }, [currentArticleTitle, validatedFromYear, validatedToYear])
+
+  useEffect(() => {
+    if (currentArticleTitle != "") {
+      fetch('/api/individual/getMinYear/' + currentArticleTitle).then(res => res.json())
+        .then(list => {
+          var min = new Date(list[0].timestamp);
+          fetch('/api/individual/getMaxYear/' + currentArticleTitle).then(res => res.json())
+            .then(list => {
+              var max = new Date(list[0].timestamp);
+              var temp = []
+              for (var i = min.getFullYear(); i <= max.getFullYear(); i++) {
+                temp.push({ label: i, value: i });
+              }
+              setYearOptions(temp);
+            });
+        });
+    }
+  }, [currentArticleTitle])
 
   const setYearRange = () => {
     // some year validation
@@ -56,7 +76,7 @@ export const IndividualArticles = props => {
     setCurrentArticleTitle(value._id.title);
     setCurrentArticle(value);
     // GET request
-    fetch('/api/individual/getLatestRevision/?title=' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list)); 
+    fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list));
   }
 
   var num = 0;
@@ -89,23 +109,10 @@ export const IndividualArticles = props => {
       {currentArticle != ""
         ? <div>
           <SubHeading>Summary Information - {currentArticleTitle} </SubHeading>
-
           <DateSelect>
             <Select
               onChange={e => setFromYear(e.value)}
-              options={[
-                { label: "2010", value: "2010" },
-                { label: "2011", value: "2011" },
-                { label: "2012", value: "2012" },
-                { label: "2013", value: "2013" },
-                { label: "2014", value: "2014" },
-                { label: "2015", value: "2015" },
-                { label: "2016", value: "2016" },
-                { label: "2017", value: "2017" },
-                { label: "2018", value: "2018" },
-                { label: "2019", value: "2019" },
-                { label: "2020", value: "2020" }
-              ]}
+              options={yearOptions}
               placeholder="From: ">
             </Select>
 
@@ -113,19 +120,7 @@ export const IndividualArticles = props => {
 
             <Select
               onChange={e => setToYear(e.value)}
-              options={[
-                { label: "2010", value: "2010" },
-                { label: "2011", value: "2011" },
-                { label: "2012", value: "2012" },
-                { label: "2013", value: "2013" },
-                { label: "2014", value: "2014" },
-                { label: "2015", value: "2015" },
-                { label: "2016", value: "2016" },
-                { label: "2017", value: "2017" },
-                { label: "2018", value: "2018" },
-                { label: "2019", value: "2019" },
-                { label: "2020", value: "2020" }
-              ]}
+              options={yearOptions}
               placeholder="To: ">
             </Select>
           </DateSelect>
@@ -162,7 +157,6 @@ export const IndividualArticles = props => {
         </div>
 
         : <div></div>}
-
 
       <ModalTransition>
         {isOpen && (

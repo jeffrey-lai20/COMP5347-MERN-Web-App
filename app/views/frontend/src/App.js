@@ -13,6 +13,7 @@ import { SideBar, Body, Screen, Content } from "./styled"
 export default () => {
   const [loginValue, setLoginValue] = useState();
 
+
   // useEffect(() => {
   //
   //   fetch('/main').then(res => res.json()).then(list => setLoginValue(list));

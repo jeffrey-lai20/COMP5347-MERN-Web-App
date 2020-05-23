@@ -119,7 +119,7 @@ module.exports.getIndividualBarChartDataUser = function(req, res) {
 }
 
 module.exports.getLatestRevisionForArticle = function(req, res) {
-    title = req.query.title;
+    title = req.params.title;
     Revision.getLatestRevision(title, function(error, articleResult) {
     	let currentDate = new Date();
     	let prevDate = new Date(articleResult[0].date);
@@ -130,7 +130,7 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
     	// For Articles older than 24 hours: Update
     	if (timeDifference > 1) {
     		Revision.queryWiki(title, prevDate, function(error, result) {
-    			res.send({result:result});
+                res.send({timeDifference: timeDifference, result:result});
     		})
     	// For articles within 24 hours
     	} else {
