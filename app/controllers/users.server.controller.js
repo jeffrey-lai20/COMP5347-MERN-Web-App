@@ -10,6 +10,14 @@ module.exports.getAuth = function(req, res) {
     }
 }
 
+module.exports.logout = function(req, res) {
+    console.log("Logging out");
+    delete req.session.authenticated;
+    delete req.session.user;
+    res.redirect('/');
+}
+
+
 // Index
 module.exports.showIndex = function (req, res) {
     res.render('app/views/frontend/src/landingpage/index.js');
@@ -105,9 +113,7 @@ module.exports.loginProcess = function (req, res) {
                 //req.session.userId = user._id;
                 console.log("Logged in successfully.");
                 req.flash('info', 'Login successfully!');
-                res.redirect('/main');
-                // console.log("Got here");
-
+                res.redirect('/');
             }
         });
     } else {
@@ -115,7 +121,6 @@ module.exports.loginProcess = function (req, res) {
         res.redirect('/login');
     }
 };
-
 
 module.exports.resetPasswordUsername = function (req, res) {
     var userName = req.body.userName;

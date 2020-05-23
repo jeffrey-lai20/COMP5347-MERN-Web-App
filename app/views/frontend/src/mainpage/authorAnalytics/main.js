@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import { ArticleHeading, SubHeading, Result, ModalResult} from "./styled"
+import { ArticleHeading, SubHeading, Result, ModalResult, ArticleSelect} from "./styled"
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {TextField} from "@material-ui/core";
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
@@ -49,6 +49,7 @@ export const AuthorAnalytics = () => {
     return (
         <div>
             <ArticleHeading>Author Article Analytics</ArticleHeading>
+            <ArticleSelect>
             <div>
                 <Autocomplete
                     onChange={(event, valueSelected) => {
@@ -60,6 +61,7 @@ export const AuthorAnalytics = () => {
                     renderInput={(params) => <TextField {...params} label="Search for an Author" variant="outlined" />}
                 />
             </div>
+            </ArticleSelect>
             {currentAuthorUser != ""
                 ? <div>
                     <SubHeading>Articles {currentAuthorUser} has written/edited</SubHeading>

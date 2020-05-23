@@ -265,6 +265,7 @@ var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 */
 
 // Authors are either admin or bots
+<<<<<<< HEAD
 RevisionSchema.statics.findAllAuthors = function(callback) {
 	return this.aggregate([
 		{$match: {usertype : 'admin' || 'bot' }}, 
@@ -272,6 +273,41 @@ RevisionSchema.statics.findAllAuthors = function(callback) {
 	]).exec(callback)
 }
 
+=======
+// RevisionSchema.statics.getAllAuthors = function(callback) {
+// 	return this.aggregate([
+// 		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
+// 		{$group: {_id : {userid: "$userid", user : "$user"}}}
+// 	]).exec(callback)
+// }
+
+RevisionSchema.statics.getAuthor = function(author, callback) {
+	return this.aggregate([
+		{$match: {user: author}},
+		{$group : {_id : { user: author, title : "$title"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+
+}
+
+// Query to return titles of all articles
+RevisionSchema.statics.findAllAuthors = function(callback){
+    var types = ["admin", "bot"];
+	return this.aggregate([
+		{$match: {usertype : {$in: types}}},
+		{$group : {_id : {user : "$user"}, count : {$sum : 1}}}
+	]).sort({name : 1}).exec(callback)
+}
+
+RevisionSchema.statics.findAllAuthorRevisionsOnArticle = function(author, Ititle, callback) {
+	return this.aggregate([
+		{$match: {user: author, title: Ititle}}
+	]).exec(callback)
+}
+
+
+var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
+
+>>>>>>> 99d7039974e1adc3f1adc6eac1a946b93c9356c9
 /*
  *	Constructing Usertype with text file
  */

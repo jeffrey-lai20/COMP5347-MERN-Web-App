@@ -2,16 +2,19 @@ import React from "react";
 import Button, { ButtonAppearances } from '@atlaskit/button';
 import { Login } from './loginDialog/main'
 import { Register } from './registerDialog/main'
+import {Heading, LoginButton, RegisterButton, SubHeading} from './styled'
 
 export const LandingPage = () => {
 
     return (
         <div>
+
             <title>Wikipedia Analytics</title>
             <div>
-                <h1>Wiki Analytic Heading</h1>
-                <p>Little description on what this is, stuff like wikipedia articles
-                and revisions idk</p>
+                <Heading>Wikipedia Analytics</Heading>
+
+                <SubHeading>This is a data analytic web application. Please register or login to start exploring!</SubHeading>
+            
             </div>
 
 
@@ -27,8 +30,9 @@ export const LandingPage = () => {
             </div> */}
             {/* <Button appearance="primary" href="/login">Login</Button>
             <Button  appearance="primary" href="/register">Sign Up</Button> */}
-            <Login/>
-            <Register/>
+            <LoginButton><Login/></LoginButton>
+            <RegisterButton><Register/></RegisterButton>
+
         </div>
     )
 }
