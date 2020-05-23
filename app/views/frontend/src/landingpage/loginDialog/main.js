@@ -3,13 +3,16 @@ import React, { useState, Component, useEffect } from "react";
 import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
+
+
+
 import { ResetPasswordUsername } from '../resetPassword/resetPasswordUsernameDialog/main.js'
 
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
 export const Login = ({loginFunction}) => {
     const [isOpen, setIsOpen] = useState("");
-    const [resetPasswordIsOpen, setResetPasswordIsOpen] = useState("");
+
 
     return (
         <div>
@@ -30,6 +33,7 @@ export const Login = ({loginFunction}) => {
                     <Button appearance="primary" className="button" type="reset" value="Clear">Clear</Button>
                     <ResetPasswordUsername/>
                 </form>
+
             </Modal>
           )}
         </ModalTransition>

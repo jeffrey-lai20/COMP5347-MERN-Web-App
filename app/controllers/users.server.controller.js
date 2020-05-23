@@ -115,7 +115,6 @@ module.exports.loginProcess = function (req, res) {
                 req.flash('info', 'Login successfully!');
                 res.redirect('/main');
                 // console.log("Got here");
-
             }
         });
     } else {

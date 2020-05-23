@@ -1,10 +1,39 @@
-import React from "react";
+import React, { useState, CSSProperties, ReactElement } from 'react';
 import Button, { ButtonAppearances } from '@atlaskit/button';
 import { Login } from './loginDialog/main'
 import { Register } from './registerDialog/main'
+import {colors, gridSize} from "@atlaskit/theme";
+import Flag from "@atlaskit/flag/dist/cjs/components/Flag";
+import Tick from "@atlaskit/icon/glyph/check-circle";
+import Error from "@atlaskit/icon/glyph/error";
+
 
 export const LandingPage = () => {
+    const actions = [
+        { content: 'Understood', onClick: () => {} },
+    ];
+    const appearances: { [key: string]: { description: string; title: string } } = {
+        error: {
+            description: 'You need to take action, something has gone terribly wrong!',
+            title: 'Uh oh!',
+        },
 
+        success: {
+            description: 'Nothing to worry about, everything is going great!',
+            title: 'Good news, everyone',
+        },
+    };
+    const iconMap = (key: string) => {
+        const icons: { [key: string]: ReactElement } = {
+            success: <Tick label="Success" secondaryColor={colors.G400} />,
+            error: <Error label="Error icon" secondaryColor={colors.R300} />,
+        };
+
+        return key ? icons[key] : icons;
+    };
+    const getIcon = (key: string) => {
+        return iconMap(key);
+    };
     return (
         <div>
             <title>Wikipedia Analytics</title>
@@ -29,6 +58,23 @@ export const LandingPage = () => {
             <Button  appearance="primary" href="/register">Sign Up</Button> */}
             <Login/>
             <Register/>
+            {/*{Object.keys(appearances).map((type, idx) => (*/}
+            {/*    <div*/}
+            {/*        key={'error'}*/}
+            {/*        style={idx ? ({ marginTop: gridSize() }) : undefined}*/}
+            {/*    >*/}
+            {/*        <Flag*/}
+            {/*            actions={actions}*/}
+            {/*            appearance={'error'}*/}
+            {/*            description={appearances['error'].description}*/}
+            {/*            icon={getIcon('error')}*/}
+            {/*            id={'error'}*/}
+            {/*            isDismissAllowed*/}
+            {/*            key={'error'}*/}gi
+            {/*            title={appearances['error'].title}*/}
+            {/*        />*/}
+            {/*    </div>*/}
+            {/*))}*/}
         </div>
     )
 }
