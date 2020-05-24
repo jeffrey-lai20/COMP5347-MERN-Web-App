@@ -21,46 +21,18 @@ export const LandingPage = () => {
     const [currentArticleTitle, setCurrentArticleTitle] = useState("");
     const [currentRevisions, setCurrentRevisions] = useState([]);
     const [topFiveUsers, setTopFiveUsers] = useState([]);
-    const [latestRevisionTimeDifference, setLatestRevisionTimeDifference] = useState([]);
-    const [numberOfRevisionsPulled, setNumberOfRevisionsPulled] = useState([]);
-    const [fromYear, setFromYear] = useState("");
-    const [toYear, setToYear] = useState("");
     const [validatedFromYear, setValidatedFromYear] = useState("1800");
     const [validatedToYear, setValidatedToYear] = useState("2020");
     const [isOpen, setIsOpen] = useState(false);
     const [yearOptions, setYearOptions] = useState([]);
 
     useEffect(() => {
+        fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
         // GET request
         if (currentArticleTitle != "") {
             fetch('/api/individual/getTopFiveUsers/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear).then(res => res.json()).then(list => setTopFiveUsers(list));
-            fetch('/api/individual/getNumberOfRevisions/' + currentArticleTitle + '/' + validatedFromYear + '/' + validatedToYear)
-                .then(res => res.json()).then(list =>
-            {
-                setCurrentRevisions(list[0].count)
-            })
         }
     }, [currentArticleTitle, validatedFromYear, validatedToYear])
-
-    useEffect(() => {
-        fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
-
-        if (currentArticleTitle != "") {
-            fetch('/api/individual/getMinYear/' + currentArticleTitle).then(res => res.json())
-                .then(list => {
-                    var min = new Date(list[0].timestamp);
-                    fetch('/api/individual/getMaxYear/' + currentArticleTitle).then(res => res.json())
-                        .then(list => {
-                            var max = new Date(list[0].timestamp);
-                            var temp = []
-                            for (var i = min.getFullYear(); i <= max.getFullYear(); i++) {
-                                temp.push({ label: i, value: i });
-                            }
-                            setYearOptions(temp);
-                        });
-                });
-        }
-    }, [currentArticleTitle])
 
     const allArticlesOptions = allArticles.map(article => ({
         label: "Title: " + article._id.title + " " + "Number of Revisions: " + article.count,
@@ -70,12 +42,6 @@ export const LandingPage = () => {
     const articleSelected = (value) => {
         setCurrentArticleTitle(value._id.title);
         setCurrentArticle(value);
-        setCurrentRevisions(value.count);
-        fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json())
-            .then(list => {
-                setLatestRevisionTimeDifference(list.timeDifference);
-                setNumberOfRevisionsPulled(list.result);
-            });
     }
 
     var optionsLanding = [allArticlesOptions[0], allArticlesOptions[1], allArticlesOptions[2]];
@@ -90,8 +56,6 @@ export const LandingPage = () => {
                     Features include computing various analytics at overall data set levels, as well as at individual article levels.<br/><br/>
                     Analytical charts are available for display as shown below. A history of author revisions and more details are also available.</SubHeading>
                 <br/><br/><br/><br/>
-
-
 
                 <div>
                     <SubHeading>Example Analytics</SubHeading>
@@ -124,20 +88,6 @@ export const LandingPage = () => {
 
                 </div>
             </div>
-
-
-            {/* <div id="image_section">
-                <div class = "col-sm-6">
-                    <h2>Description of first image</h2>
-                    <img src="image URL goes here" alt="First image here"></img>
-                </div>
-                <div className="col-sm-6">
-                    <h2>Description of second image</h2>
-                    <img src="image URL goes here" alt="Second image here"></img>
-                </div>
-            </div> */}
-            {/* <Button appearance="primary" href="/login">Login</Button>
-            <Button  appearance="primary" href="/register">Sign Up</Button> */}
             <LoginButton><Login/></LoginButton>
             <RegisterButton><Register/></RegisterButton>
 
