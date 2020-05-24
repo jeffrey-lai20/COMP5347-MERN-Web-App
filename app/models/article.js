@@ -258,14 +258,11 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 	})
 }
 
-var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
-
 /*
 	Author Analytics
 */
 
 // Authors are either admin or bots
-<<<<<<< HEAD
 RevisionSchema.statics.findAllAuthors = function(callback) {
 	return this.aggregate([
 		{$match: {usertype : 'admin' || 'bot' }}, 
@@ -273,7 +270,6 @@ RevisionSchema.statics.findAllAuthors = function(callback) {
 	]).exec(callback)
 }
 
-=======
 // RevisionSchema.statics.getAllAuthors = function(callback) {
 // 	return this.aggregate([
 // 		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
@@ -290,7 +286,7 @@ RevisionSchema.statics.getAuthor = function(author, callback) {
 }
 
 // Query to return titles of all articles
-RevisionSchema.statics.findAllAuthors = function(callback){
+RevisionSchema.statics.findAllAuthors = function(callback) {
     var types = ["admin", "bot"];
 	return this.aggregate([
 		{$match: {usertype : {$in: types}}},
@@ -304,10 +300,8 @@ RevisionSchema.statics.findAllAuthorRevisionsOnArticle = function(author, Ititle
 	]).exec(callback)
 }
 
-
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 
->>>>>>> 99d7039974e1adc3f1adc6eac1a946b93c9356c9
 /*
  *	Constructing Usertype with text file
  */
