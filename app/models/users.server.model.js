@@ -116,5 +116,12 @@ UserSchema.statics.getQuestion = function(userName, callback) {
     ]).sort({name : 1}).exec(callback)
 }
 
+UserSchema.statics.findAllUsers = function(callback) {
+    console.log("OK");
+    return this.aggregate([
+        {$group : {_id : {userName : "$userName"}}}
+    ]).sort({name : 1}).exec(callback)
+}
+
 var User = mongoose.model('User', UserSchema);
 module.exports = User;

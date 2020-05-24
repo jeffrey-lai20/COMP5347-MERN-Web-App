@@ -75,7 +75,6 @@ export const Register = ({signUpFunction}) => {
              <Button appearance="primary" className="button" type="submit" value="Register">Register</Button>
              </LoginButton>
          </form>
-       
     </Modal>
   )}
 </ModalTransition>

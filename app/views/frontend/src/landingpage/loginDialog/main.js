@@ -1,42 +1,32 @@
 import React, { useState, Component, useEffect } from "react";
-
 import Button, { ButtonAppearances } from '@atlaskit/button';
 import Textfield from '@atlaskit/textfield';
-import Tag from '@atlaskit/tag';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
-
 import {SubHeading, Heading, TextFieldStyle, LoginButton } from './styled';
-import Select from "@atlaskit/select/Select";
-import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
-import {TextField} from "@material-ui/core";
-
 
 export const Login = ({loginFunction}) => {
     const [isLoginOpen, setIsLoginOpen] = useState("");
     const [isResetUsernameOpen, setIsResetUsernameOpen] = useState("");
     const [isResetPasswordOpen, setIsResetPasswordOpen] = useState("");
+    const [username, setUsername] = useState([]);
+    const [inputValue, setInputValue] = React.useState("");
     const [question, setQuestion] = useState([]);
-    const [user, setUser] = useState([]);
 
-    // const userData = user.map(data => ({
-    //     label: data.userName,
-    //     value: data
-    // }))
-
-    const userSelected = (value) => {
-        console.log(value);
-        console.log(value.userName);
-        setUser(value.userName);
-        fetch('/resetPassword?user=' + user.userName).then(res => res.json()).then(list => setQuestion(list));
+    function handleInputChange(event) {
+        setInputValue(event.target.value);
+        userSelected(event.target.value)
     }
-    // const getQuestion = (user) => {
-    //     setUser(user);
-    //     fetch('/resetPassword?user=' + user.userName).then(res => res.json()).then(list => setQuestion(list));
-    // }
+
+    const userSelected = (data) => {
+        setUsername(data);
+        console.log("USERNAME IS" + username);
+        fetch('/resetPassword/' + data).then(res => res.json()).then(list => setQuestion(list));
+        console.log("QUESTION IS " + question);
+    }
 
     const questionDisplay = question.map(data => {
-        console.log("quinrwgs");
-        return (<h3>Question: {data}</h3> )
+        console.log("DATA IS "+data._id.resetQuestion);
+        return (<SubHeading><div>Reset Password Question: {data._id.resetQuestion}</div></SubHeading>)
     })
 
     return (
@@ -62,7 +52,6 @@ export const Login = ({loginFunction}) => {
                             <LoginButton>
                                 <Button appearance="primary" className="button" type="submit" value="Login">Login</Button>
                             </LoginButton>
-
                             <LoginButton>
                                 <Button onClick={() => {setIsLoginOpen(false); setIsResetUsernameOpen(true);}}>Reset Password</Button>
                             </LoginButton>
@@ -70,7 +59,6 @@ export const Login = ({loginFunction}) => {
                     </Modal>
                 )}
             </ModalTransition>
-
             <ModalTransition>
                 {isResetUsernameOpen && (
                     <Modal onClose={() => setIsResetUsernameOpen(false)}>
@@ -79,21 +67,18 @@ export const Login = ({loginFunction}) => {
                             <div>
                                 <SubHeading>Enter username: </SubHeading>
                                 <TextFieldStyle>
-                                    <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
+                                    <input type="text" name="userName" value={ inputValue } onChange={ handleInputChange } />
+                                    {console.log("Username is  " + username)}
                                 </TextFieldStyle>
                             </div>
                             <LoginButton>
-                                <Button appearance="primary" className="button" type="submit" value="Continue" onChange={(event, valueSelected) => {
-                                    userSelected(valueSelected.value)
-                                }}
+                                <Button appearance="primary" className="button" type="submit" value="Continue"
                                         onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true)}} >Continue</Button>
-                                {/**/}
                             </LoginButton>
                         </form>
                     </Modal>
                 )}
             </ModalTransition>
-
             <ModalTransition>
                 {isResetPasswordOpen && (
                     <Modal onClose={() => setIsResetPasswordOpen(false)}>
@@ -101,23 +86,9 @@ export const Login = ({loginFunction}) => {
                         <form action='/getResetPasswordAnswer' method='POST' id='resetPasswordAnswerForm'>
                             <div>
                                 <SubHeading>Username: </SubHeading>
-                                {/*<TextFieldStyle>*/}
-                                {/*    <Textfield className="form-control" type="text" placeholder="Username"*/}
-                                {/*               name="userName" required/>*/}
-                                {/*</TextFieldStyle>*/}
-                                {/*<Button onClick={setYearRange}>Enter Username for Question</Button>*/}
-
-                                <Autocomplete
-                                    onChange={(event, valueSelected) => {
-                                        userSelected(valueSelected.value)
-                                    }}
-                                    options={"Enter your username"}
-                                    getOptionLabel={(option) => option.label}
-                                    style={{ width: 500 }}
-                                    renderInput={(params) => <TextField {...params} label="Enter Username" variant="outlined" />}
-                                />
-
-
+                                <TextFieldStyle>
+                                    <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
+                                </TextFieldStyle>
                             </div>
                             {questionDisplay}
                             <div>
@@ -146,7 +117,6 @@ export const Login = ({loginFunction}) => {
                     </Modal>
                 )}
             </ModalTransition>
-
         </div>
     )
 }

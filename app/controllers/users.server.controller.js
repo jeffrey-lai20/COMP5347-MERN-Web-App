@@ -27,6 +27,9 @@ module.exports.logout = function(req, res) {
 
 // Index
 module.exports.showIndex = function (req, res) {
+    // res.locals.message = req.flash();
+    // res.send(req.flash('error'));
+
     res.render('app/views/frontend/src/landingpage/index.js');
 };
 
@@ -64,10 +67,10 @@ module.exports.registerUser = function (req, res) {
                 }
             }, function (err, mail) {
                 if (user || mail) {
-                    res.render('/register', {
-                        user: user,
-                        mail: mail
-                    });
+                    console.log("Invalid username or email");
+                    req.flash('error', 'Registration failed. Please try again.');
+
+                    res.redirect('/');
                 } else {
                     var newUser = new User({
                         firstName: firstName,
@@ -105,7 +108,7 @@ module.exports.registerUser = function (req, res) {
 
 // Login
 module.exports.login = function (req, res) {
-    res.render('app/views/frontend/src/landingpage/loginDialog/main.js');
+    // res.render('app/views/frontend/src/landingpage/loginDialog/main.js');
 };
 
 module.exports.loginProcess = function (req, res) {
@@ -212,7 +215,11 @@ module.exports.resetPasswordAnswer = function (req, res) {
 }
 
 module.exports.getQuestion = function (req, res) {
-    userName = req.body.userName;
+    console.log("The query works");
+    // userName = req.body.userName;
+    userName = req.params.userName;
+
+    console.log("So we inpuit " + userName);
     User.findOne({
         userName: {
             "$regex": "^" + userName + "\\b",
@@ -236,6 +243,16 @@ module.exports.getQuestion = function (req, res) {
     });
 }
 
+module.exports.getUsers = function (req, res) {
+    console.log("FYUCK")
+    User.findAllUsers(function(error, result) {
+        console.log("FYUCK")
 
-
-
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(result)
+            res.json(result);
+        }
+    })
+}

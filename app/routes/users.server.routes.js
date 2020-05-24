@@ -7,7 +7,8 @@ router.get('/login', controller.login);
 router.get('/register', controller.register);
 router.get('/main', controller.getAuth);
 router.get('/error', controller.getError);
-router.get('/resetPassword/', controller.getQuestion)
+router.get('/resetPassword/:userName', controller.getQuestion)
+router.get('/getUsers/', controller.getUsers);
 
 // router.get("/getResetPasswordQuestion", controller.getResetPasswordQuestion);
 router.post('/resetPasswordUsername', controller.resetPasswordUsername);
