@@ -20,6 +20,7 @@ module.exports.getError = function(req, res) {
         console.log("Success!");
     } else if (num >= 200) {
         res.status(num).send('Success');
+        num = 0;
     }
     console.log(num)
 
