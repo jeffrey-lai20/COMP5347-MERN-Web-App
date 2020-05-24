@@ -9,19 +9,22 @@ import {
 } from "react-router-dom";
 
 import { SideBar, Body, Screen, Content } from "./styled"
+import {SubHeading} from "./landingpage/loginDialog/styled";
 
 export default () => {
     const [loginValue, setLoginValue] = useState();
     const [errorValue, setErrorValue] = useState();
     // setErrorValue(undefined);
-    {console.log("ERRO VasdasdALUY " + errorValue)}
+    {console.log(errorValue)}
 
   useEffect(() => {
-      fetch('/error').then(res => res.json()).then(list => setErrorValue(list));
       fetch('/main').then(res => res.json()).then(list => setLoginValue(list));
+      fetch('/error').then(res => setErrorValue(res));
   }, [])
 
-    {console.log("ERRO VALUY " + errorValue)}
+    const errorDisplay = () => {
+        return (<div>Error: {errorValue.statusText}. Please try again.</div>)
+    }
 
   return (
     <div>
@@ -43,11 +46,10 @@ export default () => {
             <Screen>
               <Switch>
                 <Route path="/" component={LandingPage} />
-                  {errorValue ?
-                      (alert("Invalid input: \"" + errorValue + "\". Please try again."),
-                      setErrorValue(undefined))
-                      :<h1></h1>}   {/*Do nothing*/}
-              </Switch>
+                  {typeof errorValue !== 'undefined' ?
+                      (alert("Alert: \"" + errorValue.statusText + "\"."))
+                      :(<h1></h1>)}   {/*Do nothing*/}
+            </Switch>
             </Screen>
           }
 

@@ -14,7 +14,7 @@ export const Login = ({loginFunction}) => {
 
     function handleInputChange(event) {
         setInputValue(event.target.value);
-        userSelected(event.target.value)
+        userSelected(event.target.value);
     }
 
     const userSelected = (data) => {

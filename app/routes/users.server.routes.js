@@ -3,8 +3,7 @@ var router = express.Router();
 var controller=require('../controllers/users.server.controller');
 
 router.get('/', controller.showIndex);
-router.get('/login', controller.login);
-router.get('/register', controller.register);
+// router.get('/register', controller.register);
 router.get('/main', controller.getAuth);
 router.get('/error', controller.getError);
 router.get('/resetPassword/:userName', controller.getQuestion)

@@ -26,7 +26,7 @@ export const Register = ({signUpFunction}) => {
             <div>
                 <SubHeading>First name: </SubHeading>
                 <TextField>
-                <Textfield className="form-control" placeholder="First Name" type="text" name="firstName" placeholder='Firstname'/>
+                <Textfield className="form-control" placeholder="First Name" type="text" name="firstName"/>
                 </TextField>
             </div>
              <div>

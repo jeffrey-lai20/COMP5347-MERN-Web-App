@@ -1,5 +1,6 @@
 var express = require('express');
 const User = require('../models/users.server.model');
+let num = 0;
 
 //Check session authentication
 module.exports.getAuth = function(req, res) {
@@ -11,10 +12,25 @@ module.exports.getAuth = function(req, res) {
 }
 
 module.exports.getError = function(req, res) {
-    if (req.session.userName) {
-        res.json(req.session.userName)
-        delete req.session.userName;
+    // res.send('oml')
+    console.log(res.status)
+    if (num >= 400) {
+        res.status(num).send('Sorry, there\'s been an error');
+        num = 0;
+        console.log("Success!");
+    } else if (num >= 200) {
+        res.status(num).send('Success');
     }
+    console.log(num)
+
+
+}
+
+module.exports.showIndex = function(req, res) {
+    console.log("We get here tho");
+    res.send(req.flash('message'));
+
+
 }
 
 module.exports.logout = function(req, res) {
@@ -25,18 +41,7 @@ module.exports.logout = function(req, res) {
 }
 
 
-// Index
-module.exports.showIndex = function (req, res) {
-    // res.locals.message = req.flash();
-    // res.send(req.flash('error'));
 
-    res.render('app/views/frontend/src/landingpage/index.js');
-};
-
-// Register
-module.exports.register = function (req, res) {
-    res.render("app/views/frontend/src/landingpage/registerDialog/main.js");
-};
 
 module.exports.registerUser = function (req, res) {
     // Validation
@@ -69,7 +74,7 @@ module.exports.registerUser = function (req, res) {
                 if (user || mail) {
                     console.log("Invalid username or email");
                     req.flash('error', 'Registration failed. Please try again.');
-
+                    num = 409;
                     res.redirect('/');
                 } else {
                     var newUser = new User({
@@ -84,38 +89,29 @@ module.exports.registerUser = function (req, res) {
                     });
                     User.createUser(newUser, function (err, user) {
                         if (err) throw err;
+                        num = 406;
                         console.log(user);
+                        res.redirect('/');
                     });
                     req.flash('success_msg', 'Registration successful.');
-                    res.redirect('/login');
+                    num = 202;
+                    res.redirect('/');
                 }
             });
         });
-        //}
     }
     else {
+        num = 406;
         console.log("Invalid input.")
-        // console.log("We have: " + req.body.firstName);
-        // console.log("We have: " + req.body.lastName);
-        // console.log("We have: " + req.body.email);
-        // console.log("We have: " + req.body.userName);
-        // console.log("We have: " + resetQuestion);
-        // console.log("We have: " + resetQuestion);
-        // console.log("We have: " + req.body.password);
-        // console.log("We have: " + password2);
+        res.redirect('/');
     }
-};
-
-// Login
-module.exports.login = function (req, res) {
-    // res.render('app/views/frontend/src/landingpage/loginDialog/main.js');
 };
 
 module.exports.loginProcess = function (req, res) {
     if (req.body.userName && req.body.password) {
         User.auth(req.body.userName, req.body.password, function (error, user) {
             if (error || !user) {
-                req.session.userName=req.body.userName;
+                num = 406;
                 res.redirect('/');
             } else {
                 req.session.authenticated = true;
@@ -123,15 +119,12 @@ module.exports.loginProcess = function (req, res) {
                 //req.session.userId = user._id;
                 console.log("Logged in successfully.");
                 req.flash('info', 'Login successfully!');
+                num = 202;
                 res.redirect('/');
             }
         });
     } else {
-        // req.session.user=req.body.userName;
-        // // console.log("BRUHH");
-        //
-        // // console.log(req.session.user);
-        // req.flash('error', 'Username and password are incorrect');
+        num = 406;
         res.redirect('/');
     }
 };
@@ -151,6 +144,7 @@ module.exports.resetPasswordUsername = function (req, res) {
         } else {
             console.log("User does not exist.")
             console.log(err)
+            num = 406;
             res.redirect('/login');
         }
     });
@@ -171,6 +165,7 @@ module.exports.getResetPasswordQuestion = function (req, res) {
         } else {
             console.log("User does not exist.")
             console.log(err)
+            num = 406;
             res.redirect('/login');
         }
     });
@@ -193,33 +188,34 @@ module.exports.resetPasswordAnswer = function (req, res) {
                     User.resetPassword(user, function (err, user) {
                         if (err) throw err;
                         console.log(user);
+                        num = 202;
+                        res.redirect('/login');
                     });
                     console.log("Password has been reset.")
                     req.flash('success_msg', 'Registration successful.');
                     res.redirect('/login');
                 } else {
                     console.log("Mismatching Passwords.");
+                    num = 406;
                     res.redirect('/login');
                 }
             } else {
                 console.log("Wrong Password Reset Answer.");
+                num = 406;
                 res.redirect('/login');
             }
 
         } else {
             console.log("User does not exist.")
             console.log(err)
+            num = 406;
             res.redirect('/login');
         }
     });
 }
 
 module.exports.getQuestion = function (req, res) {
-    console.log("The query works");
-    // userName = req.body.userName;
     userName = req.params.userName;
-
-    console.log("So we inpuit " + userName);
     User.findOne({
         userName: {
             "$regex": "^" + userName + "\\b",
@@ -229,6 +225,7 @@ module.exports.getQuestion = function (req, res) {
         if (user) {
             User.getQuestion(userName, function(error, result) {
                 if (error) {
+                    num = 406;
                     console.log(error)
                 } else {
                     console.log(result)
@@ -238,17 +235,16 @@ module.exports.getQuestion = function (req, res) {
         } else {
             console.log("User does not exist.")
             console.log(err)
+            num = 406;
             res.redirect('/login');
         }
     });
 }
 
 module.exports.getUsers = function (req, res) {
-    console.log("FYUCK")
     User.findAllUsers(function(error, result) {
-        console.log("FYUCK")
-
         if (error) {
+            num = 406;
             console.log(error)
         } else {
             console.log(result)
