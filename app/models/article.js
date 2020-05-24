@@ -93,6 +93,7 @@ RevisionSchema.statics.findShortestHistory = function(noOfArticle, callback) {
 
 RevisionSchema.statics.barChartDistributionYear = function(callback) {
 	return this.aggregate([
+		{$match: {'timestamp': {$exists:true, $ne: null }}},
 	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
 	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
 	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
@@ -117,6 +118,7 @@ RevisionSchema.statics.pieChartDistributionUsertype = function(callback) {
 // Query to return titles of all articles
 RevisionSchema.statics.findAllArticles = function(callback){
 	return this.aggregate([
+		{$match: {'timestamp': {$exists:true, $ne: null }}},
 		{$group : {_id : {title : "$title"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 }
