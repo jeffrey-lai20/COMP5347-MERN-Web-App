@@ -93,6 +93,7 @@ RevisionSchema.statics.findShortestHistory = function(noOfArticle, callback) {
 
 RevisionSchema.statics.barChartDistributionYear = function(callback) {
 	return this.aggregate([
+		{$match: {'timestamp': {$exists:true, $ne: null }}},
 	      {$group : {_id : {year:{$substr:["$timestamp",0,4]}},
 	    	  registered: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "registered" ]},1,0] }},
 	          anonymous: {"$sum":{"$cond": [{ "$eq":[ "$usertype", "anonymous" ]},1,0] }},
@@ -117,6 +118,7 @@ RevisionSchema.statics.pieChartDistributionUsertype = function(callback) {
 // Query to return titles of all articles
 RevisionSchema.statics.findAllArticles = function(callback){
 	return this.aggregate([
+		{$match: {'timestamp': {$exists:true, $ne: null }}},
 		{$group : {_id : {title : "$title"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 }
@@ -186,7 +188,7 @@ RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 	this.aggregate([
 		{$match: {title: Ititle}},
 		{$project: {"date":"$timestamp"}},
-		{$sort 	: {minTimestamp : -1}},
+		{$sort 	: {date : -1}},
 		{$limit:1}
 	]).exec(callback)
 }
@@ -197,7 +199,6 @@ RevisionSchema.statics.getLatestRevision = function(Ititle, callback) {
 
 RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 	var endpoint = "https://en.wikipedia.org/w/api.php";
-	var model= this;
 	// URL for HTTP GET:
 	var url = endpoint + "?"  
 		+ "action=query"
@@ -225,9 +226,7 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 		} else if (res.statusCode < 200 || res.statusCode >= 300) {
 			console.log("Not successful response: " + res.statusCode);
 		} else {
-			// Checking data format:
-			//console.log("This is data: " + JSON.stringify(data.query.pages));
-						
+			// Checking data format:						
 			// Getting Articles
 			var dataPages = data.query.pages;
 
@@ -239,14 +238,16 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 					if (article[j].timestamp != lastDate.toISOString()) {
 						var new_article = {
 							'title' : title,
-							'user' : article.user,
-							'timestamp' : article.timestamp
+							'user' : article[j].user,
+							'timestamp' : article[j].timestamp
 						}
 						updates.push(new_article);
 					}
 				}
+				console.log("Updates : " + updates);
+				
 				console.log("Updated all articles");
-				model.insertMany(updates, function(error, res) {
+				Revision.insertMany(updates, function(error, res) {
 					if (error) {
 						console.log(error);
 					} else {
@@ -264,6 +265,13 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 */
 
 // Authors are either admin or bots
+RevisionSchema.statics.findAllAuthors = function(callback) {
+	return this.aggregate([
+		{$match: {usertype : 'admin' || 'bot' }}, 
+		{$group: {_id : {userid: "$userid", user : "$user"}}}
+	]).exec(callback)
+}
+
 // RevisionSchema.statics.getAllAuthors = function(callback) {
 // 	return this.aggregate([
 // 		{$match: {user: "$user"} && {usertype : 'admin' || 'bot' }},
@@ -272,15 +280,16 @@ RevisionSchema.statics.queryWiki = function(title, lastDate, callback) {
 // }
 
 RevisionSchema.statics.getAuthor = function(author, callback) {
-	return this.aggregate([
-		{$match: {user: author}},
+    var types = ["admin", "bot"];
+    return this.aggregate([
+        {$match: {usertype : {$in: types}}},
 		{$group : {_id : { user: author, title : "$title"}, count : {$sum : 1}}}
 	]).sort({name : 1}).exec(callback)
 
 }
 
 // Query to return titles of all articles
-RevisionSchema.statics.findAllAuthors = function(callback){
+RevisionSchema.statics.findAllAuthors = function(callback) {
     var types = ["admin", "bot"];
 	return this.aggregate([
 		{$match: {usertype : {$in: types}}},
@@ -293,7 +302,6 @@ RevisionSchema.statics.findAllAuthorRevisionsOnArticle = function(author, Ititle
 		{$match: {user: author, title: Ititle}}
 	]).exec(callback)
 }
-
 
 var Revision = mongoose.model('Revision', RevisionSchema, 'articles')
 

@@ -22,7 +22,7 @@ export const SubHeading = styled.div`
     color: #0D65A5;
 `;
 
-export const TextField = styled.div`
+export const TextFieldStyle = styled.div`
     font-family: 'Arial';
     font-size: 20px;
     padding: 20px;

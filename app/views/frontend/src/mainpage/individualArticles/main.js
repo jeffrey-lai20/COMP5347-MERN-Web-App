@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import { ArticleHeading, SubHeading, Result, UserTable, ArticleSelect, DateSelect } from "./styled";
+import { ArticleHeading, SubHeading, Result, UserTable, ArticleSelect, DateSelect, DateButton, ErrorHeading, ErrorSubHeading } from "./styled";
 import Select from '@atlaskit/select';
 import Button from '@atlaskit/button';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
@@ -24,14 +24,12 @@ export const IndividualArticles = props => {
   const [toYear, setToYear] = useState("");
   const [validatedFromYear, setValidatedFromYear] = useState("1800");
   const [validatedToYear, setValidatedToYear] = useState("2020");
-
   const [isOpen, setIsOpen] = useState(false);
-
   const [yearOptions, setYearOptions] = useState([]);
 
   // Retrieve list from Express App
   useEffect(() => {
-    fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
+    //fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
   }, [])
 
   useEffect(() => {
@@ -47,6 +45,8 @@ export const IndividualArticles = props => {
   }, [currentArticleTitle, validatedFromYear, validatedToYear])
 
   useEffect(() => {
+    fetch('/api/individual/getAllArticles').then(res => res.json()).then(list => setAllArticles(list));
+
     if (currentArticleTitle != "") {
       fetch('/api/individual/getMinYear/' + currentArticleTitle).then(res => res.json())
         .then(list => {
@@ -67,7 +67,7 @@ export const IndividualArticles = props => {
   const setYearRange = () => {
     // some year validation
 
-    if (fromYear > toYear) {
+    if (fromYear > toYear || fromYear == "" || toYear == "") {
       setIsOpen(true);
     } else {
       setValidatedFromYear(fromYear);
@@ -83,9 +83,7 @@ export const IndividualArticles = props => {
   const articleSelected = (value) => {
     setCurrentArticleTitle(value._id.title);
     setCurrentArticle(value);
-    setCurrentRevisions(value.count)
-    // GET request
-    //fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json()).then(list => setLatestRevision(list));
+    setCurrentRevisions(value.count);
     fetch('/api/individual/getLatestRevision/' + value._id.title).then(res => res.json())
       .then(list => {
           setLatestRevisionTimeDifference(list.timeDifference);
@@ -139,7 +137,7 @@ export const IndividualArticles = props => {
             </Select>
           </DateSelect>
 
-          <Button onClick={setYearRange}>Update</Button>
+          <DateButton><Button onClick={setYearRange}>Update Analytics for {currentArticleTitle}</Button></DateButton>
 
           <Result>
           <a>The last update was {latestRevisionTimeDifference} days ago.</a><br></br>
@@ -180,8 +178,9 @@ export const IndividualArticles = props => {
 
       <ModalTransition>
         {isOpen && (
-          <Modal onClose={() => setIsOpen(false)} heading="Error">
-            <a>Invalid year range entered! Please try again. </a>
+          <Modal onClose={() => setIsOpen(false)}>
+            <ErrorHeading>Error</ErrorHeading>
+            <ErrorSubHeading>Invalid year range entered! Please try again. </ErrorSubHeading>
             <br></br>
           </Modal>
         )}

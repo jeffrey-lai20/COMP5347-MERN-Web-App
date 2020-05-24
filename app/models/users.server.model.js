@@ -40,11 +40,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    loggedIn: {
-        type: Boolean,
-        required: false
-    }
-
 });
 
 UserSchema.statics.createUser=function(newUser,callback){
@@ -111,6 +106,19 @@ UserSchema.statics.getLoggedByUsername = function(userName, callback) {
     return this.aggregate([
         {$match: {userName: userName}},
         {$group : {_id : { loggedIn: "$loggedIn"}}}
+    ]).sort({name : 1}).exec(callback)
+}
+
+UserSchema.statics.getQuestion = function(userName, callback) {
+    return this.aggregate([
+        {$match: {userName: userName}},
+        {$group : {_id : { resetQuestion: "$resetQuestion"}}}
+    ]).sort({name : 1}).exec(callback)
+}
+
+UserSchema.statics.findAllUsers = function(callback) {
+    return this.aggregate([
+        {$group : {_id : {userName : "$userName"}}}
     ]).sort({name : 1}).exec(callback)
 }
 

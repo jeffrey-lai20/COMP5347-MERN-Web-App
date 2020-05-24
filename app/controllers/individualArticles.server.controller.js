@@ -125,7 +125,7 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
     	let prevDate = new Date(articleResult[0].date);
     	
     	let timeDifference = Math.floor((currentDate - prevDate)/(1000 * 60 * 60 * 24));
-        console.log("Previous Date of the article: " + prevDate + "Time Difference: " + timeDifference);
+        console.log("Previous Date of the article: " + prevDate + " Time Difference: " + timeDifference);
 
     	// For Articles older than 24 hours: Update
     	if (timeDifference > 1) {
@@ -134,44 +134,45 @@ module.exports.getLatestRevisionForArticle = function(req, res) {
     		})
     	// For articles within 24 hours
     	} else {
+    		res.send({timeDifference: timeDifference, result:0});
             console.log(res);
         }
     })
 }
 
 // Author analytics controller
-module.exports.getAuthor = function(req, res) {
-    author = req.query.user;
-    Revision.getAuthor(author, function(error, result) {
-        if (error) {
-            console.log(error)
-        } else {
-            console.log(result)
-            res.json(result);
-        }
-    })
-}
+// module.exports.getAuthor = function(req, res) {
+//     author = req.query.user;
+//     Revision.getAuthor(author, function(error, result) {
+//         if (error) {
+//             console.log(error)
+//         } else {
+//             console.log(result)
+//             res.json(result);
+//         }
+//     })
+// }
 
-module.exports.getAllAuthors = function(req, res) {
-    Revision.findAllAuthors(function(error, result) {
-        if (error) {
-            console.log(error)
-        } else {
-            console.log(result)
-            res.json(result);
-        }
-    })
-}
+// module.exports.getAllAuthors = function(req, res) {
+//     Revision.findAllAuthors(function(error, result) {
+//         if (error) {
+//             console.log(error)
+//         } else {
+//             console.log(result)
+//             res.json(result);
+//         }
+//     })
+// }
 
-module.exports.getTimestampsAuthorArticle = function(req, res) {
-    user = req.params.user;
-    title = req.params.title;
-    Revision.findAllAuthorRevisionsOnArticle(user, title, function(error, result) {
-        if (error) {
-            console.log(error)
-        } else {
-            console.log(result)
-            res.json(result);
-        }
-    })
-}
+// module.exports.getTimestampsAuthorArticle = function(req, res) {
+//     user = req.params.user;
+//     title = req.params.title;
+//     Revision.findAllAuthorRevisionsOnArticle(user, title, function(error, result) {
+//         if (error) {
+//             console.log(error)
+//         } else {
+//             console.log(result)
+//             res.json(result);
+//         }
+//     })
+// }
