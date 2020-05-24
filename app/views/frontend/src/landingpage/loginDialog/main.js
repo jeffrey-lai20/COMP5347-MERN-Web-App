@@ -5,7 +5,11 @@ import Textfield from '@atlaskit/textfield';
 import Tag from '@atlaskit/tag';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 
-import {SubHeading, Heading, TextField, LoginButton } from './styled';
+import {SubHeading, Heading, TextFieldStyle, LoginButton } from './styled';
+import Select from "@atlaskit/select/Select";
+import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
+import {TextField} from "@material-ui/core";
+
 
 export const Login = ({loginFunction}) => {
     const [isLoginOpen, setIsLoginOpen] = useState("");
@@ -19,12 +23,19 @@ export const Login = ({loginFunction}) => {
     //     value: data
     // }))
 
-    const getQuestion = (user) => {
-        setUser(user);
+    const userSelected = (value) => {
+        console.log(value);
+        console.log(value.userName);
+        setUser(value.userName);
         fetch('/resetPassword?user=' + user.userName).then(res => res.json()).then(list => setQuestion(list));
     }
+    // const getQuestion = (user) => {
+    //     setUser(user);
+    //     fetch('/resetPassword?user=' + user.userName).then(res => res.json()).then(list => setQuestion(list));
+    // }
 
     const questionDisplay = question.map(data => {
+        console.log("quinrwgs");
         return (<h3>Question: {data}</h3> )
     })
 
@@ -38,15 +49,15 @@ export const Login = ({loginFunction}) => {
                         <form action='/login' method='POST' id='loginForm'>
                             <div>
                                 <SubHeading>Username:</SubHeading>
-                                <TextField>
+                                <TextFieldStyle>
                                     <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
-                                </TextField>
+                                </TextFieldStyle>
                             </div>
                             <div>
                                 <SubHeading>Password:</SubHeading>
-                                <TextField>
+                                <TextFieldStyle>
                                     <Textfield className="form-control" type="password" placeholder="Password" name="password" required/>
-                                </TextField>
+                                </TextFieldStyle>
                             </div>
                             <LoginButton>
                                 <Button appearance="primary" className="button" type="submit" value="Login">Login</Button>
@@ -67,15 +78,15 @@ export const Login = ({loginFunction}) => {
                         <form action='/resetPasswordUsername' method='POST' id='resetPasswordUsernameForm'>
                             <div>
                                 <SubHeading>Enter username: </SubHeading>
-                                <TextField>
+                                <TextFieldStyle>
                                     <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
-                                </TextField>
+                                </TextFieldStyle>
                             </div>
                             <LoginButton>
-                                <Button appearance="primary" className="button" type="submit" value="Continue"
-                                        onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true);
-                                        getQuestion("getElementByName('userName').innerHTML"
-                                        )}} >Continue</Button>
+                                <Button appearance="primary" className="button" type="submit" value="Continue" onChange={(event, valueSelected) => {
+                                    userSelected(valueSelected.value)
+                                }}
+                                        onClick={() => {setIsResetUsernameOpen(false); setIsResetPasswordOpen(true)}} >Continue</Button>
                                 {/**/}
                             </LoginButton>
                         </form>
@@ -90,28 +101,42 @@ export const Login = ({loginFunction}) => {
                         <form action='/getResetPasswordAnswer' method='POST' id='resetPasswordAnswerForm'>
                             <div>
                                 <SubHeading>Username: </SubHeading>
-                                <TextField>
-                                    <Textfield className="form-control" type="text" placeholder="Username" name="userName" required/>
-                                </TextField>
+                                {/*<TextFieldStyle>*/}
+                                {/*    <Textfield className="form-control" type="text" placeholder="Username"*/}
+                                {/*               name="userName" required/>*/}
+                                {/*</TextFieldStyle>*/}
+                                {/*<Button onClick={setYearRange}>Enter Username for Question</Button>*/}
+
+                                <Autocomplete
+                                    onChange={(event, valueSelected) => {
+                                        userSelected(valueSelected.value)
+                                    }}
+                                    options={"Enter your username"}
+                                    getOptionLabel={(option) => option.label}
+                                    style={{ width: 500 }}
+                                    renderInput={(params) => <TextField {...params} label="Enter Username" variant="outlined" />}
+                                />
+
+
                             </div>
                             {questionDisplay}
                             <div>
                                 <SubHeading>Answer: </SubHeading>
-                                <TextField>
+                                <TextFieldStyle>
                                     <Textfield className="form-control" type="text" placeholder="Answer" name="resetAnswer" required/>
-                                </TextField>
+                                </TextFieldStyle>
                             </div>
                             <div>
                                 <SubHeading>New password: </SubHeading>
-                                <TextField>
+                                <TextFieldStyle>
                                     <Textfield class="form-control" placeholder="Password" type="password" name="password"/>
-                                </TextField>
+                                </TextFieldStyle>
                             </div>
                             <div>
                                 <SubHeading>Confirm new password: </SubHeading>
-                                <TextField>
+                                <TextFieldStyle>
                                     <Textfield class="form-control" placeholder="Password" type="password" name="password2"/>
-                                </TextField>
+                                </TextFieldStyle>
                             </div>
                             <LoginButton>
                                 <Button appearance="primary" className="button" type="submit" value="ResetPassword">Reset Password</Button>
