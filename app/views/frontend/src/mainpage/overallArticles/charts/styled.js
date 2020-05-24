@@ -38,7 +38,7 @@ export const Result = styled.div`
     font-family: 'Arial';
     font-size: 20px;
     background: white;
-    color:white;
+    color:black;
     padding: 30px;
     line-height: 100%;
     margin-top: 50px;
