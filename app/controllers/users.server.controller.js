@@ -12,7 +12,6 @@ module.exports.getAuth = function(req, res) {
 }
 
 module.exports.getError = function(req, res) {
-    // res.send('oml')
     console.log(res.status)
     if (num >= 400) {
         res.status(num).send('Sorry, there\'s been an error');
@@ -23,13 +22,6 @@ module.exports.getError = function(req, res) {
         num = 0;
     }
     console.log(num)
-
-
-}
-
-module.exports.showIndex = function(req, res) {
-    console.log("We get here tho");
-    res.send(req.flash('message'));
 
 
 }
@@ -89,19 +81,21 @@ module.exports.registerUser = function (req, res) {
                         resetAnswer: resetAnswer
                     });
                     User.createUser(newUser, function (err, user) {
-                        if (err) throw err;
-                        num = 406;
-                        console.log(user);
-                        res.redirect('/');
+                        if (err){
+                            throw err;
+                            num = 406;
+                            res.redirect('/');
+                        } else {
+                            num = 202;
+                            console.log(user);
+                            res.redirect('/');
+                        }
+
                     });
-                    req.flash('success_msg', 'Registration successful.');
-                    num = 202;
-                    res.redirect('/');
                 }
             });
         });
-    }
-    else {
+    } else {
         num = 406;
         console.log("Invalid input.")
         res.redirect('/');

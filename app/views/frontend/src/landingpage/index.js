@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import Button, { ButtonAppearances } from '@atlaskit/button';
 import { Login } from './loginDialog/main'
 import { Register } from './registerDialog/main'
 import {Heading, LoginButton, RegisterButton, SubHeading} from './styled'
@@ -13,12 +12,6 @@ import {
     UserTable
 } from "../mainpage/individualArticles/styled";
 import Select from "@atlaskit/select/Select";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import {RedditArticles} from "../mainpage/individualArticles/reddit/main";
-import TableBody from "@material-ui/core/TableBody";
 import {ModalTransition} from "@atlaskit/modal-dialog";
 import Modal from "@atlaskit/modal-dialog/dist/cjs/components/ModalWrapper";
 

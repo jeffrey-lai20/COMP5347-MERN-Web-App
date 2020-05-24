@@ -16,7 +16,6 @@ export const AuthorAnalytics = () => {
     useEffect(() => {
         // GET request
         fetch('/api/author/getAllAuthors').then(res => res.json()).then(list => setAllAuthors(list));
-       // fetch('/api/author/getAuthor').then(res => res.json()).then(list => setCurrentAuthor(list));
     }, [])
 
     useEffect(() => {
@@ -71,7 +70,6 @@ export const AuthorAnalytics = () => {
                     </ul>
                     </Result>
                 </div>: <div></div>
-
             }
 
         <ModalTransition>

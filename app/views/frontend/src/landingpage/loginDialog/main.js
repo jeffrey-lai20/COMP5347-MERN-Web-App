@@ -19,13 +19,10 @@ export const Login = ({loginFunction}) => {
 
     const userSelected = (data) => {
         setUsername(data);
-        console.log("USERNAME IS" + username);
         fetch('/resetPassword/' + data).then(res => res.json()).then(list => setQuestion(list));
-        console.log("QUESTION IS " + question);
     }
 
     const questionDisplay = question.map(data => {
-        console.log("DATA IS "+data._id.resetQuestion);
         return (<SubHeading><div>Reset Password Question: {data._id.resetQuestion}</div></SubHeading>)
     })
 
@@ -68,7 +65,6 @@ export const Login = ({loginFunction}) => {
                                 <SubHeading>Enter username: </SubHeading>
                                 <TextFieldStyle>
                                     <input type="text" name="userName" value={ inputValue } onChange={ handleInputChange } />
-                                    {console.log("Username is  " + username)}
                                 </TextFieldStyle>
                             </div>
                             <LoginButton>
